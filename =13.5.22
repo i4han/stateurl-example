@@ -1,0 +1,32 @@
+..                                       | Progress: resolved 0, reused 1, downloaded 0, added 0
+..                                       |  WARN  deprecated mailgun-js@0.22.0
+..                                       | Progress: resolved 143, reused 139, downloaded 0, added 0
+..                                       |  WARN  deprecated glob@7.2.3
+..                                       |  WARN  deprecated inflight@1.0.6
+..                                       |  WARN  deprecated node-domexception@1.0.0
+..                                       | Progress: resolved 503, reused 418, downloaded 0, added 0
+..                                       |  WARN  deprecated @types/minimatch@6.0.0
+..                                       |   +3 +
+ WARN  Local dependency not found at /home/isaac/pan/coprogram
+..                                       | Progress: resolved 618, reused 538, downloaded 0, added 3, done
+
+dependencies:
++ yjs 13.6.27
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ @lexical/react 0.14.5
+│ └─┬ @lexical/yjs 0.14.5
+│   └── ✕ missing peer yjs@>=13.5.22
+├─┬ @preact/signals-react-transform 0.3.2
+│ └── ✕ missing peer @babel/core@^7.0.0
+├─┬ openai 4.104.0
+│ └── ✕ unmet peer zod@^3.23.8: found 4.1.13
+└─┬ react-server-dom-webpack 0.0.1
+  ├── ✕ unmet peer react@^17.0.0: found 18.3.1
+  └── ✕ unmet peer react-dom@^17.0.0: found 18.2.0
+Peer dependencies that should be installed:
+  @babel/core@^7.0.0
+  yjs@>=13.5.22
+
+Done in 4s
