@@ -1,0 +1,125 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+      - generic [ref=e4]:
+            "[plugin:vite:react-babel]
+            /home/isaac/pan/stateurl-example/src/components/ViaExample.tsx:
+            Expecting Unicode escape sequence \\uXXXX. (11:23) 14 | }"
+      - generic [ref=e5]: /home/isaac/pan/stateurl-example/src/components/ViaExample.tsx:11:23
+      - generic [ref=e6]:
+            "9 | const handleVia = (expression: string, shouldNavigate = false)
+            => { 10 | const result = via(expression) 11 |
+            setLastResult(\\`via('\\${expression}') → \"\\${result}\"\\`) | ^ 12
+            | if (shouldNavigate) { 13 | go(result)"
+      - generic [ref=e7]:
+            at constructor
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:367:19)
+            at TypeScriptParserMixin.raise
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:6624:19)
+            at TypeScriptParserMixin.readWord1
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:6584:16)
+            at TypeScriptParserMixin.readWord
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:6604:23)
+            at TypeScriptParserMixin.getTokenFromCode
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:6323:14)
+            at TypeScriptParserMixin.getTokenFromCode
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:4826:11)
+            at TypeScriptParserMixin.getTokenFromCode
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10042:11)
+            at TypeScriptParserMixin.nextToken
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:5807:10)
+            at TypeScriptParserMixin.next
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:5717:10)
+            at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11233:10)
+            at TypeScriptParserMixin.parseSubscript
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11184:19)
+            at TypeScriptParserMixin.parseSubscript
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9329:18)
+            at TypeScriptParserMixin.parseSubscripts
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11158:19)
+            at TypeScriptParserMixin.parseExprSubscripts
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11149:17)
+            at TypeScriptParserMixin.parseUpdate
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11130:21)
+            at TypeScriptParserMixin.parseMaybeUnary
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11110:23)
+            at TypeScriptParserMixin.parseMaybeUnary
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9890:18)
+            at TypeScriptParserMixin.parseMaybeUnaryOrPrivate
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10963:61)
+            at TypeScriptParserMixin.parseExprOps
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10968:23)
+            at TypeScriptParserMixin.parseMaybeConditional
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10945:23)
+            at TypeScriptParserMixin.parseMaybeAssign
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10895:21)
+            at TypeScriptParserMixin.parseMaybeAssign
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9839:20)
+            at TypeScriptParserMixin.parseExpressionBase
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10848:23)
+            at
+            /home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10844:39
+            at TypeScriptParserMixin.allowInAnd
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12495:16)
+            at TypeScriptParserMixin.parseExpression
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10844:17)
+            at TypeScriptParserMixin.parseStatementContent
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12971:23)
+            at TypeScriptParserMixin.parseStatementContent
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9569:18)
+            at TypeScriptParserMixin.parseStatementLike
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12843:17)
+            at TypeScriptParserMixin.parseStatementListItem
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12823:17)
+            at TypeScriptParserMixin.parseBlockOrModuleBlockBody
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:13392:61)
+            at TypeScriptParserMixin.parseBlockBody
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:13385:10)
+            at TypeScriptParserMixin.parseBlock
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:13373:10)
+            at TypeScriptParserMixin.parseFunctionBody
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12174:24)
+            at TypeScriptParserMixin.parseArrowExpression
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12149:10)
+            at TypeScriptParserMixin.parseParenAndDistinguishExpression
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11759:12)
+            at TypeScriptParserMixin.parseExprAtom
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11395:23)
+            at TypeScriptParserMixin.parseExprAtom
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:4793:20)
+            at TypeScriptParserMixin.parseExprSubscripts
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11145:23)
+            at TypeScriptParserMixin.parseUpdate
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11130:21)
+            at TypeScriptParserMixin.parseMaybeUnary
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:11110:23)
+            at TypeScriptParserMixin.parseMaybeUnary
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9890:18)
+            at TypeScriptParserMixin.parseMaybeUnaryOrPrivate
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10963:61)
+            at TypeScriptParserMixin.parseExprOps
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10968:23)
+            at TypeScriptParserMixin.parseMaybeConditional
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10945:23)
+            at TypeScriptParserMixin.parseMaybeAssign
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10895:21)
+            at TypeScriptParserMixin.parseMaybeAssign
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:9839:20)
+            at
+            /home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10864:39
+            at TypeScriptParserMixin.allowInAnd
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:12495:16)
+            at TypeScriptParserMixin.parseMaybeAssignAllowIn
+            (/home/isaac/pan/node_modules/.pnpm/@babel+parser@7.28.5/node_modules/@babel/parser/lib/index.js:10864:17
+      - generic [ref=e8]:
+            - text: Click outside, press Esc key, or fix the code to dismiss.
+            - text: You can also disable this overlay by setting
+            - code [ref=e9]: server.hmr.overlay
+            - text: to
+            - code [ref=e10]: 'false'
+            - text: in
+            - code [ref=e11]: vite.config.ts
+            - text: .
+```

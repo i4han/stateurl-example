@@ -14,7 +14,7 @@ export default function Layout() {
     const isActive = (path: string) => currentPath.includes(path)
 
     const toggleTheme = () => {
-        feature.theme.value = theme === 'light' ? 'dark' : 'light'
+        feature.theme.set(theme === 'light' ? 'dark' : 'light')
     }
 
     return (
@@ -27,17 +27,24 @@ export default function Layout() {
                     <div className='feature-badges'>
                         <span className='badge version'>v{version}</span>
                         <span className={`badge theme ${theme}`}>
-                            {theme === 'light' ? '☀️ Light' : '🌙 Dark'}
+                            {theme === 'light' ? 'Light' : 'Dark'}
                         </span>
                     </div>
                     <button
-                        onClick={() => { feature.version.value = version === '1' ? '2' : '1' }}
+                        type='button'
+                        onClick={() => {
+                            feature.version.set(version === '1' ? '2' : '1')
+                        }}
                         className='feature-toggle'
                     >
                         Toggle Version
                     </button>
-                    <button onClick={toggleTheme} className='feature-toggle theme-toggle'>
-                        {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+                    <button
+                        type='button'
+                        onClick={toggleTheme}
+                        className='feature-toggle theme-toggle'
+                    >
+                        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
                     </button>
                 </nav>
             </header>
@@ -45,23 +52,54 @@ export default function Layout() {
             <div className='app-body'>
                 <aside className='side-nav'>
                     <nav>
-                        <a href={to('/home')} onClick={handleHref} className={isActive('/home') ? 'active' : ''}>
-                            🏠 Home
+                        <a
+                            href={to('/home')}
+                            onClick={handleHref}
+                            className={isActive('/home') ? 'active' : ''}
+                        >
+                            Home
                         </a>
-                        <a href={to('/counter')} onClick={handleHref} className={isActive('/counter') ? 'active' : ''}>
-                            🔢 Counter (Query)
+                        <a
+                            href={to('/counter')}
+                            onClick={handleHref}
+                            className={isActive('/counter') ? 'active' : ''}
+                        >
+                            Counter
                         </a>
-                        <a href={to('/products')} onClick={handleHref} className={isActive('/products') ? 'active' : ''}>
-                            📦 Products (Params)
+                        <a
+                            href={to('/products')}
+                            onClick={handleHref}
+                            className={isActive('/products') ? 'active' : ''}
+                        >
+                            Products
                         </a>
-                        <a href={to('/users')} onClick={handleHref} className={isActive('/users') ? 'active' : ''}>
-                            👥 Users (Params)
+                        <a
+                            href={to('/users')}
+                            onClick={handleHref}
+                            className={isActive('/users') ? 'active' : ''}
+                        >
+                            Users
                         </a>
-                        <a href={to('/settings')} onClick={handleHref} className={isActive('/settings') ? 'active' : ''}>
-                            ⚙️ Settings
+                        <a
+                            href={to('/settings')}
+                            onClick={handleHref}
+                            className={isActive('/settings') ? 'active' : ''}
+                        >
+                            Settings
                         </a>
-                        <a href={to('/about')} onClick={handleHref} className={isActive('/about') ? 'active' : ''}>
-                            ℹ️ About
+                        <a
+                            href={to('/via-demo')}
+                            onClick={handleHref}
+                            className={isActive('/via-demo') ? 'active' : ''}
+                        >
+                            Via Navigation
+                        </a>
+                        <a
+                            href={to('/about')}
+                            onClick={handleHref}
+                            className={isActive('/about') ? 'active' : ''}
+                        >
+                            About
                         </a>
                     </nav>
                 </aside>
@@ -73,7 +111,8 @@ export default function Layout() {
 
             <footer>
                 <p>
-                    StateURL Demo • Theme: <strong>{theme}</strong> • Path: <code>{pathname.value}</code>
+                    StateURL Demo • Theme: <strong>{theme}</strong> • Path:{' '}
+                    <code>{pathname.value}</code>
                 </p>
             </footer>
         </div>

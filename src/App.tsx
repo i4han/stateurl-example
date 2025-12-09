@@ -17,6 +17,7 @@ export default function App() {
             routes={routes}
             basePattern='/app/:version=v1/:theme=light'
             RenderNotFound={NotFound}
+            redirectToBase={true}
         />
     )
 }

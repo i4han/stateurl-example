@@ -1,4 +1,5 @@
 import { Outlet, useNavigator, param } from 'stateurl'
+import CodeExample from './CodeExample'
 
 const products = [
     { id: '1', name: 'Laptop', price: 999 },
@@ -14,7 +15,10 @@ export default function Products() {
     return (
         <section>
             <h2>Products (Params Demo)</h2>
-            <p>Click a product to see its details. Notice the URL changes to <code>/products/item/123</code></p>
+            <p>
+                Click a product to see its details. Notice the URL changes to{' '}
+                <code>/products/item/123</code>
+            </p>
 
             <div className='products-container'>
                 <div className='products-list'>
@@ -25,10 +29,16 @@ export default function Products() {
                                 <a
                                     href={to(`/products/item/${product.id}`)}
                                     onClick={handleHref}
-                                    className={productId === product.id ? 'active' : ''}
+                                    className={
+                                        productId === product.id ? 'active' : ''
+                                    }
                                 >
-                                    <span className='product-name'>{product.name}</span>
-                                    <span className='product-price'>${product.price}</span>
+                                    <span className='product-name'>
+                                        {product.name}
+                                    </span>
+                                    <span className='product-price'>
+                                        ${product.price}
+                                    </span>
                                 </a>
                             </li>
                         ))}
@@ -36,15 +46,38 @@ export default function Products() {
                 </div>
 
                 <div className='product-detail-container'>
-                    {productId ? (
-                        <Outlet />
-                    ) : (
-                        <div className='placeholder'>
-                            <p>← Select a product to view details</p>
-                        </div>
-                    )}
+                    <Outlet />
                 </div>
             </div>
+
+            <CodeExample
+                code={`import { useNavigator, param } from 'stateurl'
+
+export default function Products() {
+  const { handleHref, to } = useNavigator()
+  
+  // Access nested param (signal)
+  const productId = param.products?.item?.value
+  
+  return (
+    <div>
+      {products.map((product) => (
+        <a 
+          href={to(\`/products/item/\${product.id}\`)}
+          onClick={handleHref}
+          className={productId === product.id ? 'active' : ''}
+        >
+          {product.name} - \${product.price}
+        </a>
+      ))}
+      
+      {/* Outlet renders ProductDetail component */}
+      <Outlet />
+    </div>
+  )
+}`}
+                language='tsx'
+            />
         </section>
     )
 }

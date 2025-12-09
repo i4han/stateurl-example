@@ -19,18 +19,15 @@ export const routes = [
             {
                 path: 'products',
                 render: Products,
-                outlet: [
-                    { path: 'item/:productId', render: ProductDetail },
-                ],
+                outlet: [{ path: 'item/:productId', render: ProductDetail }],
             },
             {
                 path: 'users',
                 render: Users,
-                outlet: [
-                    { path: 'profile/:userId', render: UserDetail },
-                ],
+                outlet: [{ path: 'profile/:userId', render: UserDetail }],
             },
             { path: 'settings', render: Settings },
+            { path: 'via-demo', render: null },
             { path: 'about', render: About },
         ],
     },

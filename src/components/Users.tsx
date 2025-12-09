@@ -1,4 +1,5 @@
 import { Outlet, useNavigator, param } from 'stateurl'
+import CodeExample from './CodeExample'
 
 const users = [
     { id: '1', name: 'Alice Johnson' },
@@ -13,7 +14,10 @@ export default function Users() {
     return (
         <section>
             <h2>Users (Params Demo)</h2>
-            <p>Click a user to see their profile. Notice the URL changes to <code>/users/profile/42</code></p>
+            <p>
+                Click a user to see their profile. Notice the URL changes to{' '}
+                <code>/users/profile/42</code>
+            </p>
 
             <div className='users-container'>
                 <div className='users-list'>
@@ -24,9 +28,11 @@ export default function Users() {
                                 <a
                                     href={to(`/users/profile/${user.id}`)}
                                     onClick={handleHref}
-                                    className={userId === user.id ? 'active' : ''}
+                                    className={
+                                        userId === user.id ? 'active' : ''
+                                    }
                                 >
-                                    👤 {user.name}
+                                    {user.name}
                                 </a>
                             </li>
                         ))}
@@ -34,15 +40,38 @@ export default function Users() {
                 </div>
 
                 <div className='user-detail-container'>
-                    {userId ? (
-                        <Outlet />
-                    ) : (
-                        <div className='placeholder'>
-                            <p>← Select a user to view profile</p>
-                        </div>
-                    )}
+                    <Outlet />
                 </div>
             </div>
+
+            <CodeExample
+                code={`import { useNavigator, param } from 'stateurl'
+
+export default function Users() {
+  const { handleHref, to } = useNavigator()
+  
+  // Access route param (signal)
+  const userId = param.users?.profile?.value
+  
+  return (
+    <div>
+      {users.map((user) => (
+        <a 
+          href={to(\`/users/profile/\${user.id}\`)}
+          onClick={handleHref}
+          className={userId === user.id ? 'active' : ''}
+        >
+          {user.name}
+        </a>
+      ))}
+      
+      {/* Outlet renders nested route */}
+      <Outlet />
+    </div>
+  )
+}`}
+                language='tsx'
+            />
         </section>
     )
 }
