@@ -57,16 +57,11 @@ export default function Layout() {
             )}
 
             <header className='top-menu'>
-                <div className='logo'>
-                    <h1>StateURL Example</h1>
-                </div>
+                <a href={to('/home')} onClick={handleHref} className='logo'>
+                    <span className='logo-icon'>S</span>
+                    <span className='logo-text'>StateURL</span>
+                </a>
                 <nav className='top-nav'>
-                    <div className='feature-badges'>
-                        <span className='badge version'>{version}</span>
-                        <span className={`badge theme ${theme}`}>
-                            {theme === 'light' ? 'Light' : 'Dark'}
-                        </span>
-                    </div>
                     <button
                         type='button'
                         onClick={() => {

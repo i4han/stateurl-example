@@ -14,9 +14,26 @@ export default function CodeExample({
     const theme = feature.theme.value
 
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(code)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
+        try {
+            // Modern clipboard API (requires secure context)
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(code)
+            } else {
+                // Fallback for non-secure contexts
+                const textArea = document.createElement('textarea')
+                textArea.value = code
+                textArea.style.position = 'fixed'
+                textArea.style.left = '-9999px'
+                document.body.appendChild(textArea)
+                textArea.select()
+                document.execCommand('copy')
+                document.body.removeChild(textArea)
+            }
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        } catch (err) {
+            console.error('Failed to copy:', err)
+        }
     }
 
     // Light theme with readable comments
