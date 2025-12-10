@@ -450,9 +450,9 @@ section > p {
 /* Buttons - Outline Style with Consistent Height */
 .btn {
     padding: 0.75rem 1.5rem;
-    border: 2px solid var(--color-border);
+    border: 1px solid var(--color-primary);
     background: var(--color-bg-secondary);
-    color: var(--text-primary);
+    color: var(--color-primary);
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.929rem;
@@ -467,9 +467,9 @@ section > p {
 }
 
 .btn:hover {
-    background: var(--color-accent);
-    color: white;
-    border-color: var(--color-accent);
+    background: var(--bg-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
     transform: translateY(-1px);
 }
 
@@ -875,9 +875,9 @@ strong {
 
 .button-group button {
     background: var(--color-accent);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
+    color: var(--color-primary);
+    border: var(--color-primary);
+    padding: 0.75rem 1rem;
     border-radius: 6px;
     cursor: pointer;
     font-family: 'Roboto Mono', monospace;

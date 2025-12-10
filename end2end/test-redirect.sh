@@ -8,3 +8,5 @@ echo ""
 
 # Run only the redirect tests
 pnpm test end2end/06-redirect-to-base.spec.ts "$@"
+
+

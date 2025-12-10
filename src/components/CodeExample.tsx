@@ -37,19 +37,37 @@ export default function CodeExample({
         },
     }
 
-    // Dark theme with lighter text
+    // Dark theme with brighter, more readable text
     const darkStyle = {
         ...vscDarkPlus,
+        'code[class*="language-"]': {
+            color: '#d4d4d4',
+        },
+        'pre[class*="language-"]': {
+            color: '#d4d4d4',
+        },
         comment: {
-            color: '#7c7c7c',
+            color: '#6a9955',
             fontStyle: 'italic',
+        },
+        string: {
+            color: '#ce9178',
+        },
+        keyword: {
+            color: '#569cd6',
+        },
+        function: {
+            color: '#dcdcaa',
+        },
+        operator: {
+            color: '#d4d4d4',
         },
     }
 
     const customStyle = theme === 'dark' ? darkStyle : lightStyle
 
     return (
-        <div className='code-example'>
+        <div className='code-example' style={{ background: theme === 'dark' ? '#171717' : undefined }}>
             <div
                 style={{
                     display: 'flex',
@@ -58,36 +76,23 @@ export default function CodeExample({
                     marginBottom: '1rem',
                 }}
             >
-                <h4
-                    style={{
-                        margin: 0,
-                        fontSize: '0.929rem',
-                        fontWeight: 500,
-                    }}
-                >
-                    Code Example
-                </h4>
+                <h4 style={{ margin: 0 }}>Code Example</h4>
                 <button
                     type='button'
                     onClick={handleCopy}
                     className='btn btn-primary'
-                    style={{
-                        padding: '0.5rem 1rem',
-                        fontSize: '0.929rem',
-                        flex: 'none',
-                    }}
+                    style={{ flex: 'none' }}
                 >
                     {copied ? 'Copied' : 'Copy'}
                 </button>
             </div>
-            <div style={{ overflowX: 'auto', maxWidth: '100%' }}>
+            <div style={{ overflowX: 'auto', maxWidth: '100%', background: theme === 'dark' ? '#1e1e1e' : '#f6f8fa', borderRadius: '6px' }}>
                 <SyntaxHighlighter
                     language={language}
                     style={customStyle}
                     customStyle={{
                         borderRadius: '6px',
                         padding: '1rem',
-                        fontSize: '0.875rem',
                         margin: 0,
                         background: theme === 'dark' ? '#1e1e1e' : '#f6f8fa',
                         fontFamily:
@@ -108,7 +113,6 @@ export default function CodeExample({
                         paddingRight: '1em',
                         color: theme === 'dark' ? '#858585' : '#d1d5db',
                         userSelect: 'none',
-                        fontSize: '0.875rem',
                         opacity: theme === 'dark' ? 0.6 : 0.5,
                     }}
                 >

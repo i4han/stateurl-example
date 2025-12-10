@@ -1,14 +1,17 @@
-import { useNavigator, via, go, pathname } from 'stateurl'
+import { useNavigator, via, go, path } from 'stateurl'
 import { useState } from 'react'
 import CodeExample from './CodeExample'
 
 export default function ViaExample() {
     const { route } = useNavigator()
     const [lastResult, setLastResult] = useState<string>('')
+    
+    // Read current path using new API
+    const currentPath = path.full.value
 
     const handleVia = (expression: string, shouldNavigate = false) => {
         const result = via(expression)
-        setLastResult(\`via('\${expression}') → "\${result}"\`)
+        setLastResult(`via('${expression}') → "${result}"`)
         if (shouldNavigate) {
             go(result)
         }
@@ -23,7 +26,7 @@ export default function ViaExample() {
             </p>
 
             <div className='current-location'>
-                <strong>Current Location:</strong> <code>{pathname.value}</code>
+                <strong>Current Location:</strong> <code>{currentPath}</code>
             </div>
 
             {lastResult && (
@@ -53,12 +56,12 @@ export default function ViaExample() {
                 </div>
 
                 <CodeExample
-                    code={\`// Absolute paths - direct navigation
+                    code={`// Absolute paths - direct navigation
 const homePath = via('/home')          // → '/home'
 const productsPath = via('/products')  // → '/products'
 
 // Navigate using the path
-go(via('/settings'))  // Jump to settings\`}
+go(via('/settings'))  // Jump to settings`}
                     language='typescript'
                 />
             </div>
@@ -105,13 +108,13 @@ go(via('/settings'))  // Jump to settings\`}
                 </div>
 
                 <CodeExample
-                    code={\`// From /products:
+                    code={`// From /products:
 via('counter')   // → '/counter' (finds sibling)
 via('settings')  // → '/settings' (finds sibling)
 
 // From /products/item/1:
 via('products')  // → '/products' (finds ancestor)
-via('users')     // → '/users' (finds upper neighbor)\`}
+via('users')     // → '/users' (finds upper neighbor)`}
                     language='typescript'
                 />
             </div>
@@ -134,12 +137,12 @@ via('users')     // → '/users' (finds upper neighbor)\`}
                 </div>
 
                 <CodeExample
-                    code={\`// Multi-level navigation with params
+                    code={`// Multi-level navigation with params
 via('products/item:1')    // → '/products/item/1'
 via('users/profile:2')    // → '/users/profile/2'
 
 // Hierarchical paths work from anywhere
-go(via('products/item:3')) // Jump to product 3\`}
+go(via('products/item:3')) // Jump to product 3`}
                     language='typescript'
                 />
             </div>
@@ -165,13 +168,13 @@ go(via('products/item:3')) // Jump to product 3\`}
                 </div>
 
                 <CodeExample
-                    code={\`// Colon syntax for params
+                    code={`// Colon syntax for params
 via('item:1')      // Find 'item' route, set param to '1'
 via('profile:2')   // Find 'profile' route, set param to '2'
 
 // Combine with hierarchical paths
 via('products/item:4')  // → '/products/item/4'
-via('users/profile:1')  // → '/users/profile/1'\`}
+via('users/profile:1')  // → '/users/profile/1'`}
                     language='typescript'
                 />
             </div>
@@ -205,7 +208,7 @@ via('users/profile:1')  // → '/users/profile/1'\`}
                 </div>
 
                 <CodeExample
-                    code={\`// via() returns path, go() navigates
+                    code={`// via() returns path, go() navigates
 const path = via('settings')
 console.log(path)  // '/settings'
 go(path)           // Navigate to settings
@@ -217,7 +220,7 @@ go(via('products/item:1'))
 // Use in event handlers
 <button onClick={() => go(via('about'))}>
   About
-</button>\`}
+</button>`}
                     language='tsx'
                 />
             </div>
@@ -237,7 +240,7 @@ go(via('products/item:1'))
                 </div>
 
                 <CodeExample
-                    code={\`// v1 (deprecated):
+                    code={`// v1 (deprecated):
 via('^users')           // ❌ No longer supported
 via('settings', '^')    // ❌ No longer supported
 
@@ -251,7 +254,7 @@ via('settings')         // ✅ 6-level priority search
 // 3. Then descendants
 // 4. Then lower neighbors
 // 5. Then ancestors
-// 6. Finally upper neighbors\`}
+// 6. Finally upper neighbors`}
                     language='typescript'
                 />
             </div>

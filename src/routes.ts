@@ -8,6 +8,24 @@ import ProductDetail from './components/ProductDetail'
 import Users from './components/Users'
 import UserDetail from './components/UserDetail'
 import Settings from './components/Settings'
+import ViaExample from './components/ViaExample'
+import GuardsDemo, {
+    GuardsProtectedPage,
+    GuardsPremiumPage,
+    authGuard,
+    premiumGuard,
+} from './components/GuardsDemo'
+import TransitionsDemo, {
+    TransitionsFastPage,
+    TransitionsMediumPage,
+    TransitionsSlowPage,
+} from './components/TransitionsDemo'
+import ErrorBoundaryDemo, {
+    ErrorStablePage,
+    ErrorImmediatePage,
+    ErrorDelayedPage,
+} from './components/ErrorBoundaryDemo'
+import NestedLayoutDemo from './components/NestedLayoutDemo'
 
 export const routes = [
     {
@@ -27,8 +45,29 @@ export const routes = [
                 outlet: [{ path: 'profile/:userId', render: UserDetail }],
             },
             { path: 'settings', render: Settings },
-            { path: 'via-demo', render: null },
+            { path: 'via-demo', render: ViaExample },
             { path: 'about', render: About },
+            { path: 'nested-layout-demo', render: NestedLayoutDemo },
+            // v0.2.0 Feature Demos
+            { path: 'guards-demo', render: GuardsDemo },
+            {
+                path: 'guards-protected',
+                case: [authGuard],
+                render: GuardsProtectedPage,
+            },
+            {
+                path: 'guards-premium',
+                case: [authGuard, premiumGuard],
+                render: GuardsPremiumPage,
+            },
+            { path: 'transitions-demo', render: TransitionsDemo },
+            { path: 'transitions-fast', render: TransitionsFastPage },
+            { path: 'transitions-medium', render: TransitionsMediumPage },
+            { path: 'transitions-slow', render: TransitionsSlowPage },
+            { path: 'error-boundary-demo', render: ErrorBoundaryDemo },
+            { path: 'error-stable', render: ErrorStablePage },
+            { path: 'error-immediate', render: ErrorImmediatePage },
+            { path: 'error-delayed', render: ErrorDelayedPage },
         ],
     },
 ] as const satisfies Route[]

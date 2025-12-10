@@ -22,7 +22,7 @@ export default function ProductDetail() {
     const { route } = useNavigator()
     const productId = route.param.productId
     const product = products.find((p) => p.id === productId)
-    console.log(productId)
+    
     if (!product) {
         return (
             <div className='placeholder'>
@@ -44,11 +44,13 @@ export default function ProductDetail() {
             </div>
 
             <CodeExample
-                code={`import { param, useNavigator } from 'stateurl'
+                code={`import { useNavigator } from 'stateurl'
 
 export default function ProductDetail() {
-  // Access nested route param (signal)
-  const productId = param.products?.item?.value
+  const { route } = useNavigator()
+  
+  // Access route param (Proxy API)
+  const productId = route.param.productId
   
   // Use it to fetch/display data
   const product = products.find(p => p.id === productId)

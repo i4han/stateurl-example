@@ -177,3 +177,5 @@ If manual verification works but tests fail:
 -   Check Playwright version
 -   Re-install browsers: `pnpm exec playwright install chromium`
 -   Try: `pnpm test:ui` to see what's happening
+
+

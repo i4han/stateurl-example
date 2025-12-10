@@ -1,9 +1,9 @@
-import { feature, pathname } from 'stateurl'
+import { feature, path } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function Home() {
-    const version = feature.version.value
-    const theme = feature.theme.value
+    const version = feature.version
+    const theme = feature.theme
 
     return (
         <section>
@@ -19,7 +19,7 @@ export default function Home() {
                     <p>URL pattern-based feature flags</p>
                     <code>/app/:version/:theme</code>
                     <p className='current'>
-                        Current: v{version} ({theme})
+                        Current: {version} ({theme})
                     </p>
                 </div>
 
@@ -60,14 +60,14 @@ export default function App() {
   )
 }
 
-// Access features anywhere in your app
+// Access features anywhere in your app (Proxy API)
 import { feature } from 'stateurl'
 
-const version = feature.version.value  // 'v1' or 'v2'
-const theme = feature.theme.value      // 'light' or 'dark'
+const version = feature.version  // 'v1' or 'v2'
+const theme = feature.theme      // 'light' or 'dark'
 
 // Update features (URL updates automatically!)
-feature.theme.value = 'dark'`}
+feature.theme = 'dark'`}
                 language='tsx'
             />
 
@@ -75,10 +75,10 @@ feature.theme.value = 'dark'`}
                 <h4>Current State:</h4>
                 <ul>
                     <li>
-                        <strong>Path:</strong> <code>{pathname.value}</code>
+                        <strong>Path:</strong> <code>{path.full.value}</code>
                     </li>
                     <li>
-                        <strong>Version:</strong> v{version}
+                        <strong>Version:</strong> {version}
                     </li>
                     <li>
                         <strong>Theme:</strong>{' '}

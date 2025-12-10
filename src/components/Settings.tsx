@@ -2,8 +2,8 @@ import { feature } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function Settings() {
-    const version = feature.version.value
-    const theme = feature.theme.value
+    const version = feature.version
+    const theme = feature.theme
 
     return (
         <section>
@@ -17,24 +17,24 @@ export default function Settings() {
                 <div className='setting-item'>
                     <h3>Version</h3>
                     <p>
-                        Current version: <strong>v{version}</strong>
+                        Current version: <strong>{version}</strong>
                     </p>
                     <div className='button-group'>
                         <button
                             type='button'
                             onClick={() => {
-                                feature.version.set('1')
+                                feature.version = 'v1'
                             }}
-                            className={version === '1' ? 'btn-active' : 'btn'}
+                            className='btn'
                         >
                             Version 1
                         </button>
                         <button
                             type='button'
                             onClick={() => {
-                                feature.version.set('2')
+                                feature.version = 'v2'
                             }}
-                            className={version === '2' ? 'btn-active' : 'btn'}
+                            className='btn'
                         >
                             Version 2
                         </button>
@@ -51,7 +51,7 @@ export default function Settings() {
                         <button
                             type='button'
                             onClick={() => {
-                                feature.theme.set('light')
+                                feature.theme = 'light'
                             }}
                             className={theme === 'light' ? 'btn-active' : 'btn'}
                         >
@@ -60,7 +60,7 @@ export default function Settings() {
                         <button
                             type='button'
                             onClick={() => {
-                                feature.theme.set('dark')
+                                feature.theme = 'dark'
                             }}
                             className={theme === 'dark' ? 'btn-active' : 'btn'}
                         >
@@ -90,24 +90,24 @@ export default function Settings() {
                 code={`import { feature } from 'stateurl'
 
 export default function Settings() {
-  // Access feature flags (signals)
-  const version = feature.version.value
-  const theme = feature.theme.value
+  // Access feature flags (Proxy API)
+  const version = feature.version
+  const theme = feature.theme
   
   // Update features - URL updates automatically!
   const changeVersion = (v: string) => {
-    feature.version.value = v
+    feature.version = v
   }
   
   const changeTheme = (t: string) => {
-    feature.theme.value = t
+    feature.theme = t
   }
   
   return (
     <div>
       <button 
-        onClick={() => changeVersion('1')}
-        className={version === '1' ? 'active' : ''}
+        onClick={() => changeVersion('v1')}
+        className={version === 'v1' ? 'active' : ''}
       >
         Version 1
       </button>

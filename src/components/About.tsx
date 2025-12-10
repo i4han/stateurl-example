@@ -42,11 +42,11 @@ export default function About() {
             </div>
 
             <CodeExample
-                code={`import { useNavigator, pathname } from 'stateurl'
+                code={`import { useNavigator, path } from 'stateurl'
 
 export default function Navigation() {
   const { handleHref, to } = useNavigator()
-  const currentPath = pathname.value
+  const currentPath = path.full.value
   
   // Check if route is active
   const isActive = (path: string) => currentPath.includes(path)

@@ -46,11 +46,13 @@ export default function UserDetail() {
             </div>
 
             <CodeExample
-                code={`import { param } from 'stateurl'
+                code={`import { useNavigator } from 'stateurl'
 
 export default function UserDetail() {
-  // Access nested route param (signal)
-  const userId = param.users?.profile?.value
+  const { route } = useNavigator()
+  
+  // Access route param (Proxy API)
+  const userId = route.param.userId
   
   // Use it to fetch/display data
   const user = users.find(u => u.id === userId)
