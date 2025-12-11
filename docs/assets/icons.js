@@ -1,5 +1,65 @@
 (function() {
     addIcons();
+    addDemoLink();
+    
+    function addDemoLink() {
+        if (document.readyState === "loading") return document.addEventListener("DOMContentLoaded", addDemoLink);
+        
+        // Find the toolbar
+        const toolbar = document.querySelector('.tsd-page-toolbar .tsd-toolbar-contents');
+        if (!toolbar) return;
+        
+        const linkStyle = `
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            background: var(--color-background-secondary);
+            padding: 0.375rem 0.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 150ms ease, opacity 150ms ease;
+            z-index: 10;
+        `;
+        
+        // Create demo link
+        const demoLink = document.createElement('a');
+        demoLink.href = '/';
+        demoLink.className = 'demo-app-link';
+        demoLink.innerHTML = '🚀 Demo App';
+        demoLink.style.cssText = linkStyle + 'left: 180px;';
+        demoLink.onmouseenter = () => demoLink.style.opacity = '0.8';
+        demoLink.onmouseleave = () => demoLink.style.opacity = '1';
+        
+        // Create GitHub link
+        const githubLink = document.createElement('a');
+        githubLink.href = 'https://github.com/i4han/stateurl-example';
+        githubLink.target = '_blank';
+        githubLink.rel = 'noopener noreferrer';
+        githubLink.className = 'github-link';
+        githubLink.innerHTML = 'GitHub';
+        githubLink.style.cssText = linkStyle + 'left: 290px;';
+        githubLink.onmouseenter = () => githubLink.style.opacity = '0.8';
+        githubLink.onmouseleave = () => githubLink.style.opacity = '1';
+        
+        // Create npm link
+        const npmLink = document.createElement('a');
+        npmLink.href = 'https://www.npmjs.com/package/stateurl';
+        npmLink.target = '_blank';
+        npmLink.rel = 'noopener noreferrer';
+        npmLink.className = 'npm-link';
+        npmLink.innerHTML = '📦 npm';
+        npmLink.style.cssText = linkStyle + 'left: 370px;';
+        npmLink.onmouseenter = () => npmLink.style.opacity = '0.8';
+        npmLink.onmouseleave = () => npmLink.style.opacity = '1';
+        
+        toolbar.appendChild(demoLink);
+        toolbar.appendChild(githubLink);
+        toolbar.appendChild(npmLink);
+    }
+    
     function addIcons() {
         if (document.readyState === "loading") return document.addEventListener("DOMContentLoaded", addIcons);
         const svg = document.body.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"));

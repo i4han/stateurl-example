@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSignals } from '@preact/signals-react/runtime'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { feature } from 'stateurl'
@@ -10,8 +11,9 @@ export default function CodeExample({
     code: string
     language?: string
 }) {
+    useSignals() // Enable signal tracking for reactivity
     const [copied, setCopied] = useState(false)
-    const theme = feature.theme.value
+    const theme = feature.theme
 
     const handleCopy = async () => {
         try {
@@ -54,37 +56,51 @@ export default function CodeExample({
         },
     }
 
-    // Dark theme with brighter, more readable text
+    // Dark theme matching Slate blue palette
     const darkStyle = {
         ...vscDarkPlus,
         'code[class*="language-"]': {
-            color: '#d4d4d4',
+            color: '#e2e8f0',
+            background: '#0f172a',
         },
         'pre[class*="language-"]': {
-            color: '#d4d4d4',
+            color: '#e2e8f0',
+            background: '#0f172a',
         },
         comment: {
-            color: '#6a9955',
+            color: '#64748b',
             fontStyle: 'italic',
         },
         string: {
-            color: '#ce9178',
+            color: '#fbbf24',
         },
         keyword: {
-            color: '#569cd6',
+            color: '#60a5fa',
         },
         function: {
-            color: '#dcdcaa',
+            color: '#a5b4fc',
         },
         operator: {
-            color: '#d4d4d4',
+            color: '#94a3b8',
+        },
+        punctuation: {
+            color: '#94a3b8',
+        },
+        number: {
+            color: '#34d399',
+        },
+        boolean: {
+            color: '#f472b6',
+        },
+        'class-name': {
+            color: '#67e8f9',
         },
     }
 
     const customStyle = theme === 'dark' ? darkStyle : lightStyle
 
     return (
-        <div className='code-example' style={{ background: theme === 'dark' ? '#171717' : undefined }}>
+        <div className='code-example' style={{ background: theme === 'dark' ? '#0f172a' : undefined }}>
             <div
                 style={{
                     display: 'flex',
@@ -103,7 +119,7 @@ export default function CodeExample({
                     {copied ? 'Copied' : 'Copy'}
                 </button>
             </div>
-            <div style={{ overflowX: 'auto', maxWidth: '100%', background: theme === 'dark' ? '#1e1e1e' : '#f6f8fa', borderRadius: '6px' }}>
+            <div style={{ overflowX: 'auto', maxWidth: '100%', background: theme === 'dark' ? '#0f172a' : '#f6f8fa', borderRadius: '6px' }}>
                 <SyntaxHighlighter
                     language={language}
                     style={customStyle}
@@ -111,13 +127,13 @@ export default function CodeExample({
                         borderRadius: '6px',
                         padding: '1rem',
                         margin: 0,
-                        background: theme === 'dark' ? '#1e1e1e' : '#f6f8fa',
+                        background: theme === 'dark' ? '#0f172a' : '#f6f8fa',
                         fontFamily:
                             "'Roboto Mono', 'SF Mono', Monaco, Consolas, monospace",
                         lineHeight: '1.5',
                         border:
                             theme === 'dark'
-                                ? '1px solid #333'
+                                ? '1px solid #334155'
                                 : '1px solid #e1e4e8',
                         overflowX: 'visible',
                         width: 'fit-content',
@@ -128,9 +144,9 @@ export default function CodeExample({
                     lineNumberStyle={{
                         minWidth: '2.5em',
                         paddingRight: '1em',
-                        color: theme === 'dark' ? '#858585' : '#d1d5db',
+                        color: theme === 'dark' ? '#64748b' : '#d1d5db',
                         userSelect: 'none',
-                        opacity: theme === 'dark' ? 0.6 : 0.5,
+                        opacity: theme === 'dark' ? 0.7 : 0.5,
                     }}
                 >
                     {code}
