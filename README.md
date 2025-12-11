@@ -9,13 +9,14 @@
 ## Table of Contents
 
 1. [Quick Start](#quick-start)
-2. [Project Structure](#project-structure) 
+2. [Project Structure](#project-structure)
 3. [Core Concepts](#core-concepts)
 4. [Building Blocks](#building-blocks)
 5. [Component Patterns](#component-patterns)
 6. [API Reference](#api-reference)
 7. [Common Mistakes](#common-mistakes)
 8. [Troubleshooting](#troubleshooting)
+9. [API Documentation](#api-documentation)
 
 ---
 
@@ -58,6 +59,7 @@ stateurl-example/
 │       ├── UserDetail.tsx # Detail view
 │       ├── Settings.tsx   # Feature flags demo ⭐
 │       └── About.tsx      # Static page
+├── docs/              # TypeDoc API documentation
 ├── UPDATED.md         # Fix summary (what was changed)
 └── README.md          # This file (how to build)
 ```
@@ -835,6 +837,26 @@ feature.theme.set('dark')
 
 // Param access:
 param.products.item.value  // Matches!
+```
+
+---
+
+## API Documentation
+
+Full TypeDoc-generated API documentation is available in the `docs/` directory:
+
+**[Open API Documentation](docs/index.html)**
+
+The documentation includes:
+- All exported functions with signatures and examples
+- Type definitions and interfaces
+- Module organization
+- Source code links
+
+To serve the docs locally:
+```bash
+npx serve docs -p 3333
+# Then open http://localhost:3333
 ```
 
 ---
