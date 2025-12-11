@@ -1,7 +1,8 @@
-import { feature, path } from 'stateurl'
+import { feature, path, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function Home() {
+    useSignals()
     const version = feature.version
     const theme = feature.theme
 

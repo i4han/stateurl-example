@@ -1,6 +1,8 @@
+import { useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function About() {
+    useSignals()
     return (
         <section>
             <h2>About StateURL</h2>

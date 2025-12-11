@@ -2,7 +2,7 @@
  * Guards Demo - Route-level conditional navigation
  */
 
-import { go, transition, type GuardContext } from 'stateurl'
+import { go, transition, useSignals, type GuardContext } from 'stateurl'
 
 // Simulated auth state
 let isAuthenticated = false
@@ -34,7 +34,8 @@ function LoginModal({ intended, current, next, cancel }: GuardContext) {
             <div className='modal-content'>
                 <h3>Authentication Required</h3>
                 <p>
-                    You must log in to access <strong>{intended.resource}</strong>
+                    You must log in to access{' '}
+                    <strong>{intended.resource}</strong>
                 </p>
 
                 <div className='button-group'>
@@ -56,8 +57,8 @@ function UpgradeModal({ intended, current, next, cancel }: GuardContext) {
             <div className='modal-content'>
                 <h3>Premium Feature</h3>
                 <p>
-                    The <strong>{intended.resource}</strong> section requires a premium
-                    subscription.
+                    The <strong>{intended.resource}</strong> section requires a
+                    premium subscription.
                 </p>
 
                 <div className='info-box'>
@@ -89,6 +90,7 @@ function UpgradeModal({ intended, current, next, cancel }: GuardContext) {
 }
 
 export default function GuardsDemo() {
+    useSignals()
     return (
         <section>
             <h2>Route Guards Demo</h2>
@@ -98,13 +100,18 @@ export default function GuardsDemo() {
                 <div className='setting-item'>
                     <h3>Current Status</h3>
                     <p>
-                        Authenticated: <strong>{isAuthenticated ? 'Yes' : 'No'}</strong>
+                        Authenticated:{' '}
+                        <strong>{isAuthenticated ? 'Yes' : 'No'}</strong>
                     </p>
                     <p>
                         Premium: <strong>{isPremiumUser ? 'Yes' : 'No'}</strong>
                     </p>
                     {isAuthenticated && (
-                        <button onClick={logout} className='btn' style={{ marginTop: '0.5rem' }}>
+                        <button
+                            onClick={logout}
+                            className='btn'
+                            style={{ marginTop: '0.5rem' }}
+                        >
                             Logout
                         </button>
                     )}
@@ -114,10 +121,16 @@ export default function GuardsDemo() {
                     <h3>Test Scenarios</h3>
                     <p>Try these pages to see guards in action</p>
                     <div className='button-group'>
-                        <button onClick={() => transition('/guards-protected')} className='btn'>
+                        <button
+                            onClick={() => transition('/guards-protected')}
+                            className='btn'
+                        >
                             Protected Page
                         </button>
-                        <button onClick={() => transition('/guards-premium')} className='btn'>
+                        <button
+                            onClick={() => transition('/guards-premium')}
+                            className='btn'
+                        >
                             Premium Page
                         </button>
                     </div>
@@ -131,10 +144,18 @@ export default function GuardsDemo() {
                 <h4>How Guards Work:</h4>
                 <ol>
                     <li>User tries to navigate to a protected route</li>
-                    <li>Router evaluates guards sequentially (one at a time)</li>
-                    <li>If a guard fails, the <code>orRender</code> component shows as a modal</li>
+                    <li>
+                        Router evaluates guards sequentially (one at a time)
+                    </li>
+                    <li>
+                        If a guard fails, the <code>orRender</code> component
+                        shows as a modal
+                    </li>
                     <li>User satisfies the condition (e.g., logs in)</li>
-                    <li>Guard calls <code>next()</code> to proceed to next guard or complete navigation</li>
+                    <li>
+                        Guard calls <code>next()</code> to proceed to next guard
+                        or complete navigation
+                    </li>
                 </ol>
             </div>
 
@@ -142,12 +163,17 @@ export default function GuardsDemo() {
                 <h4>Key Features:</h4>
                 <ul>
                     <li>Sequential evaluation - Guards run one at a time</li>
-                    <li>Modal overlays - Guard components render over current page</li>
+                    <li>
+                        Modal overlays - Guard components render over current
+                        page
+                    </li>
                     <li>next() and cancel() - User controls navigation flow</li>
-                    <li>Context props - Guards receive intended destination and current location</li>
+                    <li>
+                        Context props - Guards receive intended destination and
+                        current location
+                    </li>
                 </ul>
             </div>
-
         </section>
     )
 }
@@ -161,11 +187,14 @@ export function GuardsProtectedPage() {
 
             <div className='setting-item'>
                 <h3>Success</h3>
-                <p>You passed through the authentication guard to access this page.</p>
+                <p>
+                    You passed through the authentication guard to access this
+                    page.
+                </p>
                 <p>This page required 1 guard: Authentication</p>
             </div>
 
-            <div className='button-group'>
+            <div className='button-group' style={{ marginTop: '1.5rem' }}>
                 <button onClick={() => go('/guards-demo')} className='btn'>
                     ← Back to Guards Demo
                 </button>
@@ -182,16 +211,26 @@ export function GuardsPremiumPage() {
 
             <div className='setting-item'>
                 <h3>Premium Content</h3>
-                <p>You passed through TWO guards sequentially to access this page:</p>
+                <p>
+                    You passed through TWO guards sequentially to access this
+                    page:
+                </p>
                 <ol>
                     <li>Authentication guard</li>
                     <li>Premium subscription guard</li>
                 </ol>
             </div>
 
-                <div className='info-box'>
+            <div className='info-box'>
                 <h4>Exclusive Premium Analytics:</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '1rem',
+                        marginTop: '1rem',
+                    }}
+                >
                     <div style={{ textAlign: 'center' }}>
                         <h2 style={{ color: '#2563eb' }}>1,234</h2>
                         <p>Users</p>
@@ -207,7 +246,7 @@ export function GuardsPremiumPage() {
                 </div>
             </div>
 
-            <div className='button-group'>
+            <div className='button-group' style={{ marginTop: '1.5rem' }}>
                 <button onClick={() => go('/guards-demo')} className='btn'>
                     ← Back to Guards Demo
                 </button>
@@ -218,5 +257,7 @@ export function GuardsPremiumPage() {
 
 // Export guard definitions for use in routes
 export const authGuard = { when: () => isAuthenticated, orRender: LoginModal }
-export const premiumGuard = { when: () => isPremiumUser, orRender: UpgradeModal }
-
+export const premiumGuard = {
+    when: () => isPremiumUser,
+    orRender: UpgradeModal,
+}

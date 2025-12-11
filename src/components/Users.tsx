@@ -1,4 +1,4 @@
-import { Outlet, useNavigator, param } from 'stateurl'
+import { Outlet, useNavigator, param, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const users = [
@@ -8,6 +8,7 @@ const users = [
 ]
 
 export default function Users() {
+    useSignals()
     const { handleHref, to } = useNavigator()
     const userId = param.users?.profile?.value
 

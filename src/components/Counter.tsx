@@ -1,7 +1,8 @@
-import { useNavigator } from 'stateurl'
+import { useNavigator, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function Counter() {
+    useSignals()
     const { route } = useNavigator()
 
     // Register query parameter (must be called before using route.query.count)

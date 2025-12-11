@@ -1,4 +1,4 @@
-import { Outlet, useNavigator, param } from 'stateurl'
+import { Outlet, useNavigator, param, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const products = [
@@ -9,6 +9,7 @@ const products = [
 ]
 
 export default function Products() {
+    useSignals()
     const { handleHref, to } = useNavigator()
     const productId = param.products?.item?.value
 

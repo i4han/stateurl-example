@@ -3,7 +3,7 @@
  */
 
 import { useSignals } from '@preact/signals-react/runtime'
-import { transition as navigate, routerState, useNavigator } from 'stateurl'
+import { transition as navigate, routerState, useNavigator, feature } from 'stateurl'
 
 function TransitionPage({ title, color }: { title: string; color: string }) {
     const { handleHref } = useNavigator()
@@ -59,10 +59,18 @@ export default function TransitionsDemo() {
     useSignals()
     const transition = routerState.value.transition
 
+    // Read current version (demonstrates URL state reactivity)
+    const version = feature.version
+
     return (
         <section>
             <h2>Transitions Demo</h2>
-            <p>Track navigation state for loading UI and animations.</p>
+            <p>
+                Track navigation state for loading UI and animations.
+                <span style={{ marginLeft: '1rem', opacity: 0.6, fontSize: '0.9em' }}>
+                    (Current version: {version})
+                </span>
+            </p>
 
             <div className='settings-grid'>
                 <div className='setting-item'>

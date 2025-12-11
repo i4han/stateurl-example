@@ -1,8 +1,9 @@
-import { useNavigator, via, go, path } from 'stateurl'
+import { useNavigator, via, go, path, useSignals } from 'stateurl'
 import { useState } from 'react'
 import CodeExample from './CodeExample'
 
 export default function ViaExample() {
+    useSignals()
     const { route } = useNavigator()
     const [lastResult, setLastResult] = useState<string>('')
     

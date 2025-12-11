@@ -1,4 +1,4 @@
-import { useNavigator } from 'stateurl'
+import { useNavigator, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const users = [
@@ -18,6 +18,7 @@ const users = [
 ]
 
 export default function UserDetail() {
+    useSignals()
     const { route } = useNavigator()
     const userId = route.param.userId
     const user = users[Number(userId) - 1]

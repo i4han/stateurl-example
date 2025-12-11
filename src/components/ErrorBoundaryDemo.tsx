@@ -3,9 +3,10 @@
  */
 
 import { useState } from 'react'
-import { go } from 'stateurl'
+import { go, useSignals } from 'stateurl'
 
 export default function ErrorBoundaryDemo() {
+    useSignals()
     return (
         <section>
             <h2>Error Boundary Demo</h2>

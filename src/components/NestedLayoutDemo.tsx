@@ -2,9 +2,11 @@
  * Nested Layout Demo - Multiple layouts with route prefixes
  */
 
+import { useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 export default function NestedLayoutDemo() {
+    useSignals()
     return (
         <section>
             <h2>Nested Layouts with Prefixes</h2>

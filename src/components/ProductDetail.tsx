@@ -1,4 +1,4 @@
-import { param, useNavigator } from 'stateurl'
+import { param, useNavigator, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const products = [
@@ -19,6 +19,7 @@ const products = [
 ]
 
 export default function ProductDetail() {
+    useSignals()
     const { route } = useNavigator()
     const productId = route.param.productId
     const product = products.find((p) => p.id === productId)
