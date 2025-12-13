@@ -1,25 +1,39 @@
-import { useNavigator, useSignals } from 'stateurl'
+import { useSignals, registerQuery } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-export default function Counter() {
-    useSignals()
-    const { route } = useNavigator()
+// Register query parameter at module level
+registerQuery(['counter'], 'count', {})
 
-    // Register query parameter (must be called before using route.query.count)
-    route.createQuery('count')
+const code = `
+import { registerQuery } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
-    // Get count from URL query parameter (signal-based)
-    const count = Number(route.query.count) || 0
+// Register query parameter at module level
+registerQuery(['counter'], 'count', {})
 
-    const increment = () => {
-        route.query.count = count + 1
-    }
-    const decrement = () => {
-        route.query.count = count - 1
-    }
-    const reset = () => {
-        route.query.count = undefined
-    }
+export default function Counter({ query }: RouteComponentProps) {
+  // Get from URL (via props)
+  const count = Number(query.count) || 0
+  
+  return (
+    <div>
+      <h3>Count: {count}</h3>
+      <button onClick={
+          () => { query.count = String(count + 1)
+        }>Increment</button>
+      <button onClick={
+          () => { query.count = String(count - 1)
+        }>Decrement</button>
+      <button onClick={
+          () => { query.count = undefined }
+        }>Reset</button>
+    </div>
+  )
+}`
+
+export default function Counter({ query }: RouteComponentProps) {
+    const count = Number(query.count) || 0
 
     return (
         <section>
@@ -35,13 +49,31 @@ export default function Counter() {
                 </div>
 
                 <div className='counter-controls'>
-                    <button type='button' onClick={decrement} className='btn'>
+                    <button
+                        type='button'
+                        onClick={() => {
+                            query.count = String(count - 1)
+                        }}
+                        className='btn'
+                    >
                         Decrement
                     </button>
-                    <button type='button' onClick={increment} className='btn btn-primary'>
+                    <button
+                        type='button'
+                        onClick={() => {
+                            query.count = String(count + 1)
+                        }}
+                        className='btn btn-primary'
+                    >
                         Increment
                     </button>
-                    <button type='button' onClick={reset} className='btn btn-secondary'>
+                    <button
+                        type='button'
+                        onClick={() => {
+                            query.count = undefined
+                        }}
+                        className='btn btn-secondary'
+                    >
                         Reset
                     </button>
                 </div>
@@ -60,32 +92,9 @@ export default function Counter() {
                 </div>
 
                 <CodeExample
-                    code={`import { useNavigator } from 'stateurl'
-
-export default function Counter() {
-  const { route } = useNavigator()
-  
-  // Register query parameter first!
-  route.createQuery('count')
-  
-  // Get from URL (signal)
-  const count = Number(route.query.count) || 0
-  
-  // Update URL (signal assignment)
-  const increment = () => route.query.count = count + 1
-  const decrement = () => route.query.count = count - 1
-  const reset = () => route.query.count = undefined
-  
-  return (
-    <div>
-      <h3>Count: {count}</h3>
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
-      <button onClick={reset}>Reset</button>
-    </div>
-  )
-}`}
+                    code={code}
                     language='tsx'
+                    highlightLines={[16, 19, 22]}
                 />
             </div>
         </section>

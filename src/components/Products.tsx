@@ -1,4 +1,5 @@
-import { Outlet, useNavigator, param, useSignals } from 'stateurl'
+import { handleHref, Outlet } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const products = [
@@ -8,77 +9,75 @@ const products = [
     { id: '4', name: 'Monitor', price: 299 },
 ]
 
-export default function Products() {
-    useSignals()
-    const { handleHref, to } = useNavigator()
-    const productId = param.products?.item?.value
+const code = `
+import { Outlet, handleHref } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
+export default function Products({ to, param }: RouteComponentProps) {
+  return (
+    <div>
+      {products.map((product) => (
+        <a
+          // Use relative to() - 'item/$1' from /products
+          href={to('item/$1', [product.id])}
+          onClick={handleHref}
+          className={param.productId === product.id ? 'active' : ''}
+        >
+          {product.name} - \${product.price}
+        </a>
+      ))}
+
+      {/* Outlet renders ProductDetail component */}
+      <Outlet />
+    </div>
+  )
+}`
+
+export default function Products(props: RouteComponentProps) {
     return (
         <section>
             <h2>Products (Params Demo)</h2>
             <p>
-                Click a product to see its details. Notice the URL changes to{' '}
-                <code>/products/item/123</code>
+                Click a product to see its details. Uses relative{' '}
+                <code>to('item/$1', [id])</code> for navigation.
             </p>
 
             <div className='products-container'>
                 <div className='products-list'>
                     <h3>Product List</h3>
-                    <ul className='product-items'>
-                        {products.map((product) => (
-                            <li key={product.id}>
-                                <a
-                                    href={to(`/products/item/${product.id}`)}
-                                    onClick={handleHref}
-                                    className={
-                                        productId === product.id ? 'active' : ''
-                                    }
-                                >
-                                    <span className='product-name'>
-                                        {product.name}
-                                    </span>
-                                    <span className='product-price'>
-                                        ${product.price}
-                                    </span>
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
+                    <ProductList {...props} />
                 </div>
-
                 <div className='product-detail-container'>
                     <Outlet />
                 </div>
             </div>
 
             <CodeExample
-                code={`import { useNavigator, param } from 'stateurl'
-
-export default function Products() {
-  const { handleHref, to } = useNavigator()
-  
-  // Access nested param (signal)
-  const productId = param.products?.item?.value
-  
-  return (
-    <div>
-      {products.map((product) => (
-        <a 
-          href={to(\`/products/item/\${product.id}\`)}
-          onClick={handleHref}
-          className={productId === product.id ? 'active' : ''}
-        >
-          {product.name} - \${product.price}
-        </a>
-      ))}
-      
-      {/* Outlet renders ProductDetail component */}
-      <Outlet />
-    </div>
-  )
-}`}
+                code={code}
                 language='tsx'
+                highlightLines={[11, 12, 13]}
             />
         </section>
+    )
+}
+
+function ProductList({ to, param }: RouteComponentProps) {
+    return (
+        <ul className='product-items'>
+            {products.map((product) => (
+                <li key={product.id}>
+                    <a
+                        href={to('item/$1', [product.id])}
+                        onClick={handleHref}
+                        className={
+                            param.productId === product.id ? 'active' : ''
+                        }
+                    >
+                        <span className='product-name'>{product.name}</span>
+                        <span className='product-price'>${product.price}</span>
+                    </a>
+                </li>
+            ))}
+        </ul>
     )
 }

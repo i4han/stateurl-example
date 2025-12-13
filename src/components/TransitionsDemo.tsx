@@ -2,11 +2,17 @@
  * Transitions Demo - Transition state tracking for loading UI
  */
 
+import { type MouseEvent } from 'react'
 import { useSignals } from '@preact/signals-react/runtime'
-import { transition as navigate, routerState, useNavigator, feature } from 'stateurl'
+import { routerState, feature, go } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
 function TransitionPage({ title, color }: { title: string; color: string }) {
-    const { handleHref } = useNavigator()
+    const handleHref = (e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        const href = e.currentTarget.getAttribute('href') || ''
+        go(href)
+    }
 
     return (
         <section>
@@ -54,13 +60,18 @@ function TransitionPage({ title, color }: { title: string; color: string }) {
     )
 }
 
-export default function TransitionsDemo() {
-    const { handleHref } = useNavigator()
+export default function TransitionsDemo(_props: RouteComponentProps) {
     useSignals()
     const transition = routerState.value.transition
 
     // Read current version (demonstrates URL state reactivity)
     const version = feature.version
+
+    const handleHref = (e: MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
+        const href = e.currentTarget.getAttribute('href') || ''
+        go(href)
+    }
 
     return (
         <section>

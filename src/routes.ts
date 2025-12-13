@@ -9,6 +9,8 @@ import Users from './components/Users'
 import UserDetail from './components/UserDetail'
 import Settings from './components/Settings'
 import ViaExample from './components/ViaExample'
+import QueryDemo from './components/QueryDemo'
+import ParamDemo from './components/ParamDemo'
 import GuardsDemo, {
     GuardsProtectedPage,
     GuardsPremiumPage,
@@ -29,7 +31,7 @@ import NestedLayoutDemo from './components/NestedLayoutDemo'
 
 export const routes = [
     {
-        layout: true,
+        layoutPrefix: '',
         render: Layout,
         outlet: [
             { path: 'home', index: true, render: Home },
@@ -46,9 +48,10 @@ export const routes = [
             },
             { path: 'settings', render: Settings },
             { path: 'via-demo', render: ViaExample },
+            { path: 'query-demo', render: QueryDemo },
+            { path: 'param-demo/:userId', render: ParamDemo },
             { path: 'about', render: About },
             { path: 'nested-layout-demo', render: NestedLayoutDemo },
-            // v0.2.0 Feature Demos
             { path: 'guards-demo', render: GuardsDemo },
             {
                 path: 'guards-protected',

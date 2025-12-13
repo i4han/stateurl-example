@@ -1,23 +1,20 @@
-import { Outlet, useNavigator, param, useSignals } from 'stateurl'
+import { handleHref, Outlet } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const users = [
-    { id: '1', name: 'Alice Johnson' },
-    { id: '2', name: 'Bob Smith' },
-    { id: '3', name: 'Carol Williams' },
+    { id: '0', name: 'Alice Johnson' },
+    { id: '1', name: 'Bob Smith' },
+    { id: '2', name: 'Carol Williams' },
 ]
 
-export default function Users() {
-    useSignals()
-    const { handleHref, to } = useNavigator()
-    const userId = param.users?.profile?.value
-
+export default function Users({ to, param }: RouteComponentProps) {
     return (
         <section>
             <h2>Users (Params Demo)</h2>
             <p>
-                Click a user to see their profile. Notice the URL changes to{' '}
-                <code>/users/profile/42</code>
+                Click a user to see their profile. Uses relative{' '}
+                <code>to('profile/$1', [id])</code> for navigation.
             </p>
 
             <div className='users-container'>
@@ -27,10 +24,10 @@ export default function Users() {
                         {users.map((user) => (
                             <li key={user.id}>
                                 <a
-                                    href={to(`/users/profile/${user.id}`)}
+                                    href={to('profile/$1', [user.id])}
                                     onClick={handleHref}
                                     className={
-                                        userId === user.id ? 'active' : ''
+                                        param.userId === user.id ? 'active' : ''
                                     }
                                 >
                                     {user.name}
@@ -46,26 +43,23 @@ export default function Users() {
             </div>
 
             <CodeExample
-                code={`import { useNavigator, param } from 'stateurl'
+                code={`import { Outlet, handleHref } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
-export default function Users() {
-  const { handleHref, to } = useNavigator()
-  
-  // Access route param (signal)
-  const userId = param.users?.profile?.value
-  
+export default function Users({ to, param }: RouteComponentProps) {
   return (
     <div>
       {users.map((user) => (
-        <a 
-          href={to(\`/users/profile/\${user.id}\`)}
+        <a
+          // Use relative to() - 'profile/$1' from /users
+          href={to('profile/$1', [user.id])}
           onClick={handleHref}
-          className={userId === user.id ? 'active' : ''}
+          className={param.userId === user.id ? 'active' : ''}
         >
           {user.name}
         </a>
       ))}
-      
+
       {/* Outlet renders nested route */}
       <Outlet />
     </div>

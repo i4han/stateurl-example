@@ -1,30 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { useSignals } from '@preact/signals-react/runtime'
-import { Outlet, useNavigator, feature, path, routerState } from 'stateurl'
+import { Outlet, feature, path, routerState, handleHref } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
-export default function Layout() {
+export default function Layout({ to, ahead }: RouteComponentProps) {
     useSignals() // Enable signal tracking
-    const { handleHref, to } = useNavigator()
-    const version = feature.version
-    const theme = feature.theme
-    const currentPath = path.full.value
     const transition = routerState.value.transition
     const [toast, setToast] = useState<string | null>(null)
-
+    const [active] = ahead
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme)
-    }, [theme])
-
-    const isActive = (path: string) => currentPath.includes(path)
+        document.documentElement.setAttribute('data-theme', feature.theme)
+    }, [feature.theme])
 
     const toggleTheme = () => {
-        feature.theme = theme === 'light' ? 'dark' : 'light'
+        feature.theme = feature.theme === 'light' ? 'dark' : 'light'
     }
 
     const toggleVersion = () => {
-        const newVersion = version === 'v1' ? 'v2' : 'v1'
-        feature.version = newVersion
-        setToast(`Check URL updated to ${newVersion}`)
+        feature.version = feature.version === 'v1' ? 'v2' : 'v1'
+        setToast(`Check URL updated to ${feature.version}`)
         setTimeout(() => setToast(null), 2500)
     }
 
@@ -65,43 +59,6 @@ export default function Layout() {
             )}
 
             <header className='top-menu'>
-                {/* Toast notification - on header */}
-                {toast && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            background:
-                                theme === 'dark'
-                                    ? 'rgba(59, 130, 246, 0.2)'
-                                    : 'rgba(59, 130, 246, 0.1)',
-                            color: theme === 'dark' ? '#93c5fd' : '#1e40af',
-                            padding: '6px 16px',
-                            borderRadius: '6px',
-                            border: '1px solid rgba(59, 130, 246, 0.25)',
-                            zIndex: 10000,
-                            animation:
-                                'toastFade 0.3s ease-out, toastFadeOut 0.3s ease-in 2.2s',
-                            fontWeight: 500,
-                            fontSize: '13px',
-                            whiteSpace: 'nowrap',
-                        }}
-                    >
-                        {toast}
-                        <style>{`
-                            @keyframes toastFade {
-                                0% { opacity: 0; }
-                                100% { opacity: 1; }
-                            }
-                            @keyframes toastFadeOut {
-                                0% { opacity: 1; }
-                                100% { opacity: 0; }
-                            }
-                        `}</style>
-                    </div>
-                )}
                 <a href={to('/home')} onClick={handleHref} className='logo'>
                     <span className='logo-icon'>S</span>
                     <span className='logo-text'>StateURL</span>
@@ -144,10 +101,49 @@ export default function Layout() {
                         onClick={toggleTheme}
                         className='feature-toggle theme-toggle'
                     >
-                        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                        {feature.theme === 'light' ? 'Dark Mode' : 'Light Mode'}
                     </button>
                 </nav>
             </header>
+
+            {/* Toast notification - below header */}
+            {toast && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '60px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background:
+                            feature.theme === 'dark'
+                                ? 'rgba(59, 130, 246, 0.2)'
+                                : 'rgba(59, 130, 246, 0.1)',
+                        color: feature.theme === 'dark' ? '#93c5fd' : '#1e40af',
+                        padding: '8px 20px',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(59, 130, 246, 0.25)',
+                        zIndex: 10000,
+                        animation:
+                            'toastFade 0.3s ease-out, toastFadeOut 0.8s ease-in 2.2s',
+                        fontWeight: 500,
+                        fontSize: '14px',
+                        whiteSpace: 'nowrap',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    }}
+                >
+                    {toast}
+                    <style>{`
+                        @keyframes toastFade {
+                            0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+                            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                        }
+                        @keyframes toastFadeOut {
+                            0% { opacity: 1; }
+                            100% { opacity: 0; }
+                        }
+                    `}</style>
+                </div>
+            )}
 
             <div className='app-body'>
                 <aside className='side-nav'>
@@ -155,49 +151,63 @@ export default function Layout() {
                         <a
                             href={to('/home')}
                             onClick={handleHref}
-                            className={isActive('/home') ? 'active' : ''}
+                            className={active === 'home' ? 'active' : ''}
                         >
                             Home
                         </a>
                         <a
                             href={to('/counter')}
                             onClick={handleHref}
-                            className={isActive('/counter') ? 'active' : ''}
+                            className={active === 'counter' ? 'active' : ''}
                         >
                             Counter
                         </a>
                         <a
                             href={to('/products')}
                             onClick={handleHref}
-                            className={isActive('/products') ? 'active' : ''}
+                            className={active === 'products' ? 'active' : ''}
                         >
                             Products
                         </a>
                         <a
                             href={to('/users')}
                             onClick={handleHref}
-                            className={isActive('/users') ? 'active' : ''}
+                            className={active === 'users' ? 'active' : ''}
                         >
                             Users
                         </a>
                         <a
                             href={to('/settings')}
                             onClick={handleHref}
-                            className={isActive('/settings') ? 'active' : ''}
+                            className={active === 'settings' ? 'active' : ''}
                         >
                             Settings
                         </a>
                         <a
                             href={to('/via-demo')}
                             onClick={handleHref}
-                            className={isActive('/via-demo') ? 'active' : ''}
+                            className={active === 'via-demo' ? 'active' : ''}
                         >
                             Via Navigation
                         </a>
                         <a
+                            href={to('/query-demo')}
+                            onClick={handleHref}
+                            className={active === 'query-demo' ? 'active' : ''}
+                        >
+                            Query Params
+                        </a>
+                        <a
+                            href={to('/param-demo/1')}
+                            onClick={handleHref}
+                            className={active === 'param-demo' ? 'active' : ''}
+                        >
+                            Param Assignment
+                        </a>
+                        <a
                             href={to('/about')}
                             onClick={handleHref}
-                            className={isActive('/about') ? 'active' : ''}
+                            className={active === 'about' ? 'active' : ''}
                         >
                             About
                         </a>
@@ -205,7 +215,7 @@ export default function Layout() {
                             href={to('/nested-layout-demo')}
                             onClick={handleHref}
                             className={
-                                isActive('/nested-layout-demo') ? 'active' : ''
+                                active === 'nested-layout-demo' ? 'active' : ''
                             }
                         >
                             Nested Layouts
@@ -213,7 +223,7 @@ export default function Layout() {
                         <a
                             href={to('/guards-demo')}
                             onClick={handleHref}
-                            className={isActive('/guards-demo') ? 'active' : ''}
+                            className={active === 'guards-demo' ? 'active' : ''}
                         >
                             Guards
                         </a>
@@ -221,7 +231,7 @@ export default function Layout() {
                             href={to('/transitions-demo')}
                             onClick={handleHref}
                             className={
-                                isActive('/transitions-demo') ? 'active' : ''
+                                active === 'transitions-demo' ? 'active' : ''
                             }
                         >
                             Transitions
@@ -230,7 +240,7 @@ export default function Layout() {
                             href={to('/error-boundary-demo')}
                             onClick={handleHref}
                             className={
-                                isActive('/error-boundary-demo') ? 'active' : ''
+                                active === 'error-boundary-demo' ? 'active' : ''
                             }
                         >
                             Error Boundary
@@ -245,8 +255,8 @@ export default function Layout() {
 
             <footer>
                 <p>
-                    StateURL Demo • Theme: <strong>{theme}</strong> • Path:{' '}
-                    <code>{path.full.value}</code>
+                    StateURL Demo • Theme: <strong>{feature.theme}</strong> •
+                    Path: <code>{path.full.value}</code>
                 </p>
             </footer>
         </div>

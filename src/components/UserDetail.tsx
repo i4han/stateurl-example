@@ -1,27 +1,62 @@
-import { useNavigator, useSignals } from 'stateurl'
+import { go, handleGo, useSignals } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const users = [
     {
-        id: '1',
+        id: '0',
         name: 'Alice Johnson',
         email: 'alice@example.com',
         role: 'Admin',
     },
-    { id: '2', name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
+    { id: '1', name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
     {
-        id: '3',
+        id: '2',
         name: 'Carol Williams',
         email: 'carol@example.com',
         role: 'Manager',
     },
 ]
 
-export default function UserDetail() {
+const code = `
+import { handleGo, handleHref } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
+
+export default function UserDetail({ param, via, to }: RouteComponentProps) {
+  const userId = param.userId
+  const nextUser = (Number(userId) + 1) % 3
+
+  return (
+        <div className='button-group'>
+            <button type='button' onClick={handleGo(to(prevUser))}>
+                to(prevUser)
+            </button>
+            <button
+                type='button'
+                onClick={handleGo(via('profile:$1', [nextUser]))}
+            >
+                via('profile:$1', [{nextUser}]) → Next User
+            </button>
+        </div>
+
+  )
+}`
+
+export default function UserDetail({
+    param,
+    via,
+    to,
+    breadcrumbs,
+}: RouteComponentProps) {
     useSignals()
-    const { route } = useNavigator()
-    const userId = route.param.userId
-    const user = users[Number(userId) - 1]
+    // Access param directly from props
+    const userId = param.userId
+    const user = users[Number(userId)]
+
+    // Navigate to other users using relative via
+    const prevUser = String((Number(userId) - 1 + users.length) % users.length)
+
+    const nextUser = String((Number(userId) + 1) % users.length)
 
     if (!user) {
         return (
@@ -43,31 +78,27 @@ export default function UserDetail() {
             <div className='param-info'>
                 <strong>URL Param:</strong> <code>userId = {userId}</code>
                 <br />
-                <strong>Full Path:</strong> <code>/users/profile/{userId}</code>
+                <strong>Breadcrumbs:</strong>{' '}
+                <code>{breadcrumbs.join(' / ')}</code>
             </div>
 
-            <CodeExample
-                code={`import { useNavigator } from 'stateurl'
+            <br />
+            <div className='navigation-demo'>
+                <h4>Relative Navigation</h4>
+                <div className='button-group'>
+                    <button type='button' onClick={handleGo(to(prevUser))}>
+                        to(prevUser)
+                    </button>
+                    <button
+                        type='button'
+                        onClick={handleGo(via('profile:$1', [nextUser]))}
+                    >
+                        via('profile:$1', [{nextUser}]) → Next User
+                    </button>
+                </div>
+            </div>
 
-export default function UserDetail() {
-  const { route } = useNavigator()
-  
-  // Access route param (Proxy API)
-  const userId = route.param.userId
-  
-  // Use it to fetch/display data
-  const user = users.find(u => u.id === userId)
-  
-  return (
-    <div>
-      <h3>{user.name}</h3>
-      <p>Email: {user.email}</p>
-      <p>Role: {user.role}</p>
-    </div>
-  )
-}`}
-                language='tsx'
-            />
+            <CodeExample code={code} language='tsx' />
         </div>
     )
 }

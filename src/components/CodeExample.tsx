@@ -7,9 +7,11 @@ import { feature } from 'stateurl'
 export default function CodeExample({
     code,
     language = 'typescript',
+    highlightLines = [],
 }: {
     code: string
     language?: string
+    highlightLines?: number[]
 }) {
     useSignals() // Enable signal tracking for reactivity
     const [copied, setCopied] = useState(false)
@@ -100,7 +102,10 @@ export default function CodeExample({
     const customStyle = theme === 'dark' ? darkStyle : lightStyle
 
     return (
-        <div className='code-example' style={{ background: theme === 'dark' ? '#0f172a' : undefined }}>
+        <div
+            className='code-example'
+            style={{ background: theme === 'dark' ? '#0f172a' : undefined }}
+        >
             <div
                 style={{
                     display: 'flex',
@@ -119,7 +124,14 @@ export default function CodeExample({
                     {copied ? 'Copied' : 'Copy'}
                 </button>
             </div>
-            <div style={{ overflowX: 'auto', maxWidth: '100%', background: theme === 'dark' ? '#0f172a' : '#f6f8fa', borderRadius: '6px' }}>
+            <div
+                style={{
+                    overflowX: 'auto',
+                    maxWidth: '100%',
+                    background: theme === 'dark' ? '#0f172a' : '#f6f8fa',
+                    borderRadius: '6px',
+                }}
+            >
                 <SyntaxHighlighter
                     language={language}
                     style={customStyle}
@@ -130,7 +142,7 @@ export default function CodeExample({
                         background: theme === 'dark' ? '#0f172a' : '#f6f8fa',
                         fontFamily:
                             "'Roboto Mono', 'SF Mono', Monaco, Consolas, monospace",
-                        lineHeight: '1.5',
+                        lineHeight: '20px',
                         border:
                             theme === 'dark'
                                 ? '1px solid #334155'
@@ -140,6 +152,7 @@ export default function CodeExample({
                         minWidth: '100%',
                     }}
                     showLineNumbers={true}
+                    wrapLines={true}
                     wrapLongLines={false}
                     lineNumberStyle={{
                         minWidth: '2.5em',
@@ -147,6 +160,26 @@ export default function CodeExample({
                         color: theme === 'dark' ? '#64748b' : '#d1d5db',
                         userSelect: 'none',
                         opacity: theme === 'dark' ? 0.7 : 0.5,
+                    }}
+                    lineProps={(lineNumber) => {
+                        const isHighlighted =
+                            highlightLines.includes(lineNumber)
+                        return {
+                            style: {
+                                display: 'block',
+                                backgroundColor: isHighlighted
+                                    ? theme === 'dark'
+                                        ? 'rgba(59, 130, 246, 0.15)'
+                                        : 'rgba(59, 130, 246, 0.12)'
+                                    : undefined,
+                                borderLeft: isHighlighted
+                                    ? '3px solid #3b82f6'
+                                    : '3px solid transparent',
+                                marginLeft: '-1rem',
+                                paddingLeft: 'calc(1rem - 3px)',
+                                fontWeight: isHighlighted ? 500 : undefined,
+                            },
+                        }
                     }}
                 >
                     {code}

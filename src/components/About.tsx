@@ -1,7 +1,8 @@
 import { useSignals } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-export default function About() {
+export default function About(_props: RouteComponentProps) {
     useSignals()
     return (
         <section>
@@ -44,27 +45,33 @@ export default function About() {
             </div>
 
             <CodeExample
-                code={`import { useNavigator, path } from 'stateurl'
+                code={`import { go, path } from 'stateurl'
+import type { RouteComponentProps } from 'stateurl'
 
-export default function Navigation() {
-  const { handleHref, to } = useNavigator()
+// Route components receive props automatically
+export default function Navigation({ to }: RouteComponentProps) {
   const currentPath = path.full.value
   
   // Check if route is active
-  const isActive = (path: string) => currentPath.includes(path)
+  const isActive = (p: string) => currentPath.includes(p)
+  
+  const handleClick = (e, href) => {
+    e.preventDefault()
+    go(href)
+  }
   
   return (
     <nav>
       <a 
         href={to('/home')} 
-        onClick={handleHref}
+        onClick={(e) => handleClick(e, to('/home'))}
         className={isActive('/home') ? 'active' : ''}
       >
         Home
       </a>
       <a 
         href={to('/products')} 
-        onClick={handleHref}
+        onClick={(e) => handleClick(e, to('/products'))}
         className={isActive('/products') ? 'active' : ''}
       >
         Products
