@@ -24,6 +24,7 @@ function upgradeToPremium() {
 
 // Guard Components
 function LoginModal({ intended, current, next, cancel }: GuardContext) {
+    useSignals()
     const handleLogin = () => {
         login()
         next()

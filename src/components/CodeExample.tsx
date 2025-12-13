@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { useSignals } from '@preact/signals-react/runtime'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { feature } from 'stateurl'
+import { useSignals, feature } from 'stateurl'
 
 export default function CodeExample({
     code,

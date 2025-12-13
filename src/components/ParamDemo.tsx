@@ -17,6 +17,7 @@ function UserProfile({ param }: RouteComponentProps) {
 `
 
 export default function ParamDemo({ param }: RouteComponentProps) {
+    useSignals()
     return (
         <section>
             <h2>Reactive Param Assignment</h2>

@@ -26,6 +26,7 @@ export default function Settings() {
 }`
 
 export default function Settings() {
+    useSignals()
     return (
         <section>
             <h2>Settings</h2>

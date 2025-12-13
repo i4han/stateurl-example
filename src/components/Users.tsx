@@ -1,4 +1,4 @@
-import { handleHref, Outlet } from 'stateurl'
+import { handleHref, Outlet, useSignals } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
@@ -9,6 +9,7 @@ const users = [
 ]
 
 export default function Users({ to, param }: RouteComponentProps) {
+    useSignals()
     return (
         <section>
             <h2>Users (Params Demo)</h2>

@@ -1,4 +1,4 @@
-import { handleHref, Outlet } from 'stateurl'
+import { useSignals, handleHref, Outlet } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
@@ -34,6 +34,7 @@ export default function Products({ to, param }: RouteComponentProps) {
 }`
 
 export default function Products(props: RouteComponentProps) {
+    useSignals()
     return (
         <section>
             <h2>Products (Params Demo)</h2>

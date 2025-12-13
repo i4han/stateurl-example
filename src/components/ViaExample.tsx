@@ -50,6 +50,7 @@ export default function ViaExample(props: RouteComponentProps) {
 }
 
 function AbsolutePathsExample() {
+    useSignals()
     return (
         <div className='demo-section'>
             <h3>Absolute Paths</h3>
@@ -78,6 +79,7 @@ via('/products/item:1') // → '/products/item/1'`}
 }
 
 function RelativeViaExample({ via }: RouteComponentProps) {
+    useSignals()
     return (
         <div className='demo-section'>
             <h3>Relative via()</h3>
@@ -130,6 +132,7 @@ function MyComponent({ via }: RouteComponentProps) {
 }
 
 function InterpolationExample({ via, to }: RouteComponentProps) {
+    useSignals()
     return (
         <div className='demo-section'>
             <h3>$1, $2 Interpolation</h3>
@@ -164,6 +167,7 @@ to('/user/$1/post/$2', [1, 2]) // → '/user/1/post/2'`}
 }
 
 function RelativeToExample({ to }: RouteComponentProps) {
+    useSignals()
     return (
         <div className='demo-section'>
             <h3>Relative to()</h3>
@@ -195,6 +199,7 @@ to('../item/$1', [42])   // → relative + interpolation`}
 }
 
 function Result({ expr, value }: { expr: string; value: string }) {
+    useSignals()
     return (
         <div className='via-result'>
             <code>{expr}</code>

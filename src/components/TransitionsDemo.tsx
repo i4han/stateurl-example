@@ -3,17 +3,11 @@
  */
 
 import { type MouseEvent } from 'react'
-import { useSignals } from '@preact/signals-react/runtime'
-import { routerState, feature, go } from 'stateurl'
+import { useSignals, routerState, feature, go, handleHref } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 
 function TransitionPage({ title, color }: { title: string; color: string }) {
-    const handleHref = (e: MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault()
-        const href = e.currentTarget.getAttribute('href') || ''
-        go(href)
-    }
-
+    useSignals()
     return (
         <section>
             <h2>{title}</h2>
@@ -78,7 +72,13 @@ export default function TransitionsDemo(_props: RouteComponentProps) {
             <h2>Transitions Demo</h2>
             <p>
                 Track navigation state for loading UI and animations.
-                <span style={{ marginLeft: '1rem', opacity: 0.6, fontSize: '0.9em' }}>
+                <span
+                    style={{
+                        marginLeft: '1rem',
+                        opacity: 0.6,
+                        fontSize: '0.9em',
+                    }}
+                >
                     (Current version: {version})
                 </span>
             </p>

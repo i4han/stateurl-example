@@ -1,6 +1,5 @@
 import { useEffect, useState, type MouseEvent } from 'react'
-import { useSignals } from '@preact/signals-react/runtime'
-import { Outlet, feature, path, routerState, handleHref } from 'stateurl'
+import { useSignals, Outlet, feature, path, routerState, handleHref } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 
 export default function Layout({ to, ahead }: RouteComponentProps) {

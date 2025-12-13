@@ -33,6 +33,7 @@ export default function Counter({ query }: RouteComponentProps) {
 }`
 
 export default function Counter({ query }: RouteComponentProps) {
+    useSignals()
     const count = Number(query.count) || 0
 
     return (
