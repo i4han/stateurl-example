@@ -2,11 +2,41 @@
  * Guards Demo - Route-level conditional navigation
  */
 
-import { go, transition, useSignals, type GuardContext } from 'stateurl'
+import {
+    go,
+    useSignals,
+    Outlet,
+    type Route,
+    type GuardContext,
+    type RouteComponentProps,
+} from 'stateurl'
 
 // Simulated auth state
 let isAuthenticated = false
 let isPremiumUser = false
+
+export const authGuard = { when: () => isAuthenticated, orRender: LoginModal }
+export const premiumGuard = {
+    when: () => isPremiumUser,
+    orRender: UpgradeModal,
+}
+
+export const GuardsRoute: Route = {
+    path: 'guards-demo',
+    render: GuardsDemo,
+    outlet: [
+        {
+            path: 'guards-protected',
+            case: [authGuard],
+            render: GuardsProtectedPage,
+        },
+        {
+            path: 'guards-premium',
+            case: [authGuard, premiumGuard],
+            render: GuardsPremiumPage,
+        },
+    ],
+}
 
 function login() {
     isAuthenticated = true
@@ -90,8 +120,11 @@ function UpgradeModal({ intended, current, next, cancel }: GuardContext) {
     )
 }
 
-export default function GuardsDemo() {
+export default function GuardsDemo({ ahead }: RouteComponentProps) {
     useSignals()
+    if (ahead.length > 0) {
+        return <Outlet />
+    }
     return (
         <section>
             <h2>Route Guards Demo</h2>
@@ -123,13 +156,17 @@ export default function GuardsDemo() {
                     <p>Try these pages to see guards in action</p>
                     <div className='button-group'>
                         <button
-                            onClick={() => transition('/guards-protected')}
+                            onClick={() =>
+                                go('/guards-demo/guards-protected')
+                            }
                             className='btn'
                         >
                             Protected Page
                         </button>
                         <button
-                            onClick={() => transition('/guards-premium')}
+                            onClick={() =>
+                                go('/guards-demo/guards-premium')
+                            }
                             className='btn'
                         >
                             Premium Page
@@ -257,8 +294,3 @@ export function GuardsPremiumPage() {
 }
 
 // Export guard definitions for use in routes
-export const authGuard = { when: () => isAuthenticated, orRender: LoginModal }
-export const premiumGuard = {
-    when: () => isPremiumUser,
-    orRender: UpgradeModal,
-}

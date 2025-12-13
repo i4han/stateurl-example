@@ -11,12 +11,7 @@ import Settings from './components/Settings'
 import ViaExample from './components/ViaExample'
 import QueryDemo from './components/QueryDemo'
 import ParamDemo from './components/ParamDemo'
-import GuardsDemo, {
-    GuardsProtectedPage,
-    GuardsPremiumPage,
-    authGuard,
-    premiumGuard,
-} from './components/GuardsDemo'
+import { GuardsRoute } from './components/GuardsDemo'
 import TransitionsDemo, {
     TransitionsFastPage,
     TransitionsMediumPage,
@@ -52,17 +47,7 @@ export const routes = [
             { path: 'param-demo/:userId', render: ParamDemo },
             { path: 'about', render: About },
             { path: 'nested-layout-demo', render: NestedLayoutDemo },
-            { path: 'guards-demo', render: GuardsDemo },
-            {
-                path: 'guards-protected',
-                case: [authGuard],
-                render: GuardsProtectedPage,
-            },
-            {
-                path: 'guards-premium',
-                case: [authGuard, premiumGuard],
-                render: GuardsPremiumPage,
-            },
+            GuardsRoute,
             { path: 'transitions-demo', render: TransitionsDemo },
             { path: 'transitions-fast', render: TransitionsFastPage },
             { path: 'transitions-medium', render: TransitionsMediumPage },
