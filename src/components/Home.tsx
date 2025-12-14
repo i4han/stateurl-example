@@ -50,12 +50,13 @@ export default function Home() {
                 code={`import { Router } from 'stateurl'
 import { routes } from './routes'
 
-// Setup router with feature flags in base pattern
+// Setup router with feature flags
 export default function App() {
   return (
     <Router
+      base="app"
+      feature={{ version: ['v1', 'v2'], theme: ['light', 'dark'] }}
       routes={routes}
-      basePattern='/app/:version=v1/:theme=light'
       redirectToBase={true}
     />
   )
@@ -76,7 +77,7 @@ feature.theme = 'dark'`}
                 <h4>Current State:</h4>
                 <ul>
                     <li>
-                        <strong>Path:</strong> <code>{path.full.value}</code>
+                        <strong>Path:</strong> <code>{path.full}</code>
                     </li>
                     <li>
                         <strong>Version:</strong> {version}

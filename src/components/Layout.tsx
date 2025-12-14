@@ -147,6 +147,7 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
             <div className='app-body'>
                 <aside className='side-nav'>
                     <nav>
+                        {/* Overview */}
                         <a
                             href={to('/home')}
                             onClick={handleHref}
@@ -154,6 +155,15 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
                         >
                             Home
                         </a>
+                        <a
+                            href={to('/about')}
+                            onClick={handleHref}
+                            className={active === 'about' ? 'active' : ''}
+                        >
+                            About
+                        </a>
+
+                        {/* Basic Examples */}
                         <a
                             href={to('/counter')}
                             onClick={handleHref}
@@ -175,20 +185,8 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
                         >
                             Users
                         </a>
-                        <a
-                            href={to('/settings')}
-                            onClick={handleHref}
-                            className={active === 'settings' ? 'active' : ''}
-                        >
-                            Settings
-                        </a>
-                        <a
-                            href={to('/via-demo')}
-                            onClick={handleHref}
-                            className={active === 'via-demo' ? 'active' : ''}
-                        >
-                            Via Navigation
-                        </a>
+
+                        {/* Core Features */}
                         <a
                             href={to('/query-demo')}
                             onClick={handleHref}
@@ -204,20 +202,27 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
                             Param Assignment
                         </a>
                         <a
-                            href={to('/about')}
+                            href={to('/label-demo')}
                             onClick={handleHref}
-                            className={active === 'about' ? 'active' : ''}
+                            className={active === 'label-demo' ? 'active' : ''}
                         >
-                            About
+                            Label Navigation
                         </a>
                         <a
                             href={to('/nested-layout-demo')}
                             onClick={handleHref}
-                            className={
-                                active === 'nested-layout-demo' ? 'active' : ''
-                            }
+                            className={active === 'nested-layout-demo' ? 'active' : ''}
                         >
                             Nested Layouts
+                        </a>
+
+                        {/* Advanced Features */}
+                        <a
+                            href={to('/loader-demo')}
+                            onClick={handleHref}
+                            className={active === 'loader-demo' ? 'active' : ''}
+                        >
+                            Loader API
                         </a>
                         <a
                             href={to('/guards-demo')}
@@ -229,20 +234,32 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
                         <a
                             href={to('/transitions-demo')}
                             onClick={handleHref}
-                            className={
-                                active === 'transitions-demo' ? 'active' : ''
-                            }
+                            className={active === 'transitions-demo' ? 'active' : ''}
                         >
                             Transitions
                         </a>
                         <a
+                            href={to('/fork-demo')}
+                            onClick={handleHref}
+                            className={active === 'fork-demo' ? 'active' : ''}
+                        >
+                            Fork Routes
+                        </a>
+                        <a
                             href={to('/error-boundary-demo')}
                             onClick={handleHref}
-                            className={
-                                active === 'error-boundary-demo' ? 'active' : ''
-                            }
+                            className={active === 'error-boundary-demo' ? 'active' : ''}
                         >
                             Error Boundary
+                        </a>
+
+                        {/* Configuration */}
+                        <a
+                            href={to('/settings')}
+                            onClick={handleHref}
+                            className={active === 'settings' ? 'active' : ''}
+                        >
+                            Settings
                         </a>
                     </nav>
                 </aside>
@@ -255,7 +272,7 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
             <footer>
                 <p>
                     StateURL Demo • Theme: <strong>{feature.theme}</strong> •
-                    Path: <code>{path.full.value}</code>
+                    Path: <code>{path.full}</code>
                 </p>
             </footer>
         </div>

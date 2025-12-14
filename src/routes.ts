@@ -8,7 +8,8 @@ import ProductDetail from './components/ProductDetail'
 import Users from './components/Users'
 import UserDetail from './components/UserDetail'
 import Settings from './components/Settings'
-import ViaExample from './components/ViaExample'
+import LabelExample from './components/LabelExample'
+import LoaderExample, { LoaderUserPage } from './components/LoaderExample'
 import QueryDemo from './components/QueryDemo'
 import ParamDemo from './components/ParamDemo'
 import { GuardsRoute } from './components/GuardsDemo'
@@ -23,29 +24,57 @@ import ErrorBoundaryDemo, {
     ErrorDelayedPage,
 } from './components/ErrorBoundaryDemo'
 import NestedLayoutDemo from './components/NestedLayoutDemo'
+import ForkDemo, {
+    ForkLayoutDemo,
+    ForkPanelA,
+    ForkPanelB,
+} from './components/ForkDemo'
 
 export const routes = [
     {
         layoutPrefix: '',
         render: Layout,
         outlet: [
-            { path: 'home', index: true, render: Home },
-            { path: 'counter', render: Counter },
+            { path: 'home', index: true, render: Home, label: 'home' },
+            { path: 'counter', render: Counter, label: 'counter' },
             {
                 path: 'products',
                 render: Products,
-                outlet: [{ path: 'item/:productId', render: ProductDetail }],
+                label: 'products',
+                outlet: [{ path: 'item/:productId', render: ProductDetail, label: 'productDetail' }],
             },
             {
                 path: 'users',
                 render: Users,
-                outlet: [{ path: 'profile/:userId', render: UserDetail }],
+                label: 'users',
+                outlet: [{ path: 'profile/:userId', render: UserDetail, label: 'userProfile' }],
             },
-            { path: 'settings', render: Settings },
-            { path: 'via-demo', render: ViaExample },
+            { path: 'settings', render: Settings, label: 'settings' },
+            { path: 'label-demo', render: LabelExample, label: 'labelDemo' },
+            {
+                path: 'loader-demo',
+                render: LoaderExample,
+                label: 'loaderDemo',
+                outlet: [{
+                    path: 'user/:userId',
+                    render: LoaderUserPage,
+                    label: 'loaderUser',
+                    loader: async ({ param }) => {
+                        // Simulate API call
+                        await new Promise(r => setTimeout(r, 500))
+                        return {
+                            user: {
+                                id: param.userId,
+                                name: `User ${param.userId}`,
+                                email: `user${param.userId}@example.com`,
+                            }
+                        }
+                    },
+                }],
+            },
             { path: 'query-demo', render: QueryDemo },
             { path: 'param-demo/:userId', render: ParamDemo },
-            { path: 'about', render: About },
+            { path: 'about', render: About, label: 'about' },
             { path: 'nested-layout-demo', render: NestedLayoutDemo },
             GuardsRoute,
             { path: 'transitions-demo', render: TransitionsDemo },
@@ -56,6 +85,17 @@ export const routes = [
             { path: 'error-stable', render: ErrorStablePage },
             { path: 'error-immediate', render: ErrorImmediatePage },
             { path: 'error-delayed', render: ErrorDelayedPage },
+            { path: 'fork-demo', render: ForkDemo, label: 'forkDemo' },
+            {
+                path: 'fork-layout',
+                render: ForkLayoutDemo,
+                label: 'forkLayout',
+                fork: true,
+                outlet: [
+                    { path: 'panel-a', render: ForkPanelA, label: 'forkPanelA' },
+                    { path: 'panel-b', render: ForkPanelB, label: 'forkPanelB' },
+                ],
+            },
         ],
     },
 ] as const satisfies Route[]

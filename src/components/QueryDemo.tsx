@@ -50,7 +50,7 @@ export default function QueryDemo({ query }: RouteComponentProps) {
             </p>
 
             <div className='current-location'>
-                <strong>URL:</strong> <code>{path.full.value}{window.location.search}</code>
+                <strong>URL:</strong> <code>{window.location.pathname}{window.location.search}</code>
             </div>
 
             <div className='demo-section'>

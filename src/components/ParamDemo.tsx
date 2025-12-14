@@ -27,7 +27,7 @@ export default function ParamDemo({ param }: RouteComponentProps) {
             </p>
 
             <div className='current-location'>
-                <strong>URL:</strong> <code>{path.full.value}</code>
+                <strong>URL:</strong> <code>{path.full}</code>
             </div>
 
             <div className='demo-section'>

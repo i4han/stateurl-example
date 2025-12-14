@@ -657,6 +657,14 @@ section {
     transform: scale(0.98);
 }
 
+/* Button Row - consistent spacing for button groups */
+.button-row {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin: var(--space-4) 0;
+}
+
 /* Quick Links */
 .quick-links {
     background: var(--bg-surface);

@@ -14,9 +14,10 @@ function NotFound() {
 export default function App() {
     return (
         <Router
+            base="app"
+            feature={{ version: ['v1', 'v2'], theme: ['light', 'dark'] }}
             routes={routes}
-            basePattern='/app/:version=v1/:theme=light'
-            RenderNotFound={NotFound}
+            NotFound={NotFound}
             redirectToBase={true}
         />
     )
