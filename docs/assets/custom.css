@@ -285,7 +285,6 @@ pre code {
     padding-right: 1rem;
 }
 
-
 /* Ensure logo stays visible when search is focused */
 #tsd-search.has-focus ~ .title,
 #tsd-search .title {
