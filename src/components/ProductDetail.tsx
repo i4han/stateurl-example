@@ -2,41 +2,22 @@ import { handleGo, useSignals } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-const products = {
-    '1': {
-        id: '1',
-        name: 'Laptop',
-        price: 999,
-        desc: 'High-performance laptop for professionals',
-    },
-    '2': {
-        id: '2',
-        name: 'Mouse',
-        price: 29,
-        desc: 'Wireless ergonomic mouse',
-    },
-    '3': {
-        id: '3',
-        name: 'Keyboard',
-        price: 79,
-        desc: 'Mechanical keyboard with RGB',
-    },
-    '4': {
-        id: '4',
-        name: 'Monitor',
-        price: 299,
-        desc: '27" 4K IPS display',
-    },
-}
+const products = [
+    { id: 0, name: 'Laptop', price: 999, desc: 'High-performance laptop for professionals' },
+    { id: 1, name: 'Mouse', price: 29, desc: 'Wireless ergonomic mouse' },
+    { id: 2, name: 'Keyboard', price: 79, desc: 'Mechanical keyboard with RGB' },
+    { id: 3, name: 'Monitor', price: 299, desc: '27" 4K IPS display' },
+]
 
 const code = `
 import { handleGo } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 
 export default function ProductDetail({ param, via, to }: RouteComponentProps) {
+  // param.productId is a number - schema handles serialization
   const product = products[param.productId]
-  const nextProductId = (Number(param.productId) % 4) + 1
-  const prevProductId = ((Number(param.productId) - 2 + 4) % 4) + 1
+  const nextId = (param.productId + 1) % products.length
+  const prevId = (param.productId + products.length - 1) % products.length
 
   return (
     <div>
@@ -44,11 +25,11 @@ export default function ProductDetail({ param, via, to }: RouteComponentProps) {
       <p>\${product.price}</p>
 
       <div className='button-group'>
-        <button onClick={handleGo(to('$1', [prevProductId]))}>
-          Prev <- to('$1', [prevProductId])
+        <button onClick={handleGo(to('$1', [prevId]))}>
+          Prev <- to('$1', [prevId])
         </button>
-        <button onClick={handleGo(via('item:$1', [nextProductId]))}>
-          via('item:$1', [nextProductId]) -> Next
+        <button onClick={handleGo(via('item:$1', [nextId]))}>
+          via('item:$1', [nextId]) -> Next
         </button>
       </div>
     </div>
@@ -62,10 +43,10 @@ export default function ProductDetail({
     breadcrumbs,
 }: RouteComponentProps) {
     useSignals()
-    // Access param directly from props
-    const product = products[param.productId as keyof typeof products]
-    const nextProductId = String((Number(param.productId) % 4) + 1)
-    const prevProductId = String(((Number(param.productId) - 2 + 4) % 4) + 1)
+    // param.productId is a number - schema handles serialization
+    const product = products[param.productId]
+    const nextId = (param.productId + 1) % products.length
+    const prevId = (param.productId + products.length - 1) % products.length
 
     if (!product) {
         return (
@@ -94,15 +75,15 @@ export default function ProductDetail({
                 <div className='button-group'>
                     <button
                         type='button'
-                        onClick={handleGo(to('$1', [prevProductId]))}
+                        onClick={handleGo(to('$1', [prevId]))}
                     >
-                        to('$1', [{prevProductId}]) → Prev
+                        to('$1', [{prevId}]) → Prev
                     </button>
                     <button
                         type='button'
-                        onClick={handleGo(via('item:$1', [nextProductId]))}
+                        onClick={handleGo(via('item:$1', [nextId]))}
                     >
-                        via('item:$1', [{nextProductId}]) → Next
+                        via('item:$1', [{nextId}]) → Next
                     </button>
                 </div>
             </div>

@@ -3,10 +3,10 @@ import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const products = [
-    { id: '1', name: 'Laptop', price: 999 },
-    { id: '2', name: 'Mouse', price: 29 },
-    { id: '3', name: 'Keyboard', price: 79 },
-    { id: '4', name: 'Monitor', price: 299 },
+    { id: 0, name: 'Laptop', price: 999 },
+    { id: 1, name: 'Mouse', price: 29 },
+    { id: 2, name: 'Keyboard', price: 79 },
+    { id: 3, name: 'Monitor', price: 299 },
 ]
 
 const code = `

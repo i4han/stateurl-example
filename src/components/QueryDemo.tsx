@@ -141,11 +141,11 @@ export default function QueryDemo({ query }: RouteComponentProps) {
                 .control-group select,
                 .control-group input {
                     padding: 0.5rem 0.75rem;
-                    border: 1px solid var(--border-color, #e0e0e0);
+                    border: 1px solid var(--border-default);
                     border-radius: 6px;
                     font-size: 0.9rem;
                     min-width: 150px;
-                    background: var(--bg-input, #fff);
+                    background: var(--bg-surface);
                     color: var(--text-primary);
                 }
 
@@ -159,8 +159,8 @@ export default function QueryDemo({ query }: RouteComponentProps) {
                 .query-state {
                     padding: 1rem;
                     border-radius: 8px;
-                    border: 1px solid var(--border-color, #e0e0e0);
-                    background: var(--bg-tertiary, #fafafa);
+                    border: 1px solid var(--border-default);
+                    background: var(--bg-muted);
                 }
 
                 .query-state h4 {
@@ -178,7 +178,7 @@ export default function QueryDemo({ query }: RouteComponentProps) {
                 }
 
                 .state-values em {
-                    color: var(--text-muted, #999);
+                    color: var(--text-muted);
                     font-style: italic;
                 }
 

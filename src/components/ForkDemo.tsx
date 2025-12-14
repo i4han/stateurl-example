@@ -205,12 +205,12 @@ export function ForkLayoutDemo(_props: RouteComponentProps) {
         }}>
             {/* Sidebar */}
             <aside style={{
-                background: 'var(--sidebar-bg, #f1f5f9)',
+                background: 'var(--bg-surface)',
                 padding: '1rem',
-                borderRight: '1px solid var(--border-color, #e2e8f0)'
+                borderRight: '1px solid var(--border-default)'
             }}>
                 <h3 style={{ margin: '0 0 1rem' }}>Sidebar</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--muted-color, #64748b)' }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                     This sidebar is part of the fork layout.
                     Child routes render in the main area via ForkOutlet.
                 </p>
@@ -249,14 +249,14 @@ export function ForkLayoutDemo(_props: RouteComponentProps) {
                 <p>ForkOutlet renders child routes here:</p>
 
                 <div style={{
-                    background: 'var(--fork-content-bg, #f8fafc)',
-                    border: '2px dashed var(--border-color, #cbd5e1)',
+                    background: 'var(--bg-muted)',
+                    border: '2px dashed var(--border-default)',
                     borderRadius: '8px',
                     padding: '1rem',
                     minHeight: '200px'
                 }}>
                     <ForkOutlet fallback={
-                        <div style={{ textAlign: 'center', color: 'var(--muted-color, #94a3b8)' }}>
+                        <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
                             <p>No child route selected.</p>
                             <p>Click a panel button in the sidebar.</p>
                         </div>

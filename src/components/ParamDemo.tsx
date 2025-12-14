@@ -118,7 +118,7 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                 .current-value {
                     font-size: 1.1rem;
                     padding: 0.75rem 1rem;
-                    background: var(--bg-tertiary, #f5f5f5);
+                    background: var(--bg-muted);
                     border-radius: 6px;
                     font-family: var(--font-mono, monospace);
                 }
@@ -126,7 +126,7 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                 .info-box {
                     margin-top: 1.5rem;
                     padding: 1rem;
-                    background: var(--bg-tertiary, #fafafa);
+                    background: var(--bg-muted);
                     border-radius: 8px;
                     border-left: 3px solid var(--primary-color, #3b82f6);
                 }
@@ -150,9 +150,9 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                 .pitch-box {
                     text-align: center;
                     padding: 2rem;
-                    background: linear-gradient(135deg, var(--bg-tertiary, #f8f9fa) 0%, var(--bg-secondary, #e9ecef) 100%);
+                    background: linear-gradient(135deg, var(--bg-muted) 0%, var(--bg-surface) 100%);
                     border-radius: 12px;
-                    border: 1px solid var(--border-color, #dee2e6);
+                    border: 1px solid var(--border-default);
                 }
 
                 .pitch-code {
