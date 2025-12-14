@@ -5,18 +5,18 @@ import CodeExample from './CodeExample'
 const mainCode = `
 import { label, toLabel, go } from 'stateurl'
 
-// Define labels in routes
+// Define labels in routes (schema enables integer params)
 const routes = [
-  { path: 'users/:userId', label: 'userProfile', render: User },
+  { path: 'users/:userId', label: 'userProfile', schema: { param: { userId: 0 } } },
   { path: 'products', label: 'products', render: Products }
 ]
 
 // Navigation using labels (rename-safe)
-go(toLabel('userProfile', { userId: '123' }))
+go(toLabel('userProfile', { userId: 123 }))
 go(toLabel('products'))
 
 // Access route state via label accessor
-label.userProfile.param.userId     // Current userId
+label.userProfile.param.userId     // Current userId (number)
 label.userProfile.fullPath         // '/users/123'
 label.userProfile.go()             // Navigate to route`
 
@@ -62,16 +62,16 @@ function ToLabelExample() {
                 <Result expr="toLabel('products')" value={safeToLabel('products')} />
                 <Result expr="toLabel('settings')" value={safeToLabel('settings')} />
                 <Result
-                    expr="toLabel('userProfile', { userId: '42' })"
-                    value={safeToLabel('userProfile', { userId: '42' })}
+                    expr="toLabel('userProfile', { userId: 42 })"
+                    value={safeToLabel('userProfile', { userId: 42 })}
                 />
             </div>
 
             <CodeExample
-                code={`// toLabel converts label to path
-toLabel('home')                           // → '/home'
-toLabel('products')                       // → '/products'
-toLabel('userProfile', { userId: '42' })  // → '/users/profile/42'`}
+                code={`// toLabel converts label to path (integers auto-serialize)
+toLabel('home')                          // → '/home'
+toLabel('products')                      // → '/products'
+toLabel('userProfile', { userId: 42 })   // → '/users/profile/42'`}
                 language='typescript'
             />
         </div>
@@ -148,10 +148,10 @@ function LabelNavigationExample() {
             </div>
 
             <CodeExample
-                code={`// Navigate using labels
+                code={`// Navigate using labels (integers auto-serialize)
 go(toLabel('home'))
 go(toLabel('products'))
-go(toLabel('userProfile', { userId: '123' }))`}
+go(toLabel('userProfile', { userId: 123 }))`}
                 language='typescript'
             />
         </div>
@@ -185,9 +185,9 @@ via('/users/profile:42')`}
                     <CodeExample
                         code={`import { toLabel, label } from 'stateurl'
 
-// Label-based - rename-safe
+// Label-based - rename-safe (integers auto-serialize)
 toLabel('products')
-toLabel('userProfile', { userId: '42' })
+toLabel('userProfile', { userId: 42 })
 
 // Or use label accessor
 label.products.fullPath`}
@@ -210,7 +210,7 @@ label.products.fullPath`}
 }
 
 // Helper to safely call toLabel (catches errors for demo)
-function safeToLabel(labelName: string, params?: Record<string, string>): string {
+function safeToLabel(labelName: string, params?: Record<string, string | number>): string {
     try {
         return toLabel(labelName, params)
     } catch (e: any) {

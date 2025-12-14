@@ -98,30 +98,30 @@ function LoaderNavigationSection() {
                 <button
                     type='button'
                     className='btn btn-primary'
-                    onClick={() => go(toLabel('loaderUser', { userId: '1' }))}
+                    onClick={() => go(toLabel('loaderUser', { userId: 1 }))}
                 >
                     Load User 1
                 </button>
                 <button
                     type='button'
                     className='btn btn-primary'
-                    onClick={() => go(toLabel('loaderUser', { userId: '2' }))}
+                    onClick={() => go(toLabel('loaderUser', { userId: 2 }))}
                 >
                     Load User 2
                 </button>
                 <button
                     type='button'
                     className='btn btn-primary'
-                    onClick={() => go(toLabel('loaderUser', { userId: '3' }))}
+                    onClick={() => go(toLabel('loaderUser', { userId: 3 }))}
                 >
                     Load User 3
                 </button>
             </div>
 
             <CodeExample
-                code={`// Navigate to trigger loader
-go(toLabel('loaderUser', { userId: '1' }))
-go(toLabel('loaderUser', { userId: '2' }))`}
+                code={`// Navigate to trigger loader (userId is an integer via schema)
+go(toLabel('loaderUser', { userId: 1 }))
+go(toLabel('loaderUser', { userId: 2 }))`}
                 language='typescript'
             />
         </div>

@@ -1,5 +1,5 @@
-import { handleGo, useSignals } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { handleHref, useSignals } from 'stateurl'
+import type { TypedProps } from '../stateurl-types'
 import CodeExample from './CodeExample'
 
 const products = [
@@ -10,7 +10,7 @@ const products = [
 ]
 
 const code = `
-import { handleGo } from 'stateurl'
+import { handleHref } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 
 export default function ProductDetail({ param, via, to }: RouteComponentProps) {
@@ -25,10 +25,10 @@ export default function ProductDetail({ param, via, to }: RouteComponentProps) {
       <p>\${product.price}</p>
 
       <div className='button-group'>
-        <button onClick={handleGo(to('$1', [prevId]))}>
+        <button data-href={to('$1', [prevId])} onClick={handleHref}>
           Prev <- to('$1', [prevId])
         </button>
-        <button onClick={handleGo(via('item:$1', [nextId]))}>
+        <button data-href={via('item:$1', [nextId])} onClick={handleHref}>
           via('item:$1', [nextId]) -> Next
         </button>
       </div>
@@ -36,12 +36,12 @@ export default function ProductDetail({ param, via, to }: RouteComponentProps) {
   )
 }`
 
-export default function ProductDetail({
+function ProductDetail({
     param,
     via,
     to,
     breadcrumbs,
-}: RouteComponentProps) {
+}: TypedProps<'ProductDetail'>) {
     useSignals()
     // param.productId is a number - schema handles serialization
     const product = products[param.productId]
@@ -75,13 +75,15 @@ export default function ProductDetail({
                 <div className='button-group'>
                     <button
                         type='button'
-                        onClick={handleGo(to('$1', [prevId]))}
+                        data-href={to('$1', [prevId])}
+                        onClick={handleHref}
                     >
                         to('$1', [{prevId}]) → Prev
                     </button>
                     <button
                         type='button'
-                        onClick={handleGo(via('item:$1', [nextId]))}
+                        data-href={via('item:$1', [nextId])}
+                        onClick={handleHref}
                     >
                         via('item:$1', [{nextId}]) → Next
                     </button>
@@ -96,3 +98,5 @@ export default function ProductDetail({
         </div>
     )
 }
+
+export default ProductDetail

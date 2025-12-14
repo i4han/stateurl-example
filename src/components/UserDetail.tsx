@@ -1,17 +1,17 @@
-import { go, handleGo, useSignals } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { handleHref, useSignals } from 'stateurl'
+import type { TypedProps } from '../stateurl-types'
 import CodeExample from './CodeExample'
 
 const users = [
     {
-        id: '0',
+        id: 0,
         name: 'Alice Johnson',
         email: 'alice@example.com',
         role: 'Admin',
     },
-    { id: '1', name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
+    { id: 1, name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
     {
-        id: '2',
+        id: 2,
         name: 'Carol Williams',
         email: 'carol@example.com',
         role: 'Manager',
@@ -19,44 +19,46 @@ const users = [
 ]
 
 const code = `
-import { handleGo, handleHref } from 'stateurl'
+import { handleHref } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 
+// Route: { path: 'profile/:userId', schema: { param: { userId: 0 } } }
+
 export default function UserDetail({ param, via, to }: RouteComponentProps) {
+  // userId is already a number (schema auto-deserializes)
   const userId = param.userId
-  const nextUser = (Number(userId) + 1) % 3
+  const nextUser = (userId + 1) % 3
 
   return (
         <div className='button-group'>
-            <button type='button' onClick={handleGo(to(prevUser))}>
+            <button data-href={to(prevUser)} onClick={handleHref}>
                 to(prevUser)
             </button>
             <button
-                type='button'
-                onClick={handleGo(via('profile:$1', [nextUser]))}
+                data-href={via('profile:$1', [nextUser])}
+                onClick={handleHref}
             >
                 via('profile:$1', [{nextUser}]) → Next User
             </button>
         </div>
-
   )
 }`
 
-export default function UserDetail({
+function UserDetail({
     param,
     via,
     to,
     breadcrumbs,
-}: RouteComponentProps) {
+}: TypedProps<'UserDetail'>) {
     useSignals()
-    // Access param directly from props
+    // Access param directly from props (already a number via schema)
     const userId = param.userId
-    const user = users[Number(userId)]
+    const user = users[userId]
 
     // Navigate to other users using relative via
-    const prevUser = String((Number(userId) - 1 + users.length) % users.length)
+    const prevUser = (userId - 1 + users.length) % users.length
 
-    const nextUser = String((Number(userId) + 1) % users.length)
+    const nextUser = (userId + 1) % users.length
 
     if (!user) {
         return (
@@ -86,12 +88,13 @@ export default function UserDetail({
             <div className='navigation-demo'>
                 <h4>Relative Navigation</h4>
                 <div className='button-group'>
-                    <button type='button' onClick={handleGo(to(prevUser))}>
+                    <button type='button' data-href={to(String(prevUser))} onClick={handleHref}>
                         to(prevUser)
                     </button>
                     <button
                         type='button'
-                        onClick={handleGo(via('profile:$1', [nextUser]))}
+                        data-href={via('profile:$1', [nextUser])}
+                        onClick={handleHref}
                     >
                         via('profile:$1', [{nextUser}]) → Next User
                     </button>
@@ -102,3 +105,5 @@ export default function UserDetail({
         </div>
     )
 }
+
+export default UserDetail

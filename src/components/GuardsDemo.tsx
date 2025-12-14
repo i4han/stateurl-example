@@ -6,7 +6,6 @@ import {
     go,
     useSignals,
     Outlet,
-    type Route,
     type GuardContext,
     type RouteComponentProps,
 } from 'stateurl'
@@ -15,13 +14,13 @@ import {
 let isAuthenticated = false
 let isPremiumUser = false
 
-export const authGuard = { when: () => isAuthenticated, orRender: LoginModal }
+export const authGuard = { when: () => !isAuthenticated, render: LoginModal }
 export const premiumGuard = {
-    when: () => isPremiumUser,
-    orRender: UpgradeModal,
+    when: () => !isPremiumUser,
+    render: UpgradeModal,
 }
 
-export const GuardsRoute: Route = {
+export const GuardsRoute = {
     path: 'guards-demo',
     render: GuardsDemo,
     outlet: [
@@ -36,7 +35,7 @@ export const GuardsRoute: Route = {
             render: GuardsPremiumPage,
         },
     ],
-}
+} as const
 
 function login() {
     isAuthenticated = true
@@ -186,8 +185,8 @@ export default function GuardsDemo({ ahead }: RouteComponentProps) {
                         Router evaluates guards sequentially (one at a time)
                     </li>
                     <li>
-                        If a guard fails, the <code>orRender</code> component
-                        shows as a modal
+                        If a guard's <code>when</code> returns true, the{' '}
+                        <code>render</code> component shows as a modal
                     </li>
                     <li>User satisfies the condition (e.g., logs in)</li>
                     <li>

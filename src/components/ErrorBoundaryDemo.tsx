@@ -182,7 +182,7 @@ export function ErrorStablePage() {
 }
 
 // Immediate error page - throws on render
-export function ErrorImmediatePage() {
+export function ErrorImmediatePage(): React.ReactNode {
     throw new Error('💥 Immediate render error! Router will rollback to last stable location.')
 }
 

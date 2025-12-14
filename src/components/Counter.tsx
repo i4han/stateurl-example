@@ -1,47 +1,40 @@
-import { useSignals, registerQuery } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { useSignals } from 'stateurl'
+import type { TypedProps } from '../stateurl-types'
 import CodeExample from './CodeExample'
 
-// Register query parameter at module level
-registerQuery(['counter'], 'count', {})
-
 const code = `
-import { registerQuery } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { useSignals } from 'stateurl'
+import type { TypedProps } from './stateurl-types'
 
-// Register query parameter at module level
-registerQuery(['counter'], 'count', {})
+// TypedProps<'Counter'> provides typed query from componentSchemas
+// query.count is typed as number | undefined
 
-export default function Counter({ query }: RouteComponentProps) {
-  // Get from URL (via props)
-  const count = Number(query.count) || 0
-  
+function Counter({ query }: TypedProps<'Counter'>) {
+  useSignals()
+  const count = query.count ?? 0
+
   return (
     <div>
       <h3>Count: {count}</h3>
-      <button onClick={
-          () => { query.count = String(count + 1)
-        }>Increment</button>
-      <button onClick={
-          () => { query.count = String(count - 1)
-        }>Decrement</button>
-      <button onClick={
-          () => { query.count = undefined }
-        }>Reset</button>
+      <button onClick={() => { query.count = count + 1 }}>+</button>
+      <button onClick={() => { query.count = count - 1 }}>-</button>
+      <button onClick={() => { query.count = undefined }}>Reset</button>
     </div>
   )
-}`
+}
+export default Counter`
 
-export default function Counter({ query }: RouteComponentProps) {
+function Counter({ query }: TypedProps<'Counter'>) {
     useSignals()
-    const count = Number(query.count) || 0
+    // query.count is typed as number (schema-defined)
+    const count = query.count ?? 0
 
     return (
         <section>
             <h2>Counter (Query State Demo)</h2>
             <p>
-                This counter uses <strong>query parameters</strong> to store
-                state in the URL.
+                This counter uses <strong>schema-enabled query parameters</strong>{' '}
+                to store state in the URL. Numbers serialize automatically.
             </p>
 
             <div className='counter-demo'>
@@ -53,7 +46,7 @@ export default function Counter({ query }: RouteComponentProps) {
                     <button
                         type='button'
                         onClick={() => {
-                            query.count = String(count - 1)
+                            query.count = count - 1
                         }}
                         className='btn'
                     >
@@ -62,7 +55,7 @@ export default function Counter({ query }: RouteComponentProps) {
                     <button
                         type='button'
                         onClick={() => {
-                            query.count = String(count + 1)
+                            query.count = count + 1
                         }}
                         className='btn btn-primary'
                     >
@@ -95,9 +88,11 @@ export default function Counter({ query }: RouteComponentProps) {
                 <CodeExample
                     code={code}
                     language='tsx'
-                    highlightLines={[16, 19, 22]}
+                    highlightLines={[10, 16, 21]}
                 />
             </div>
         </section>
     )
 }
+
+export default Counter

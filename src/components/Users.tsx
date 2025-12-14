@@ -3,9 +3,9 @@ import type { RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 const users = [
-    { id: '0', name: 'Alice Johnson' },
-    { id: '1', name: 'Bob Smith' },
-    { id: '2', name: 'Carol Williams' },
+    { id: 0, name: 'Alice Johnson' },
+    { id: 1, name: 'Bob Smith' },
+    { id: 2, name: 'Carol Williams' },
 ]
 
 export default function Users({ to, param }: RouteComponentProps) {

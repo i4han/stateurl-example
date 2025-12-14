@@ -1,4 +1,4 @@
-import type { Route } from 'stateurl'
+import { defineRoutes } from 'stateurl'
 import Layout from './components/Layout'
 import Home from './components/Home'
 import About from './components/About'
@@ -30,24 +30,24 @@ import ForkDemo, {
     ForkPanelB,
 } from './components/ForkDemo'
 
-export const routes = [
+export const routes = defineRoutes([
     {
         layoutPrefix: '',
         render: Layout,
         outlet: [
             { path: 'home', index: true, render: Home, label: 'home' },
-            { path: 'counter', render: Counter, label: 'counter' },
+            { path: 'counter', render: Counter, label: 'counter', schema: { query: { count: 0 } } },
             {
                 path: 'products',
                 render: Products,
                 label: 'products',
-                outlet: [{ path: 'item/:productId', render: ProductDetail, label: 'productDetail' }],
+                outlet: [{ path: 'item/:productId', render: ProductDetail, label: 'productDetail', schema: { param: { productId: 0 } } }],
             },
             {
                 path: 'users',
                 render: Users,
                 label: 'users',
-                outlet: [{ path: 'profile/:userId', render: UserDetail, label: 'userProfile' }],
+                outlet: [{ path: 'profile/:userId', render: UserDetail, label: 'userProfile', schema: { param: { userId: 0 } } }],
             },
             { path: 'settings', render: Settings, label: 'settings' },
             { path: 'label-demo', render: LabelExample, label: 'labelDemo' },
@@ -59,8 +59,8 @@ export const routes = [
                     path: 'user/:userId',
                     render: LoaderUserPage,
                     label: 'loaderUser',
+                    schema: { param: { userId: 0 } },
                     loader: async ({ param }) => {
-                        // Simulate API call
                         await new Promise(r => setTimeout(r, 500))
                         return {
                             user: {
@@ -73,7 +73,7 @@ export const routes = [
                 }],
             },
             { path: 'query-demo', render: QueryDemo },
-            { path: 'param-demo/:userId', render: ParamDemo },
+            { path: 'param-demo/:userId', render: ParamDemo, schema: { param: { userId: 0 } } },
             { path: 'about', render: About, label: 'about' },
             { path: 'nested-layout-demo', render: NestedLayoutDemo },
             GuardsRoute,
@@ -98,4 +98,4 @@ export const routes = [
             },
         ],
     },
-] as const satisfies Route[]
+])

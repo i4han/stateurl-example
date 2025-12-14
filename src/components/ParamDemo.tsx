@@ -4,13 +4,16 @@ import CodeExample from './CodeExample'
 
 const code = `import type { RouteComponentProps } from 'stateurl'
 
+// Route definition with schema (in routes.ts):
+// { path: 'param-demo/:userId', schema: { param: { userId: 0 } } }
+
 function UserProfile({ param }: RouteComponentProps) {
     return (
         <div>
             <h1>User: {param.userId}</h1>
-            <button onClick={() => { param.userId = '123' }}>User 123</button>
-            <button onClick={() => { param.userId = '456' }}>User 456</button>
-            <button onClick={() => { param.userId = '789' }}>User 789</button>
+            <button onClick={() => { param.userId = 123 }}>User 123</button>
+            <button onClick={() => { param.userId = 456 }}>User 456</button>
+            <button onClick={() => { param.userId = 789 }}>User 789</button>
         </div>
     )
 }
@@ -44,26 +47,26 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                         <button
                             type='button'
                             onClick={() => {
-                                param.userId = '123'
+                                param.userId = 123
                             }}
                         >
-                            param.userId = '123'
+                            param.userId = 123
                         </button>
                         <button
                             type='button'
                             onClick={() => {
-                                param.userId = '456'
+                                param.userId = 456
                             }}
                         >
-                            param.userId = '456'
+                            param.userId = 456
                         </button>
                         <button
                             type='button'
                             onClick={() => {
-                                param.userId = '789'
+                                param.userId = 789
                             }}
                         >
-                            param.userId = '789'
+                            param.userId = 789
                         </button>
                     </div>
                 </div>
@@ -72,7 +75,7 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                     <h4>What's happening:</h4>
                     <ol>
                         <li>
-                            <code>param.userId = '{param.userId}'</code> is
+                            <code>param.userId = {param.userId}</code> is
                             called
                         </li>
                         <li>
@@ -91,7 +94,7 @@ export default function ParamDemo({ param }: RouteComponentProps) {
                 <h3>The Pitch</h3>
                 <div className='pitch-box'>
                     <code className='pitch-code'>
-                        param.userId = '{param.userId}'
+                        param.userId = {param.userId}
                     </code>
                     <p className='pitch-text'>
                         Reactive re-render. URL updates. No page refresh.
