@@ -95,30 +95,59 @@ function UserDetail({
 
             <br />
             <div className='navigation-demo'>
-                <h4>Type-Safe Navigation with to()</h4>
+                <h4>Type-Safe Relative Navigation</h4>
                 <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
-                    Navigate through the tree using relative paths with :param style
+                    Trail: <code>/users/profile/:userId</code> — params don't count as depth
                 </p>
-                <div className='button-group'>
-                    <button type='button' data-href={to('../')} onClick={handleHref}>
-                        ← Back (../)
-                    </button>
-                    <button type='button' data-href={to('../:id', { id: prevUser })} onClick={handleHref}>
-                        ← Prev ({prevUser})
-                    </button>
-                    <button type='button' data-href={to('../:id', { id: nextUser })} onClick={handleHref}>
-                        Next ({nextUser}) →
-                    </button>
+
+                <div className='nav-level'>
+                    <strong>Sibling (../)</strong>
+                    <span style={{ fontSize: '0.85em', color: '#888' }}> → /users/*</span>
+                    <div className='button-group'>
+                        <button type='button' data-href={to('../profile/:id', { id: prevUser })} onClick={handleHref}>
+                            ← Prev User ({prevUser})
+                        </button>
+                        <button type='button' data-href={to('../profile/:id', { id: nextUser })} onClick={handleHref}>
+                            Next User ({nextUser}) →
+                        </button>
+                        <button type='button' data-href={to('../settings')} onClick={handleHref}>
+                            Settings (../settings)
+                        </button>
+                    </div>
                 </div>
-                <p style={{ fontSize: '0.9em', color: '#666', marginTop: '1rem', marginBottom: '0.5rem' }}>
-                    Navigate to sibling route (../settings)
-                </p>
-                <div className='button-group'>
-                    <button type='button' data-href={to('../settings')} onClick={handleHref}>
-                        User Settings (../settings)
-                    </button>
+
+                <div className='nav-level'>
+                    <strong>Cousin (../../)</strong>
+                    <span style={{ fontSize: '0.85em', color: '#888' }}> → /*</span>
+                    <div className='button-group'>
+                        <button type='button' data-href={to('../../')} onClick={handleHref}>
+                            Home (../../)
+                        </button>
+                        <button type='button' data-href={to('../../products')} onClick={handleHref}>
+                            Products (../../products)
+                        </button>
+                        <button type='button' data-href={to('../../counter')} onClick={handleHref}>
+                            Counter (../../counter)
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <style>{`
+                .nav-level {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    background: var(--bg-muted, #f5f5f5);
+                    border-radius: 6px;
+                }
+                .nav-level strong {
+                    display: inline-block;
+                    min-width: 140px;
+                }
+                .nav-level .button-group {
+                    margin-top: 0.5rem;
+                }
+            `}</style>
 
             <CodeExample code={code} language='tsx' highlightLines={[20, 24, 28]} />
         </div>

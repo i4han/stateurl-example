@@ -10,7 +10,7 @@ export const userSettingsSchema = {
 const code = `
 import { handleHref, type SurlRouteProps } from 'stateurl'
 
-// Schema with trail for sibling navigation
+// Trail: /users/settings (sibling to /users/profile/:userId)
 export const userSettingsSchema = {
     trail: '/users/settings',
     schema: {}
@@ -19,14 +19,14 @@ export const userSettingsSchema = {
 function UserSettings({ to }: SurlRouteProps<typeof userSettingsSchema>) {
     return (
         <div>
-            {/* Navigate to cousin: profile/:userId */}
+            {/* Navigate to sibling: ../profile/:userId */}
             <button data-href={to('../profile/:userId', { userId: 1 })} onClick={handleHref}>
-                Go to User 1 Profile (../profile/:userId)
+                User 1 Profile
             </button>
 
-            {/* Navigate to parent */}
+            {/* Navigate to parent: ../ → /users */}
             <button data-href={to('../')} onClick={handleHref}>
-                Back to Users (../)
+                Users List
             </button>
         </div>
     )
@@ -41,31 +41,33 @@ function UserSettings({
     return (
         <div className='detail-card'>
             <h3>User Settings</h3>
-            <p>This is a sibling route to /users/profile/:userId</p>
+            <p>Sibling route to /users/profile/:userId (both under /users)</p>
 
             <div className='param-info'>
+                <strong>Trail:</strong> <code>/users/settings</code>
+                <br />
                 <strong>Breadcrumbs:</strong>{' '}
                 <code>{breadcrumbs.join(' / ')}</code>
             </div>
 
             <br />
             <div className='navigation-demo'>
-                <h4>Sibling Navigation Demo</h4>
+                <h4>Sibling Navigation (../)</h4>
                 <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
-                    From /users/settings, navigate to cousin /users/profile/:userId
+                    Navigate to sibling /users/profile/:userId
                 </p>
                 <div className='button-group'>
                     <button type='button' data-href={to('../')} onClick={handleHref}>
-                        ← Back (../)
+                        ← Users (../)
                     </button>
                     <button type='button' data-href={to('../profile/:userId', { userId: 0 })} onClick={handleHref}>
-                        User 0 (../profile/:userId)
+                        User 0
                     </button>
                     <button type='button' data-href={to('../profile/:userId', { userId: 1 })} onClick={handleHref}>
-                        User 1 (../profile/:userId)
+                        User 1
                     </button>
                     <button type='button' data-href={to('../profile/:userId', { userId: 2 })} onClick={handleHref}>
-                        User 2 (../profile/:userId)
+                        User 2
                     </button>
                 </div>
             </div>
