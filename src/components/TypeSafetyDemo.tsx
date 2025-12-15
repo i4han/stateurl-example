@@ -74,8 +74,8 @@ declare module 'stateurl' {
         '/home': true
         '/counter': true
         '/users': true
-        '/users/profile/$1': true
-        '/products/item/$1': true
+        '/users/profile/:userId': true
+        '/products/item/:productId': true
     }
 }`
 
@@ -112,10 +112,10 @@ at.users.profile.param.userId = 1  // Update route param`
 const toPathCode = `// Global to() - MUST start with '/'
 import { to, go } from 'stateurl'
 
-go(to('/home'))                    // ✓ valid
-go(to('/users/profile/$1', [42]))  // ✓ with interpolation
-go(to('home'))                     // ✗ type error!
-go(to('../settings'))              // ✗ type error!
+go(to('/home'))                                      // ✓ valid
+go(to('/users/profile/:userId', { userId: 42 }))     // ✓ with :param
+go(to('home'))                                       // ✗ type error!
+go(to('../settings'))                                // ✗ type error!
 
 // Props to() - allows relative paths
 function MyComponent({ to }: RouteComponentProps) {
@@ -213,7 +213,7 @@ export default function TypeSafetyDemo({ to }: TypedProps<'TypeSafetyDemo'>) {
                         <div className='feature-card'>
                             <h4>ToRegistry</h4>
                             <p>Lists all valid paths for to() autocomplete</p>
-                            <code>to('/users/$1')</code>
+                            <code>to('/users/:userId')</code>
                         </div>
                     </div>
 
@@ -369,8 +369,8 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <div className='autocomplete-row'>
                             <AutocompleteVisual
                                 prefix="to('/"
-                                suggestions={['/home', '/counter', '/users', '/users/profile/$1', '/products', '/products/item/$1']}
-                                selected="/users/profile/$1"
+                                suggestions={['/home', '/counter', '/users', '/users/profile/:userId', '/products', '/products/item/:productId']}
+                                selected="/users/profile/:userId"
                             />
                         </div>
 
@@ -388,7 +388,7 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <div className='comparison-col valid'>
                             <h4>✓ Valid</h4>
                             <code>to('/home')</code>
-                            <code>to('/users/profile/$1', [42])</code>
+                            <code>to('/users/profile/:userId', {'{ userId: 42 }'})</code>
                             <code>props.to('../settings')</code>
                             <code>props.to('edit')</code>
                         </div>
@@ -419,10 +419,10 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <button
                             type='button'
                             className='btn'
-                            data-href={to('/users/profile/$1', [1])}
+                            data-href={to('/users/profile/:userId', { userId: 1 })}
                             onClick={handleHref}
                         >
-                            to('/users/profile/$1', [1])
+                            to('/users/profile/:userId', {'{ userId: 1 }'})
                         </button>
                     </div>
 
