@@ -38,7 +38,8 @@ export default Counter`
 function Counter({ query }: SurlRouteProps<typeof counterConfig>) {
     useSignals()
     // query.count is typed as number (schema-defined)
-    const count = query.count ?? 0
+    // Note: URL params are strings, ensure number conversion
+    const count = Number(query.count) || 0
 
     return (
         <section>
