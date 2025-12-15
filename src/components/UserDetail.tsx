@@ -26,27 +26,33 @@ const users = [
 const code = `
 import { handleHref, type SurlRouteProps } from 'stateurl'
 
-// Schema with trail for type-safe breadcrumbs
+// Schema with trail for type-safe to() navigation
 export const userDetailSchema = {
     trail: '/users/profile/:userId',
     schema: { param: { userId: 0 } }
 } as const
 
-function UserDetail({ param, to, breadcrumbs }: SurlRouteProps<typeof userDetailSchema>) {
-  // breadcrumbs: ['users', \`profile/\${number}\`]
-  // userId is already a number (schema auto-deserializes)
+function UserDetail({ param, to }: SurlRouteProps<typeof userDetailSchema>) {
   const userId = param.userId
   const prevUser = (userId - 1 + 3) % 3
   const nextUser = (userId + 1) % 3
 
   return (
-    <div className='button-group'>
-      <button data-href={to(String(prevUser))} onClick={handleHref}>
-        to(prevUser) → Prev
-      </button>
-      <button data-href={to(String(nextUser))} onClick={handleHref}>
-        to(nextUser) → Next
-      </button>
+    <div>
+      {/* Type-safe relative navigation */}
+      <div className='button-group'>
+        {/* to('../') goes up to /users */}
+        <button data-href={to('../')} onClick={handleHref}>
+          ← Back to Users
+        </button>
+        {/* to('../sibling') navigates to sibling routes */}
+        <button data-href={to('../$1', [prevUser])} onClick={handleHref}>
+          Prev User
+        </button>
+        <button data-href={to('../$1', [nextUser])} onClick={handleHref}>
+          Next User
+        </button>
+      </div>
     </div>
   )
 }`
@@ -89,18 +95,24 @@ function UserDetail({
 
             <br />
             <div className='navigation-demo'>
-                <h4>Relative Navigation</h4>
+                <h4>Type-Safe Navigation with to()</h4>
+                <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
+                    Navigate through the tree using relative paths
+                </p>
                 <div className='button-group'>
-                    <button type='button' data-href={to(String(prevUser))} onClick={handleHref}>
-                        to(prevUser) → Prev
+                    <button type='button' data-href={to('../')} onClick={handleHref}>
+                        ← Back (../)
                     </button>
-                    <button type='button' data-href={to(String(nextUser))} onClick={handleHref}>
-                        to(nextUser) → Next
+                    <button type='button' data-href={to(`../${prevUser}`)} onClick={handleHref}>
+                        ← Prev (../{prevUser})
+                    </button>
+                    <button type='button' data-href={to(`../${nextUser}`)} onClick={handleHref}>
+                        Next (../{nextUser}) →
                     </button>
                 </div>
             </div>
 
-            <CodeExample code={code} language='tsx' />
+            <CodeExample code={code} language='tsx' highlightLines={[20, 24, 28]} />
         </div>
     )
 }

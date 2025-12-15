@@ -1,6 +1,11 @@
-import { useSignals, handleHref, Outlet } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { useSignals, handleHref, Outlet, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
+
+// Schema with trail for type-safe to() autocomplete
+export const productsSchema = {
+    trail: '/products',
+    schema: {}
+} as const
 
 const products = [
     { id: 0, name: 'Laptop', price: 999 },
@@ -10,15 +15,21 @@ const products = [
 ]
 
 const code = `
-import { Outlet, handleHref } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { Outlet, handleHref, type SurlRouteProps } from 'stateurl'
 
-export default function Products({ to, param }: RouteComponentProps) {
+// Schema with trail enables type-safe to() autocomplete
+export const productsSchema = {
+    trail: '/products',
+    schema: {}
+} as const
+
+// to() autocompletes 'item/:productId' from SurlTo registry
+export default function Products({ to, param }: SurlRouteProps<typeof productsSchema>) {
   return (
     <div>
       {products.map((product) => (
         <a
-          // Use relative to() - 'item/$1' from /products
+          // Type-safe: to() suggests 'item/:productId'
           href={to('item/$1', [product.id])}
           onClick={handleHref}
           className={param.productId === product.id ? 'active' : ''}
@@ -33,14 +44,14 @@ export default function Products({ to, param }: RouteComponentProps) {
   )
 }`
 
-export default function Products(props: RouteComponentProps) {
+export default function Products(props: SurlRouteProps<typeof productsSchema>) {
     useSignals()
     return (
         <section>
-            <h2>Products (Params Demo)</h2>
+            <h2>Products (Type-Safe to() Demo)</h2>
             <p>
-                Click a product to see its details. Uses relative{' '}
-                <code>to('item/$1', [id])</code> for navigation.
+                Click a product to see its details. The <code>to()</code> function
+                autocompletes <code>'item/:productId'</code> from the route tree.
             </p>
 
             <div className='products-container'>
@@ -56,18 +67,19 @@ export default function Products(props: RouteComponentProps) {
             <CodeExample
                 code={code}
                 language='tsx'
-                highlightLines={[11, 12, 13]}
+                highlightLines={[5, 6, 7, 11, 17]}
             />
         </section>
     )
 }
 
-function ProductList({ to, param }: RouteComponentProps) {
+function ProductList({ to, param }: SurlRouteProps<typeof productsSchema>) {
     return (
         <ul className='product-items'>
             {products.map((product) => (
                 <li key={product.id}>
                     <a
+                        // to() autocompletes 'item/:productId' based on trail
                         href={to('item/$1', [product.id])}
                         onClick={handleHref}
                         className={

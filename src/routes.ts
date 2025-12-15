@@ -3,9 +3,9 @@ import Layout from './components/Layout'
 import Home from './components/Home'
 import About from './components/About'
 import Counter, { counterSchema } from './components/Counter'
-import Products from './components/Products'
+import Products, { productsSchema } from './components/Products'
 import ProductDetail, { productDetailSchema } from './components/ProductDetail'
-import Users from './components/Users'
+import Users, { usersSchema } from './components/Users'
 import UserDetail, { userDetailSchema } from './components/UserDetail'
 import Settings from './components/Settings'
 import LabelExample from './components/LabelExample'
@@ -48,6 +48,7 @@ export const routes = defineRoutes([
                 path: 'products',
                 render: Products,
                 label: 'products',
+                ...productsSchema,
                 outlet: [
                     {
                         path: 'item/:productId',
@@ -61,6 +62,7 @@ export const routes = defineRoutes([
                 path: 'users',
                 render: Users,
                 label: 'users',
+                ...usersSchema,
                 outlet: [
                     {
                         path: 'profile/:userId',

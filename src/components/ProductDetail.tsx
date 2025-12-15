@@ -17,30 +17,30 @@ const products = [
 const code = `
 import { handleHref, type SurlRouteProps } from 'stateurl'
 
-// Schema with trail for type-safe breadcrumbs
+// Schema with trail for type-safe to() navigation
 export const productDetailSchema = {
     trail: '/products/item/:productId',
     schema: { param: { productId: 0 } }
 } as const
 
-function ProductDetail({ param, to, breadcrumbs }: SurlRouteProps<typeof productDetailSchema>) {
-  // breadcrumbs: ['products', \`item/\${number}\`]
-  // param.productId is a number - schema handles serialization
-  const product = products[param.productId]
+function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailSchema>) {
   const nextId = (param.productId + 1) % products.length
   const prevId = (param.productId + products.length - 1) % products.length
 
   return (
     <div>
-      <h3>{product.name}</h3>
-      <p>\${product.price}</p>
-
+      {/* Type-safe relative navigation */}
       <div className='button-group'>
-        <button data-href={to(String(prevId))} onClick={handleHref}>
-          to(prevId) → Prev
+        {/* to('../') goes up to /products */}
+        <button data-href={to('../')} onClick={handleHref}>
+          ← Back to Products
         </button>
-        <button data-href={to(String(nextId))} onClick={handleHref}>
-          to(nextId) → Next
+        {/* to('sibling') navigates to sibling routes */}
+        <button data-href={to('../$1', [prevId])} onClick={handleHref}>
+          Prev Product
+        </button>
+        <button data-href={to('../$1', [nextId])} onClick={handleHref}>
+          Next Product
         </button>
       </div>
     </div>
@@ -80,18 +80,24 @@ function ProductDetail({
 
             <br />
             <div className='navigation-demo'>
-                <h4>Relative Navigation</h4>
+                <h4>Type-Safe Navigation with to()</h4>
+                <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
+                    Navigate through the tree using relative paths
+                </p>
                 <div className='button-group'>
-                    <button type='button' data-href={to(String(prevId))} onClick={handleHref}>
-                        to(prevId) → Prev
+                    <button type='button' data-href={to('../')} onClick={handleHref}>
+                        ← Back (../)
                     </button>
-                    <button type='button' data-href={to(String(nextId))} onClick={handleHref}>
-                        to(nextId) → Next
+                    <button type='button' data-href={to(`../${prevId}`)} onClick={handleHref}>
+                        ← Prev (../{prevId})
+                    </button>
+                    <button type='button' data-href={to(`../${nextId}`)} onClick={handleHref}>
+                        Next (../{nextId}) →
                     </button>
                 </div>
             </div>
 
-            <CodeExample code={code} language='tsx' />
+            <CodeExample code={code} language='tsx' highlightLines={[19, 22, 25]} />
         </div>
     )
 }
