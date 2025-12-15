@@ -11,7 +11,7 @@ import UserSettings, { userSettingsSchema } from './components/UserSettings'
 import Settings from './components/Settings'
 import LabelExample from './components/LabelExample'
 import LoaderExample, { LoaderUserPage, loaderUserSchema } from './components/LoaderExample'
-import QueryDemo from './components/QueryDemo'
+import QueryDemo, { queryDemoSchema } from './components/QueryDemo'
 import ParamDemo, { paramDemoSchema } from './components/ParamDemo'
 import { GuardsRoute } from './components/GuardsDemo'
 import TransitionsDemo, {
@@ -28,9 +28,9 @@ import NestedLayoutDemo from './components/NestedLayoutDemo'
 import AtDemo from './components/AtDemo'
 import TypeSafetyDemo from './components/TypeSafetyDemo'
 import ForkDemo, {
-    ForkLayoutDemo,
-    ForkPanelA,
-    ForkPanelB,
+    ForkLayoutRenderer,
+    ForkPanelARenderer,
+    ForkPanelBRenderer,
 } from './components/ForkDemo'
 
 export const routes = defineRoutes([
@@ -110,7 +110,7 @@ export const routes = defineRoutes([
                     },
                 ],
             },
-            { path: 'query-demo', render: QueryDemo },
+            { path: 'query-demo', render: QueryDemo, label: 'queryDemo', ...queryDemoSchema },
             {
                 path: 'param-demo/:userId',
                 render: ParamDemo,
@@ -130,21 +130,12 @@ export const routes = defineRoutes([
             { path: 'error-delayed', render: ErrorDelayedPage },
             { path: 'fork-demo', render: ForkDemo, label: 'forkDemo' },
             {
-                path: 'fork-layout',
-                render: ForkLayoutDemo,
+                ...ForkLayoutRenderer,
                 label: 'forkLayout',
                 fork: true,
                 outlet: [
-                    {
-                        path: 'panel-a',
-                        render: ForkPanelA,
-                        label: 'forkPanelA',
-                    },
-                    {
-                        path: 'panel-b',
-                        render: ForkPanelB,
-                        label: 'forkPanelB',
-                    },
+                    { ...ForkPanelARenderer, label: 'forkPanelA' },
+                    { ...ForkPanelBRenderer, label: 'forkPanelB' },
                 ],
             },
         ],

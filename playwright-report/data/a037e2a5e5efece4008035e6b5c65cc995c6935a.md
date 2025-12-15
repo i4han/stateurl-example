@@ -1,0 +1,162 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - link "S StateURL" [ref=e7] [cursor=pointer]:
+      - /url: /home
+      - generic [ref=e8]: S
+      - generic [ref=e9]: StateURL
+    - navigation [ref=e10]:
+      - link "GitHub" [ref=e11] [cursor=pointer]:
+        - /url: https://github.com/i4han/stateurl-example
+      - link "📦 npm" [ref=e12] [cursor=pointer]:
+        - /url: https://www.npmjs.com/package/stateurl
+      - link "📚 API Docs" [ref=e13] [cursor=pointer]:
+        - /url: /docs/
+      - button "Toggle Version" [ref=e14] [cursor=pointer]
+      - button "Light Mode" [ref=e15] [cursor=pointer]
+  - generic [ref=e16]:
+    - complementary [ref=e17]:
+      - navigation [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /home
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Counter" [ref=e21] [cursor=pointer]:
+          - /url: /counter
+        - link "Products" [ref=e22] [cursor=pointer]:
+          - /url: /products
+        - link "Users" [ref=e23] [cursor=pointer]:
+          - /url: /users
+        - link "Query Params" [ref=e24] [cursor=pointer]:
+          - /url: /query-demo
+        - link "Param Assignment" [ref=e25] [cursor=pointer]:
+          - /url: /param-demo/1
+        - link "Label Navigation" [ref=e26] [cursor=pointer]:
+          - /url: /label-demo
+        - link "at.* Accessor" [ref=e27] [cursor=pointer]:
+          - /url: /at-demo
+        - link "Type Safety ✨" [ref=e28] [cursor=pointer]:
+          - /url: /type-safety
+        - link "Nested Layouts" [ref=e29] [cursor=pointer]:
+          - /url: /nested-layout-demo
+        - link "Loader API" [ref=e30] [cursor=pointer]:
+          - /url: /loader-demo
+        - link "Guards" [ref=e31] [cursor=pointer]:
+          - /url: /guards-demo
+        - link "Transitions" [ref=e32] [cursor=pointer]:
+          - /url: /transitions-demo
+        - link "Fork Routes" [ref=e33] [cursor=pointer]:
+          - /url: /fork-demo
+        - link "Error Boundary" [ref=e34] [cursor=pointer]:
+          - /url: /error-boundary-demo
+        - link "Settings" [active] [ref=e35] [cursor=pointer]:
+          - /url: /settings
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - heading "Settings" [level=2] [ref=e38]
+        - paragraph [ref=e39]:
+          - text: Control app features using
+          - strong [ref=e40]: feature flags
+          - text: in the URL pattern.
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - heading "Version" [level=3] [ref=e43]
+            - paragraph [ref=e44]:
+              - text: "Current version:"
+              - strong [ref=e45]: v1
+            - generic [ref=e46]:
+              - button "Version 1" [ref=e47] [cursor=pointer]
+              - button "Version 2" [ref=e48] [cursor=pointer]
+          - generic [ref=e49]:
+            - heading "Theme" [level=3] [ref=e50]
+            - paragraph [ref=e51]:
+              - text: "Current theme:"
+              - strong [ref=e52]: Dark
+            - generic [ref=e53]:
+              - button "Light Mode" [ref=e54] [cursor=pointer]
+              - button "Dark Mode" [ref=e55] [cursor=pointer]
+        - generic [ref=e56]:
+          - heading "About Features:" [level=4] [ref=e57]
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - text: "Features are part of the base URL pattern:"
+              - code [ref=e60]: /app/:version/:theme
+            - listitem [ref=e61]: Changing features updates the entire URL instantly
+            - listitem [ref=e62]: Features persist across navigation
+            - listitem [ref=e63]: The theme feature changes the entire app appearance!
+            - listitem [ref=e64]: Try changing theme and watch the URL update
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - heading "Code Example" [level=4] [ref=e67]
+            - button "Copy" [ref=e68] [cursor=pointer]
+          - code [ref=e71]:
+            - generic [ref=e73]: "1"
+            - generic [ref=e74]:
+              - generic [ref=e75]: "2"
+              - text: "import { feature } from 'stateurl'"
+            - generic [ref=e77]: "3"
+            - generic [ref=e78]:
+              - generic [ref=e79]: "4"
+              - text: "export default function Settings() {"
+            - generic [ref=e81]: "5"
+            - generic [ref=e83]: "6"
+            - generic [ref=e84]:
+              - generic [ref=e85]: "7"
+              - text: return (
+            - generic [ref=e86]:
+              - generic [ref=e87]: "8"
+              - text: <div>
+            - generic [ref=e88]:
+              - generic [ref=e89]: "9"
+              - text: <button
+            - generic [ref=e90]:
+              - generic [ref=e91]: "10"
+              - text: "onClick={() => { feature.version = 'v1' }}"
+            - generic [ref=e92]:
+              - generic [ref=e93]: "11"
+              - text: "className={feature.version === 'v1' ? 'active' : ''}"
+            - generic [ref=e94]:
+              - generic [ref=e95]: "12"
+              - text: ">"
+            - generic [ref=e96]:
+              - generic [ref=e97]: "13"
+              - text: Version 1
+            - generic [ref=e98]:
+              - generic [ref=e99]: "14"
+              - text: </button>
+            - generic [ref=e100]:
+              - generic [ref=e101]: "15"
+              - text: <button
+            - generic [ref=e102]:
+              - generic [ref=e103]: "16"
+              - text: "onClick={() => { feature.theme = 'dark' }}"
+            - generic [ref=e104]:
+              - generic [ref=e105]: "17"
+              - text: "className={feature.theme === 'dark' ? 'active' : ''}"
+            - generic [ref=e106]:
+              - generic [ref=e107]: "18"
+              - text: ">"
+            - generic [ref=e108]:
+              - generic [ref=e109]: "19"
+              - text: Dark Mode
+            - generic [ref=e110]:
+              - generic [ref=e111]: "20"
+              - text: </button>
+            - generic [ref=e112]:
+              - generic [ref=e113]: "21"
+              - text: </div>
+            - generic [ref=e114]:
+              - generic [ref=e115]: "22"
+              - text: )
+            - generic [ref=e116]:
+              - generic [ref=e117]: "23"
+              - text: "}"
+  - contentinfo [ref=e118]:
+    - paragraph [ref=e119]:
+      - text: "StateURL Demo • Theme:"
+      - strong [ref=e120]: dark
+      - text: "• Path:"
+      - code [ref=e121]: /app/v1/dark/settings
+```

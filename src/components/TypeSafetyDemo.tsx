@@ -1,6 +1,5 @@
 import { useState } from 'react'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in JSX event handlers
-import { useSignals, path, at, go, to, toLabel, label, handleHref, type TypedProps } from 'stateurl'
+import { useSignals, path, at, go, to, label, handleHref, type RouteComponentProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
 // Simulated autocomplete dropdown component
@@ -51,40 +50,36 @@ function TypeBadge({ type, color }: { type: string; color: string }) {
     )
 }
 
-const setupCode = `// stateurl-types.ts - Single source of truth
-import type { AtNode } from 'stateurl'
+const setupCode = `// stateurl-types.ts - All types derived from source
+import type {
+    SurlAtFrom, SurlToFrom, SurlParamFrom,
+    SurlFeatureFrom, SurlLabelFrom
+} from 'stateurl'
+import type { routes } from './routes'
+import type { appFeature } from './App'
 
 declare module 'stateurl' {
-    // 1. Component props typing
-    interface ComponentRegistry {
-        Counter: { query: { count: 0 } }
-        UserDetail: { param: { userId: 0 } }
-        ProductDetail: { param: { productId: 0 } }
-    }
-
-    // 2. at.* accessor typing
-    interface AtRegistry {
-        counter: AtNode
-        users: AtNode<{ profile: AtNode }>
-        products: AtNode<{ item: AtNode }>
-    }
-
-    // 3. to() path typing
-    interface ToRegistry {
-        '/home': true
-        '/counter': true
-        '/users': true
-        '/users/profile/:userId': true
-        '/products/item/:productId': true
-    }
+    interface SurlAt extends SurlAtFrom<typeof routes> {}
+    interface SurlTo extends SurlToFrom<typeof routes> {}
+    interface SurlParam extends SurlParamFrom<typeof routes> {}
+    interface SurlFeature extends SurlFeatureFrom<typeof appFeature> {}
+    interface SurlLabel extends SurlLabelFrom<typeof routes> {}
 }`
 
-const typedPropsCode = `import type { TypedProps } from 'stateurl'
+const typedPropsCode = `import { useSignals, type SurlRouteProps } from 'stateurl'
 
-// TypedProps uses COMPONENT names as keys (reusable across routers)
-// TypedProps<'Counter'> infers query.count as number
-function Counter({ query }: TypedProps<'Counter'>) {
-    const count = query.count ?? 0  // number | undefined
+// Define schema with trail for typed breadcrumbs
+export const counterSchema = {
+    trail: '/counter',
+    schema: { query: { count: 0 } }  // 0 → number type
+} as const
+
+// SurlRouteProps infers types from schema
+function Counter({ query, breadcrumbs }: SurlRouteProps<typeof counterSchema>) {
+    useSignals()
+    // query.count is typed as number (from schema)
+    // breadcrumbs is ['counter'] (from trail)
+    const count = query.count ?? 0
 
     return (
         <button onClick={() => {
@@ -125,19 +120,20 @@ function MyComponent({ to }: RouteComponentProps) {
     to('./edit')          // ✓ relative - append to current
 }`
 
-const labelCode = `import { label, toLabel } from 'stateurl'
+const labelCode = `import { label, toLabel, go } from 'stateurl'
 
 // label.* - navigate by route label (restructure-safe)
-label.counter.go()
-label.userProfile.go()
+label.counter.go()              // No params needed
+label.userProfile.go({ userId: 3 })  // With params - clean!
 label.products.go()
 
-// toLabel() - get path with typed params
-toLabel('home')                      // '/home'
-toLabel('userProfile', { userId: 1 }) // '/users/profile/1'
-toLabel('productDetail', { productId: 42 }) // '/products/item/42'`
+// With options (input data, transition control)
+label.userProfile.go({ userId: 3 }, { input: userData })
 
-export default function TypeSafetyDemo({ to }: TypedProps<'TypeSafetyDemo'>) {
+// toLabel() - get path string (for links, etc.)
+const path = toLabel('userProfile', { userId: 1 }) // '/users/profile/1'`
+
+export default function TypeSafetyDemo(_props: RouteComponentProps) {
     useSignals()
     const [activeTab, setActiveTab] = useState<'setup' | 'props' | 'at' | 'to' | 'label'>('setup')
 
@@ -165,7 +161,7 @@ export default function TypeSafetyDemo({ to }: TypedProps<'TypeSafetyDemo'>) {
                     className={activeTab === 'props' ? 'active' : ''}
                     onClick={() => setActiveTab('props')}
                 >
-                    TypedProps
+                    SurlRouteProps
                 </button>
                 <button
                     className={activeTab === 'at' ? 'active' : ''}
@@ -201,19 +197,24 @@ export default function TypeSafetyDemo({ to }: TypedProps<'TypeSafetyDemo'>) {
 
                     <div className='feature-grid'>
                         <div className='feature-card'>
-                            <h4>ComponentRegistry</h4>
-                            <p>Maps component names to their param/query schemas</p>
-                            <code>TypedProps&lt;'Counter'&gt;</code>
+                            <h4>SurlAt</h4>
+                            <p>Route tree for at.* accessor</p>
+                            <code>SurlAtFrom&lt;routes&gt;</code>
                         </div>
                         <div className='feature-card'>
-                            <h4>AtRegistry</h4>
-                            <p>Defines route tree structure for at.* accessor</p>
-                            <code>at.users.profile</code>
+                            <h4>SurlTo</h4>
+                            <p>Valid paths for to()</p>
+                            <code>SurlToFrom&lt;routes&gt;</code>
                         </div>
                         <div className='feature-card'>
-                            <h4>ToRegistry</h4>
-                            <p>Lists all valid paths for to() autocomplete</p>
-                            <code>to('/users/:userId')</code>
+                            <h4>SurlFeature</h4>
+                            <p>Feature flags from appFeature</p>
+                            <code>SurlFeatureFrom&lt;appFeature&gt;</code>
+                        </div>
+                        <div className='feature-card'>
+                            <h4>SurlLabel</h4>
+                            <p>Typed label.*.go() params</p>
+                            <code>SurlLabelFrom&lt;routes&gt;</code>
                         </div>
                     </div>
 
@@ -221,26 +222,27 @@ export default function TypeSafetyDemo({ to }: TypedProps<'TypeSafetyDemo'>) {
                 </div>
             )}
 
-            {/* TypedProps tab */}
+            {/* SurlRouteProps tab */}
             {activeTab === 'props' && (
                 <div className='demo-section'>
                     <h3>
-                        TypedProps&lt;ComponentName&gt;
+                        SurlRouteProps&lt;Schema&gt;
                         <TypeBadge type="param" color="#3b82f6" />
                         <TypeBadge type="query" color="#8b5cf6" />
+                        <TypeBadge type="trail" color="#10b981" />
                     </h3>
                     <p>
-                        Get typed <code>param</code> and <code>query</code> props based on your route schema.
-                        Schema sugar syntax: <code>{'{count: 0}'}</code> → <code>number</code> type.
+                        Get typed <code>param</code>, <code>query</code>, and <code>breadcrumbs</code> from schema.
+                        Sugar syntax: <code>{'{count: 0}'}</code> → <code>number</code> type.
                     </p>
 
                     <div className='autocomplete-demo'>
-                        <h4>Autocomplete Preview</h4>
+                        <h4>Schema-Based Types</h4>
                         <div className='autocomplete-row'>
                             <AutocompleteVisual
-                                prefix="TypedProps<'"
-                                suggestions={['Counter', 'UserDetail', 'ProductDetail', 'ParamDemo', 'LoaderUserPage']}
-                                selected="Counter"
+                                prefix="SurlRouteProps<typeof "
+                                suggestions={['counterSchema', 'userDetailSchema', 'productDetailSchema']}
+                                selected="counterSchema"
                             />
                         </div>
                         <div className='autocomplete-row'>
@@ -483,23 +485,23 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <button
                             type='button'
                             className='btn btn-primary'
-                            onClick={() => label.home?.go()}
+                            onClick={() => label.home.go()}
                         >
                             label.home.go()
                         </button>
                         <button
                             type='button'
                             className='btn'
-                            onClick={() => label.counter?.go()}
+                            onClick={() => label.counter.go()}
                         >
                             label.counter.go()
                         </button>
                         <button
                             type='button'
                             className='btn'
-                            onClick={() => go(toLabel('userProfile', { userId: 1 }))}
+                            onClick={() => label.userProfile.go({ userId: 1 })}
                         >
-                            toLabel('userProfile', {'{userId: 1}'})
+                            label.userProfile.go({'{ userId: 1 }'})
                         </button>
                     </div>
 

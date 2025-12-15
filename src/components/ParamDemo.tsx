@@ -1,31 +1,49 @@
-import { useSignals, path, type SurlRouteProps } from 'stateurl'
+import { path, type SurlRouteProps, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
 // Schema exported for routes.ts
 export const paramDemoSchema = {
     trail: '/param-demo/:userId',
-    schema: { param: { userId: 0 } }
+    schema: { param: { userId: 0 } },
 } as const
 
-const code = `import { type SurlRouteProps } from 'stateurl'
+// Alternative: defineRenderer validates trail params match schema params
+// Useful when you want compile-time validation of trail ↔ schema consistency
+// export const ParamDemoRenderer = defineRenderer({
+//     trail: '/param-demo/:userId',
+//     schema: { param: { userId: 0 } },
+//     render: ParamDemo,
+// })
 
-// Schema with trail for type-safe breadcrumbs
+const code = `import { defineRenderer, type SurlRouteProps } from 'stateurl'
+
+// Option 1: Separate schema (simpler)
 export const paramDemoSchema = {
     trail: '/param-demo/:userId',
-    schema: { param: { userId: 0 } }
+    schema: { param: { userId: 0 } },
 } as const
 
-function UserProfile({ param, breadcrumbs }: SurlRouteProps<typeof paramDemoSchema>) {
-  // breadcrumbs: [\`param-demo/\${number}\`]
-    return (
-        <div>
-            <h1>User: {param.userId}</h1>
-            <button onClick={() => { param.userId = 123 }}>User 123</button>
-            <button onClick={() => { param.userId = 456 }}>User 456</button>
-            <button onClick={() => { param.userId = 789 }}>User 789</button>
-        </div>
-    )
+function ParamDemo({ param }: SurlRouteProps<typeof paramDemoSchema>) {
+    return <h1>User: {param.userId}</h1>
 }
+
+// Option 2: defineRenderer with trail + path separated
+// - trail: parent context (for to/breadcrumbs/ahead type safety)
+// - path: this route's segment (validated against schema)
+export const ParamDemoRenderer = defineRenderer({
+    trail: '',                    // parent context (root level)
+    path: 'param-demo/:userId',   // this route's segment
+    schema: { param: { userId: 0 } },
+    render: ({ param }) => <h1>User: {param.userId}</h1>,
+})
+
+// In routes.ts - just spread, path comes from renderer
+// Hover reveals: { path: 'param-demo/:userId', ... }
+{ ...ParamDemoRenderer, label: 'paramDemo' }
+
+// Validation errors:
+// - Path has :userId but schema missing → "Path param not in schema: userId"
+// - Schema has 'extra' but path doesn't → "Schema param not in path: extra"
 `
 
 export default function ParamDemo({ param }: SurlRouteProps<typeof paramDemoSchema>) {

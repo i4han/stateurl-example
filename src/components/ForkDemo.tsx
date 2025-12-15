@@ -3,8 +3,33 @@
  */
 
 import type { RouteComponentProps } from 'stateurl'
-import { useSignals, go, ForkOutlet, path } from 'stateurl'
+import { defineRenderer, ForkOutlet, go, path, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
+
+// ============================================================================
+// defineRenderer examples - path comes from here, routes.ts just spreads
+// ============================================================================
+
+export const ForkLayoutRenderer = defineRenderer({
+    trail: '',
+    path: 'fork-layout',
+    schema: {},
+    render: ForkLayoutDemo,
+})
+
+export const ForkPanelARenderer = defineRenderer({
+    trail: '/fork-layout',
+    path: 'panel-a',
+    schema: {},
+    render: ForkPanelA,
+})
+
+export const ForkPanelBRenderer = defineRenderer({
+    trail: '/fork-layout',
+    path: 'panel-b',
+    schema: {},
+    render: ForkPanelB,
+})
 
 const mainCode = `
 // Route configuration with fork

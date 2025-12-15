@@ -1,52 +1,60 @@
-import { useSignals, path } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-const code = `import type { RouteComponentProps } from 'stateurl'
+// Schema defines available query params and their types
+export const queryDemoSchema = {
+    schema: {
+        query: {
+            sort: 'name',      // string with default 'name'
+            filter: 'all',     // string with default 'all'
+            search: '',        // string with default ''
+        }
+    }
+} as const
 
-function QueryDemo({ query }: RouteComponentProps) {
-    // Just assign - auto-registers and updates URL!
-    // No manual registration needed
+const code = `import { useSignals, type SurlRouteProps } from 'stateurl'
+
+// Define query params in schema
+export const queryDemoSchema = {
+    schema: {
+        query: {
+            sort: 'name',      // default value defines type
+            filter: 'all',
+            search: '',
+        }
+    }
+} as const
+
+function QueryDemo({ query }: SurlRouteProps<typeof queryDemoSchema>) {
+    useSignals()
 
     return (
         <div>
             <select
-                value={query.sort || 'name'}
+                value={query.sort ?? 'name'}
                 onChange={(e) => (query.sort = e.target.value)}
             >
                 <option value="name">Sort by Name</option>
                 <option value="price">Sort by Price</option>
-                <option value="date">Sort by Date</option>
             </select>
 
-            <select
-                value={query.filter || 'all'}
-                onChange={(e) => (query.filter = e.target.value)}
-            >
-                <option value="all">All Items</option>
-                <option value="active">Active Only</option>
-                <option value="archived">Archived</option>
-            </select>
-
-            <input
-                type="text"
-                value={query.search || ''}
-                onChange={(e) => (query.search = e.target.value)}
-                placeholder="Search..."
-            />
+            {/* Set to undefined to remove from URL */}
+            <button onClick={() => (query.sort = undefined)}>
+                Clear Sort
+            </button>
         </div>
     )
 }`
 
-export default function QueryDemo({ query }: RouteComponentProps) {
+export default function QueryDemo({ query }: SurlRouteProps<typeof queryDemoSchema>) {
     useSignals()
 
     return (
         <section>
-            <h2>Query Auto-Registration</h2>
+            <h2>Schema-Defined Queries</h2>
             <p>
-                Just assign to <code>query.*</code> and the URL updates automatically.
-                No manual registration needed!
+                Define query params in your route schema. Type-safe and URL-synced.
+                Set to <code>undefined</code> to remove from URL.
             </p>
 
             <div className='current-location'>
@@ -109,10 +117,10 @@ export default function QueryDemo({ query }: RouteComponentProps) {
             <div className='demo-section'>
                 <h3>How It Works</h3>
                 <ul className='feature-list'>
-                    <li><strong>Auto-registration:</strong> First assignment creates the query parameter</li>
+                    <li><strong>Schema-defined:</strong> Define queries in route schema for type safety</li>
                     <li><strong>URL sync:</strong> Values appear in the query string immediately</li>
                     <li><strong>Shareable:</strong> Copy the URL to share exact state</li>
-                    <li><strong>No boilerplate:</strong> No useState, no useEffect, no manual parsing</li>
+                    <li><strong>Clear with undefined:</strong> Set to undefined to remove from URL</li>
                 </ul>
             </div>
 

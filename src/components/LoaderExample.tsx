@@ -22,7 +22,7 @@ export const loaderUserSchema = {
 
 // Access loader data in component
 function UserPage({ data, param, breadcrumbs }: SurlRouteProps<typeof loaderUserSchema>) {
-  // breadcrumbs: ['loader-demo', \`user/\${number}\`]
+  // breadcrumbs: ['loader-demo', 'user'] (static segments only, params in param prop)
     // data contains the loader result, param.userId is typed as number
     if (!data) return <Loading />
     return <div>{data.user.name}</div>
@@ -139,7 +139,7 @@ go(toLabel('loaderUser', { userId: 2 }))`}
 /**
  * LoaderUserPage - demonstrates receiving loader data with cross-fade transition
  */
-export function LoaderUserPage({ data, param }: SurlRouteProps<typeof loaderUserSchema>) {
+export function LoaderUserPage({ data }: SurlRouteProps<typeof loaderUserSchema>) {
     useSignals()
 
     const isLoading = !data

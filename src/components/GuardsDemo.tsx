@@ -52,7 +52,7 @@ function upgradeToPremium() {
 }
 
 // Guard Components
-function LoginModal({ intended, current, next, cancel }: GuardContext) {
+function LoginModal({ intended, next, cancel }: GuardContext) {
     useSignals()
     const handleLogin = () => {
         login()
@@ -81,7 +81,7 @@ function LoginModal({ intended, current, next, cancel }: GuardContext) {
     )
 }
 
-function UpgradeModal({ intended, current, next, cancel }: GuardContext) {
+function UpgradeModal({ intended, next, cancel }: GuardContext) {
     return (
         <div className='modal-overlay'>
             <div className='modal-content'>

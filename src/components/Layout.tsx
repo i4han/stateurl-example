@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useEffect, useState } from 'react'
 import { useSignals, Outlet, feature, path, routerState, handleHref } from 'stateurl'
 import type { RouteComponentProps } from 'stateurl'
 

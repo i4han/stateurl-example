@@ -1,0 +1,160 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "S StateURL" [ref=e5] [cursor=pointer]:
+      - /url: /home
+      - generic [ref=e6]: S
+      - generic [ref=e7]: StateURL
+    - navigation [ref=e8]:
+      - link "GitHub" [ref=e9] [cursor=pointer]:
+        - /url: https://github.com/i4han/stateurl-example
+      - link "📦 npm" [ref=e10] [cursor=pointer]:
+        - /url: https://www.npmjs.com/package/stateurl
+      - link "📚 API Docs" [ref=e11] [cursor=pointer]:
+        - /url: /docs/
+      - button "Toggle Version" [ref=e12] [cursor=pointer]
+      - button "Dark Mode" [ref=e13] [cursor=pointer]
+  - generic [ref=e14]:
+    - complementary [ref=e15]:
+      - navigation [ref=e16]:
+        - link "Home" [ref=e17] [cursor=pointer]:
+          - /url: /home
+        - link "About" [ref=e18] [cursor=pointer]:
+          - /url: /about
+        - link "Counter" [ref=e19] [cursor=pointer]:
+          - /url: /counter
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /products
+        - link "Users" [ref=e21] [cursor=pointer]:
+          - /url: /users
+        - link "Query Params" [ref=e22] [cursor=pointer]:
+          - /url: /query-demo
+        - link "Param Assignment" [ref=e23] [cursor=pointer]:
+          - /url: /param-demo/1
+        - link "Label Navigation" [ref=e24] [cursor=pointer]:
+          - /url: /label-demo
+        - link "at.* Accessor" [ref=e25] [cursor=pointer]:
+          - /url: /at-demo
+        - link "Type Safety ✨" [ref=e26] [cursor=pointer]:
+          - /url: /type-safety
+        - link "Nested Layouts" [ref=e27] [cursor=pointer]:
+          - /url: /nested-layout-demo
+        - link "Loader API" [ref=e28] [cursor=pointer]:
+          - /url: /loader-demo
+        - link "Guards" [ref=e29] [cursor=pointer]:
+          - /url: /guards-demo
+        - link "Transitions" [ref=e30] [cursor=pointer]:
+          - /url: /transitions-demo
+        - link "Fork Routes" [ref=e31] [cursor=pointer]:
+          - /url: /fork-demo
+        - link "Error Boundary" [ref=e32] [cursor=pointer]:
+          - /url: /error-boundary-demo
+        - link "Settings" [ref=e33] [cursor=pointer]:
+          - /url: /settings
+    - main [ref=e34]:
+      - generic [ref=e35]:
+        - heading "Products (Params Demo)" [level=2] [ref=e36]
+        - paragraph [ref=e37]:
+          - text: Click a product to see its details. Uses relative
+          - code [ref=e38]: to('item/$1', [id])
+          - text: for navigation.
+        - generic [ref=e40]:
+          - heading "Product List" [level=3] [ref=e41]
+          - list [ref=e42]:
+            - listitem [ref=e43]:
+              - link "Laptop $999" [ref=e44] [cursor=pointer]:
+                - /url: /products/item/0
+                - generic [ref=e45]: Laptop
+                - generic [ref=e46]: $999
+            - listitem [ref=e47]:
+              - link "Mouse $29" [ref=e48] [cursor=pointer]:
+                - /url: /products/item/1
+                - generic [ref=e49]: Mouse
+                - generic [ref=e50]: $29
+            - listitem [ref=e51]:
+              - link "Keyboard $79" [ref=e52] [cursor=pointer]:
+                - /url: /products/item/2
+                - generic [ref=e53]: Keyboard
+                - generic [ref=e54]: $79
+            - listitem [ref=e55]:
+              - link "Monitor $299" [ref=e56] [cursor=pointer]:
+                - /url: /products/item/3
+                - generic [ref=e57]: Monitor
+                - generic [ref=e58]: $299
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - heading "Code Example" [level=4] [ref=e62]
+            - button "Copy" [ref=e63] [cursor=pointer]
+          - code [ref=e66]:
+            - generic [ref=e68]: "1"
+            - generic [ref=e69]:
+              - generic [ref=e70]: "2"
+              - text: "import { Outlet, handleHref } from 'stateurl'"
+            - generic [ref=e71]:
+              - generic [ref=e72]: "3"
+              - text: "import type { RouteComponentProps } from 'stateurl'"
+            - generic [ref=e74]: "4"
+            - generic [ref=e75]:
+              - generic [ref=e76]: "5"
+              - text: "export default function Products({ to, param }: RouteComponentProps) {"
+            - generic [ref=e77]:
+              - generic [ref=e78]: "6"
+              - text: return (
+            - generic [ref=e79]:
+              - generic [ref=e80]: "7"
+              - text: <div>
+            - generic [ref=e81]:
+              - generic [ref=e82]: "8"
+              - text: "{products.map((product) => ("
+            - generic [ref=e83]:
+              - generic [ref=e84]: "9"
+              - text: <a
+            - generic [ref=e85]:
+              - generic [ref=e86]: "10"
+              - text: // Use relative to() - 'item/$1' from /products
+            - generic [ref=e87]:
+              - generic [ref=e88]: "11"
+              - text: "href={to('item/$1', [product.id])}"
+            - generic [ref=e89]:
+              - generic [ref=e90]: "12"
+              - text: "onClick={handleHref}"
+            - generic [ref=e91]:
+              - generic [ref=e92]: "13"
+              - text: "className={param.productId === product.id ? 'active' : ''}"
+            - generic [ref=e93]:
+              - generic [ref=e94]: "14"
+              - text: ">"
+            - generic [ref=e95]:
+              - generic [ref=e96]: "15"
+              - text: "{product.name} - ${product.price}"
+            - generic [ref=e97]:
+              - generic [ref=e98]: "16"
+              - text: </a>
+            - generic [ref=e99]:
+              - generic [ref=e100]: "17"
+              - text: "))}"
+            - generic [ref=e102]: "18"
+            - generic [ref=e103]:
+              - generic [ref=e104]: "19"
+              - text: "{/* Outlet renders ProductDetail component */}"
+            - generic [ref=e105]:
+              - generic [ref=e106]: "20"
+              - text: <Outlet />
+            - generic [ref=e107]:
+              - generic [ref=e108]: "21"
+              - text: </div>
+            - generic [ref=e109]:
+              - generic [ref=e110]: "22"
+              - text: )
+            - generic [ref=e111]:
+              - generic [ref=e112]: "23"
+              - text: "}"
+  - contentinfo [ref=e113]:
+    - paragraph [ref=e114]:
+      - text: "StateURL Demo • Theme:"
+      - strong [ref=e115]: light
+      - text: "• Path:"
+      - code [ref=e116]: /app/v1/light/products
+```

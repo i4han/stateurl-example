@@ -1,0 +1,233 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e6]:
+    - link "S StateURL" [ref=e7] [cursor=pointer]:
+      - /url: /home
+      - generic [ref=e8]: S
+      - generic [ref=e9]: StateURL
+    - navigation [ref=e10]:
+      - link "GitHub" [ref=e11] [cursor=pointer]:
+        - /url: https://github.com/i4han/stateurl-example
+      - link "📦 npm" [ref=e12] [cursor=pointer]:
+        - /url: https://www.npmjs.com/package/stateurl
+      - link "📚 API Docs" [ref=e13] [cursor=pointer]:
+        - /url: /docs/
+      - button "Toggle Version" [ref=e14] [cursor=pointer]
+      - button "Dark Mode" [ref=e15] [cursor=pointer]
+  - generic [ref=e16]:
+    - complementary [ref=e17]:
+      - navigation [ref=e18]:
+        - link "Home" [ref=e19] [cursor=pointer]:
+          - /url: /home
+        - link "About" [ref=e20] [cursor=pointer]:
+          - /url: /about
+        - link "Counter" [ref=e21] [cursor=pointer]:
+          - /url: /counter
+        - link "Products" [ref=e22] [cursor=pointer]:
+          - /url: /products
+        - link "Users" [ref=e23] [cursor=pointer]:
+          - /url: /users
+        - link "Query Params" [ref=e24] [cursor=pointer]:
+          - /url: /query-demo
+        - link "Param Assignment" [ref=e25] [cursor=pointer]:
+          - /url: /param-demo/1
+        - link "Label Navigation" [ref=e26] [cursor=pointer]:
+          - /url: /label-demo
+        - link "at.* Accessor" [ref=e27] [cursor=pointer]:
+          - /url: /at-demo
+        - link "Type Safety ✨" [ref=e28] [cursor=pointer]:
+          - /url: /type-safety
+        - link "Nested Layouts" [ref=e29] [cursor=pointer]:
+          - /url: /nested-layout-demo
+        - link "Loader API" [ref=e30] [cursor=pointer]:
+          - /url: /loader-demo
+        - link "Guards" [ref=e31] [cursor=pointer]:
+          - /url: /guards-demo
+        - link "Transitions" [ref=e32] [cursor=pointer]:
+          - /url: /transitions-demo
+        - link "Fork Routes" [ref=e33] [cursor=pointer]:
+          - /url: /fork-demo
+        - link "Error Boundary" [ref=e34] [cursor=pointer]:
+          - /url: /error-boundary-demo
+        - link "Settings" [ref=e35] [cursor=pointer]:
+          - /url: /settings
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - heading "Users (Params Demo)" [level=2] [ref=e38]
+        - paragraph [ref=e39]:
+          - text: Click a user to see their profile. Uses relative
+          - code [ref=e40]: to('profile/$1', [id])
+          - text: for navigation.
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - heading "User List" [level=3] [ref=e43]
+            - list [ref=e44]:
+              - listitem [ref=e45]:
+                - link "Alice Johnson" [active] [ref=e46] [cursor=pointer]:
+                  - /url: /users/profile/0
+              - listitem [ref=e47]:
+                - link "Bob Smith" [ref=e48] [cursor=pointer]:
+                  - /url: /users/profile/1
+              - listitem [ref=e49]:
+                - link "Carol Williams" [ref=e50] [cursor=pointer]:
+                  - /url: /users/profile/2
+          - generic [ref=e52]:
+            - heading "Alice Johnson" [level=3] [ref=e53]
+            - paragraph [ref=e54]:
+              - strong [ref=e55]: "Email:"
+              - text: alice@example.com
+            - paragraph [ref=e56]:
+              - strong [ref=e57]: "Role:"
+              - text: Admin
+            - generic [ref=e58]:
+              - strong [ref=e59]: "URL Param:"
+              - code [ref=e60]: userId = 0
+              - strong [ref=e61]: "Breadcrumbs:"
+              - code [ref=e62]: users / profile
+            - generic [ref=e63]:
+              - heading "Relative Navigation" [level=4] [ref=e64]
+              - generic [ref=e65]:
+                - button "to(prevUser) → Prev" [ref=e66] [cursor=pointer]
+                - button "to(nextUser) → Next" [ref=e67] [cursor=pointer]
+            - generic [ref=e68]:
+              - generic [ref=e69]:
+                - heading "Code Example" [level=4] [ref=e70]
+                - button "Copy" [ref=e71] [cursor=pointer]
+              - code [ref=e74]:
+                - generic [ref=e76]: "1"
+                - generic [ref=e77]:
+                  - generic [ref=e78]: "2"
+                  - text: "import { handleHref } from 'stateurl'"
+                - generic [ref=e79]:
+                  - generic [ref=e80]: "3"
+                  - text: "import type { RouteComponentProps } from 'stateurl'"
+                - generic [ref=e82]: "4"
+                - generic [ref=e83]:
+                  - generic [ref=e84]: "5"
+                  - text: "// Route: { path: 'profile/:userId', schema: { param: { userId: 0 } } }"
+                - generic [ref=e86]: "6"
+                - generic [ref=e87]:
+                  - generic [ref=e88]: "7"
+                  - text: "export default function UserDetail({ param, to }: RouteComponentProps) {"
+                - generic [ref=e89]:
+                  - generic [ref=e90]: "8"
+                  - text: // userId is already a number (schema auto-deserializes)
+                - generic [ref=e91]:
+                  - generic [ref=e92]: "9"
+                  - text: const userId = param.userId
+                - generic [ref=e93]:
+                  - generic [ref=e94]: "10"
+                  - text: const prevUser = (userId - 1 + 3) % 3
+                - generic [ref=e95]:
+                  - generic [ref=e96]: "11"
+                  - text: const nextUser = (userId + 1) % 3
+                - generic [ref=e98]: "12"
+                - generic [ref=e99]:
+                  - generic [ref=e100]: "13"
+                  - text: return (
+                - generic [ref=e101]:
+                  - generic [ref=e102]: "14"
+                  - text: <div className='button-group'>
+                - generic [ref=e103]:
+                  - generic [ref=e104]: "15"
+                  - text: "<button data-href={to(String(prevUser))} onClick={handleHref}>"
+                - generic [ref=e105]:
+                  - generic [ref=e106]: "16"
+                  - text: to(prevUser) → Prev
+                - generic [ref=e107]:
+                  - generic [ref=e108]: "17"
+                  - text: </button>
+                - generic [ref=e109]:
+                  - generic [ref=e110]: "18"
+                  - text: "<button data-href={to(String(nextUser))} onClick={handleHref}>"
+                - generic [ref=e111]:
+                  - generic [ref=e112]: "19"
+                  - text: to(nextUser) → Next
+                - generic [ref=e113]:
+                  - generic [ref=e114]: "20"
+                  - text: </button>
+                - generic [ref=e115]:
+                  - generic [ref=e116]: "21"
+                  - text: </div>
+                - generic [ref=e117]:
+                  - generic [ref=e118]: "22"
+                  - text: )
+                - generic [ref=e119]:
+                  - generic [ref=e120]: "23"
+                  - text: "}"
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - heading "Code Example" [level=4] [ref=e123]
+            - button "Copy" [ref=e124] [cursor=pointer]
+          - code [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: "1"
+              - text: "import { Outlet, handleHref } from 'stateurl'"
+            - generic [ref=e130]:
+              - generic [ref=e131]: "2"
+              - text: "import type { RouteComponentProps } from 'stateurl'"
+            - generic [ref=e133]: "3"
+            - generic [ref=e134]:
+              - generic [ref=e135]: "4"
+              - text: "export default function Users({ to, param }: RouteComponentProps) {"
+            - generic [ref=e136]:
+              - generic [ref=e137]: "5"
+              - text: return (
+            - generic [ref=e138]:
+              - generic [ref=e139]: "6"
+              - text: <div>
+            - generic [ref=e140]:
+              - generic [ref=e141]: "7"
+              - text: "{users.map((user) => ("
+            - generic [ref=e142]:
+              - generic [ref=e143]: "8"
+              - text: <a
+            - generic [ref=e144]:
+              - generic [ref=e145]: "9"
+              - text: // Use relative to() - 'profile/$1' from /users
+            - generic [ref=e146]:
+              - generic [ref=e147]: "10"
+              - text: "href={to('profile/$1', [user.id])}"
+            - generic [ref=e148]:
+              - generic [ref=e149]: "11"
+              - text: "onClick={handleHref}"
+            - generic [ref=e150]:
+              - generic [ref=e151]: "12"
+              - text: "className={param.userId === user.id ? 'active' : ''}"
+            - generic [ref=e152]:
+              - generic [ref=e153]: "13"
+              - text: ">"
+            - generic [ref=e154]:
+              - generic [ref=e155]: "14"
+              - text: "{user.name}"
+            - generic [ref=e156]:
+              - generic [ref=e157]: "15"
+              - text: </a>
+            - generic [ref=e158]:
+              - generic [ref=e159]: "16"
+              - text: "))}"
+            - generic [ref=e161]: "17"
+            - generic [ref=e162]:
+              - generic [ref=e163]: "18"
+              - text: "{/* Outlet renders nested route */}"
+            - generic [ref=e164]:
+              - generic [ref=e165]: "19"
+              - text: <Outlet />
+            - generic [ref=e166]:
+              - generic [ref=e167]: "20"
+              - text: </div>
+            - generic [ref=e168]:
+              - generic [ref=e169]: "21"
+              - text: )
+            - generic [ref=e170]:
+              - generic [ref=e171]: "22"
+              - text: "}"
+  - contentinfo [ref=e172]:
+    - paragraph [ref=e173]:
+      - text: "StateURL Demo • Theme:"
+      - strong [ref=e174]: light
+      - text: "• Path:"
+      - code [ref=e175]: /app/v1/light/users/profile/0
+```

@@ -1,0 +1,188 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "S StateURL" [ref=e5] [cursor=pointer]:
+      - /url: /home
+      - generic [ref=e6]: S
+      - generic [ref=e7]: StateURL
+    - navigation [ref=e8]:
+      - link "GitHub" [ref=e9] [cursor=pointer]:
+        - /url: https://github.com/i4han/stateurl-example
+      - link "📦 npm" [ref=e10] [cursor=pointer]:
+        - /url: https://www.npmjs.com/package/stateurl
+      - link "📚 API Docs" [ref=e11] [cursor=pointer]:
+        - /url: /docs/
+      - button "Toggle Version" [ref=e12] [cursor=pointer]
+      - button "Dark Mode" [ref=e13] [cursor=pointer]
+  - generic [ref=e14]:
+    - complementary [ref=e15]:
+      - navigation [ref=e16]:
+        - link "Home" [ref=e17] [cursor=pointer]:
+          - /url: /home
+        - link "About" [ref=e18] [cursor=pointer]:
+          - /url: /about
+        - link "Counter" [ref=e19] [cursor=pointer]:
+          - /url: /counter
+        - link "Products" [ref=e20] [cursor=pointer]:
+          - /url: /products
+        - link "Users" [ref=e21] [cursor=pointer]:
+          - /url: /users
+        - link "Query Params" [ref=e22] [cursor=pointer]:
+          - /url: /query-demo
+        - link "Param Assignment" [ref=e23] [cursor=pointer]:
+          - /url: /param-demo/1
+        - link "Label Navigation" [ref=e24] [cursor=pointer]:
+          - /url: /label-demo
+        - link "at.* Accessor" [ref=e25] [cursor=pointer]:
+          - /url: /at-demo
+        - link "Type Safety ✨" [ref=e26] [cursor=pointer]:
+          - /url: /type-safety
+        - link "Nested Layouts" [ref=e27] [cursor=pointer]:
+          - /url: /nested-layout-demo
+        - link "Loader API" [ref=e28] [cursor=pointer]:
+          - /url: /loader-demo
+        - link "Guards" [ref=e29] [cursor=pointer]:
+          - /url: /guards-demo
+        - link "Transitions" [ref=e30] [cursor=pointer]:
+          - /url: /transitions-demo
+        - link "Fork Routes" [ref=e31] [cursor=pointer]:
+          - /url: /fork-demo
+        - link "Error Boundary" [ref=e32] [cursor=pointer]:
+          - /url: /error-boundary-demo
+        - link "Settings" [ref=e33] [cursor=pointer]:
+          - /url: /settings
+    - main [ref=e34]:
+      - generic [ref=e35]:
+        - heading "Welcome to StateURL Example" [level=2] [ref=e36]
+        - paragraph [ref=e37]:
+          - text: This demo showcases all major features of the
+          - code [ref=e38]: stateurl
+          - text: router.
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - heading "Features" [level=3] [ref=e41]
+            - paragraph [ref=e42]: URL pattern-based feature flags
+            - code [ref=e43]: /app/:version/:theme
+            - paragraph [ref=e44]: "Current: v1 (light)"
+          - generic [ref=e45]:
+            - heading "Params" [level=3] [ref=e46]
+            - paragraph [ref=e47]: Dynamic route parameters
+            - code [ref=e48]: /products/:productId
+            - paragraph [ref=e49]: See Products & Users pages
+          - generic [ref=e50]:
+            - heading "Query" [level=3] [ref=e51]
+            - paragraph [ref=e52]: URL state management
+            - code [ref=e53]: "?count=5"
+            - paragraph [ref=e54]: See Counter page
+          - generic [ref=e55]:
+            - heading "Navigation" [level=3] [ref=e56]
+            - paragraph [ref=e57]: Layout with top & side nav
+            - code [ref=e58]: handleHref
+            - paragraph [ref=e59]: Click menu items above
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - heading "Code Example" [level=4] [ref=e62]
+            - button "Copy" [ref=e63] [cursor=pointer]
+          - code [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]: "1"
+              - text: "import { Router } from 'stateurl'"
+            - generic [ref=e69]:
+              - generic [ref=e70]: "2"
+              - text: "import { routes } from './routes'"
+            - generic [ref=e72]: "3"
+            - generic [ref=e73]:
+              - generic [ref=e74]: "4"
+              - text: // Setup router with feature flags
+            - generic [ref=e75]:
+              - generic [ref=e76]: "5"
+              - text: "export default function App() {"
+            - generic [ref=e77]:
+              - generic [ref=e78]: "6"
+              - text: return (
+            - generic [ref=e79]:
+              - generic [ref=e80]: "7"
+              - text: <Router
+            - generic [ref=e81]:
+              - generic [ref=e82]: "8"
+              - text: base="app"
+            - generic [ref=e83]:
+              - generic [ref=e84]: "9"
+              - text: "feature={{ version: ['v1', 'v2'], theme: ['light', 'dark'] }}"
+            - generic [ref=e85]:
+              - generic [ref=e86]: "10"
+              - text: "routes={routes}"
+            - generic [ref=e87]:
+              - generic [ref=e88]: "11"
+              - text: "redirectToBase={true}"
+            - generic [ref=e89]:
+              - generic [ref=e90]: "12"
+              - text: />
+            - generic [ref=e91]:
+              - generic [ref=e92]: "13"
+              - text: )
+            - generic [ref=e93]:
+              - generic [ref=e94]: "14"
+              - text: "}"
+            - generic [ref=e96]: "15"
+            - generic [ref=e97]:
+              - generic [ref=e98]: "16"
+              - text: // Access features anywhere in your app (Proxy API)
+            - generic [ref=e99]:
+              - generic [ref=e100]: "17"
+              - text: "import { feature } from 'stateurl'"
+            - generic [ref=e102]: "18"
+            - generic [ref=e103]:
+              - generic [ref=e104]: "19"
+              - text: const version = feature.version // 'v1' or 'v2'
+            - generic [ref=e105]:
+              - generic [ref=e106]: "20"
+              - text: const theme = feature.theme // 'light' or 'dark'
+            - generic [ref=e108]: "21"
+            - generic [ref=e109]:
+              - generic [ref=e110]: "22"
+              - text: // Update features (URL updates automatically!)
+            - generic [ref=e111]:
+              - generic [ref=e112]: "23"
+              - text: feature.theme = 'dark'
+        - generic [ref=e113]:
+          - heading "Current State:" [level=4] [ref=e114]
+          - list [ref=e115]:
+            - listitem [ref=e116]:
+              - strong [ref=e117]: "Path:"
+              - code [ref=e118]: /app/v1/light/home
+            - listitem [ref=e119]:
+              - strong [ref=e120]: "Version:"
+              - text: v1
+            - listitem [ref=e121]:
+              - strong [ref=e122]: "Theme:"
+              - text: Light
+        - generic [ref=e123]:
+          - heading "Quick Start:" [level=3] [ref=e124]
+          - list [ref=e125]:
+            - listitem [ref=e126]:
+              - text: Toggle
+              - strong [ref=e127]: Theme
+              - text: in top menu to see dark mode
+            - listitem [ref=e128]:
+              - text: Try the
+              - strong [ref=e129]: Counter
+              - text: page to see query state
+            - listitem [ref=e130]:
+              - text: Browse
+              - strong [ref=e131]: Products
+              - text: to see params in action
+            - listitem [ref=e132]:
+              - text: Change
+              - strong [ref=e133]: Settings
+              - text: to toggle features
+            - listitem [ref=e134]: Watch the URL change with every interaction!
+  - contentinfo [ref=e135]:
+    - paragraph [ref=e136]:
+      - text: "StateURL Demo • Theme:"
+      - strong [ref=e137]: light
+      - text: "• Path:"
+      - code [ref=e138]: /app/v1/light/home
+```

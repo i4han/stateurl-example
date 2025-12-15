@@ -11,11 +11,13 @@ function NotFound() {
     )
 }
 
+export const appFeature = { version: ['v1', 'v2'], theme: ['light', 'dark'] } as const
+
 export default function App() {
     return (
         <Router
-            base="app"
-            feature={{ version: ['v1', 'v2'], theme: ['light', 'dark'] }}
+            base='app'
+            feature={appFeature}
             routes={routes}
             NotFound={NotFound}
             redirectToBase={true}
