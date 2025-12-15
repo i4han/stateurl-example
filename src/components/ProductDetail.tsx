@@ -1,6 +1,11 @@
-import { handleHref, useSignals } from 'stateurl'
-import type { TypedProps } from '../stateurl-types'
+import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
+
+// Schema exported for routes.ts
+export const productDetailSchema = {
+    trail: '/products/item/:productId',
+    schema: { param: { productId: 0 } }
+} as const
 
 const products = [
     { id: 0, name: 'Laptop', price: 999, desc: 'High-performance laptop for professionals' },
@@ -10,10 +15,16 @@ const products = [
 ]
 
 const code = `
-import { handleHref } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { handleHref, type SurlRouteProps } from 'stateurl'
 
-export default function ProductDetail({ param, via, to }: RouteComponentProps) {
+// Schema with trail for type-safe breadcrumbs
+export const productDetailSchema = {
+    trail: '/products/item/:productId',
+    schema: { param: { productId: 0 } }
+} as const
+
+function ProductDetail({ param, to, breadcrumbs }: SurlRouteProps<typeof productDetailSchema>) {
+  // breadcrumbs: ['products', \`item/\${number}\`]
   // param.productId is a number - schema handles serialization
   const product = products[param.productId]
   const nextId = (param.productId + 1) % products.length
@@ -25,11 +36,11 @@ export default function ProductDetail({ param, via, to }: RouteComponentProps) {
       <p>\${product.price}</p>
 
       <div className='button-group'>
-        <button data-href={to('$1', [prevId])} onClick={handleHref}>
-          Prev <- to('$1', [prevId])
+        <button data-href={to(String(prevId))} onClick={handleHref}>
+          to(prevId) → Prev
         </button>
-        <button data-href={via('item:$1', [nextId])} onClick={handleHref}>
-          via('item:$1', [nextId]) -> Next
+        <button data-href={to(String(nextId))} onClick={handleHref}>
+          to(nextId) → Next
         </button>
       </div>
     </div>
@@ -38,12 +49,10 @@ export default function ProductDetail({ param, via, to }: RouteComponentProps) {
 
 function ProductDetail({
     param,
-    via,
     to,
     breadcrumbs,
-}: TypedProps<'ProductDetail'>) {
+}: SurlRouteProps<typeof productDetailSchema>) {
     useSignals()
-    // param.productId is a number - schema handles serialization
     const product = products[param.productId]
     const nextId = (param.productId + 1) % products.length
     const prevId = (param.productId + products.length - 1) % products.length
@@ -73,28 +82,16 @@ function ProductDetail({
             <div className='navigation-demo'>
                 <h4>Relative Navigation</h4>
                 <div className='button-group'>
-                    <button
-                        type='button'
-                        data-href={to('$1', [prevId])}
-                        onClick={handleHref}
-                    >
-                        to('$1', [{prevId}]) → Prev
+                    <button type='button' data-href={to(String(prevId))} onClick={handleHref}>
+                        to(prevId) → Prev
                     </button>
-                    <button
-                        type='button'
-                        data-href={via('item:$1', [nextId])}
-                        onClick={handleHref}
-                    >
-                        via('item:$1', [{nextId}]) → Next
+                    <button type='button' data-href={to(String(nextId))} onClick={handleHref}>
+                        to(nextId) → Next
                     </button>
                 </div>
             </div>
 
-            <CodeExample
-                code={code}
-                language='tsx'
-                highlightLines={[16, 17, 18, 19, 20, 21]}
-            />
+            <CodeExample code={code} language='tsx' />
         </div>
     )
 }

@@ -1,15 +1,23 @@
-import { useSignals } from 'stateurl'
-import type { TypedProps } from '../stateurl-types'
+import { useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
+// Schema exported for routes.ts - single source of truth
+export const counterSchema = {
+    trail: '/counter',
+    schema: { query: { count: 0 } }
+} as const
+
 const code = `
-import { useSignals } from 'stateurl'
-import type { TypedProps } from './stateurl-types'
+import { useSignals, type SurlRouteProps } from 'stateurl'
 
-// TypedProps<'Counter'> provides typed query from componentSchemas
-// query.count is typed as number | undefined
+// Schema with trail for type-safe breadcrumbs
+export const counterSchema = {
+    trail: '/counter',
+    schema: { query: { count: 0 } }
+} as const
 
-function Counter({ query }: TypedProps<'Counter'>) {
+function Counter({ query, breadcrumbs }: SurlRouteProps<typeof counterSchema>) {
+  // breadcrumbs: ['counter']
   useSignals()
   const count = query.count ?? 0
 
@@ -24,7 +32,7 @@ function Counter({ query }: TypedProps<'Counter'>) {
 }
 export default Counter`
 
-function Counter({ query }: TypedProps<'Counter'>) {
+function Counter({ query }: SurlRouteProps<typeof counterSchema>) {
     useSignals()
     // query.count is typed as number (schema-defined)
     const count = query.count ?? 0

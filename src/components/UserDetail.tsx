@@ -1,6 +1,11 @@
-import { handleHref, useSignals } from 'stateurl'
-import type { TypedProps } from '../stateurl-types'
+import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
+
+// Schema exported for routes.ts
+export const userDetailSchema = {
+    trail: '/users/profile/:userId',
+    schema: { param: { userId: 0 } }
+} as const
 
 const users = [
     {
@@ -19,45 +24,43 @@ const users = [
 ]
 
 const code = `
-import { handleHref } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { handleHref, type SurlRouteProps } from 'stateurl'
 
-// Route: { path: 'profile/:userId', schema: { param: { userId: 0 } } }
+// Schema with trail for type-safe breadcrumbs
+export const userDetailSchema = {
+    trail: '/users/profile/:userId',
+    schema: { param: { userId: 0 } }
+} as const
 
-export default function UserDetail({ param, via, to }: RouteComponentProps) {
+function UserDetail({ param, to, breadcrumbs }: SurlRouteProps<typeof userDetailSchema>) {
+  // breadcrumbs: ['users', \`profile/\${number}\`]
   // userId is already a number (schema auto-deserializes)
   const userId = param.userId
+  const prevUser = (userId - 1 + 3) % 3
   const nextUser = (userId + 1) % 3
 
   return (
-        <div className='button-group'>
-            <button data-href={to(prevUser)} onClick={handleHref}>
-                to(prevUser)
-            </button>
-            <button
-                data-href={via('profile:$1', [nextUser])}
-                onClick={handleHref}
-            >
-                via('profile:$1', [{nextUser}]) → Next User
-            </button>
-        </div>
+    <div className='button-group'>
+      <button data-href={to(String(prevUser))} onClick={handleHref}>
+        to(prevUser) → Prev
+      </button>
+      <button data-href={to(String(nextUser))} onClick={handleHref}>
+        to(nextUser) → Next
+      </button>
+    </div>
   )
 }`
 
 function UserDetail({
     param,
-    via,
     to,
     breadcrumbs,
-}: TypedProps<'UserDetail'>) {
+}: SurlRouteProps<typeof userDetailSchema>) {
     useSignals()
-    // Access param directly from props (already a number via schema)
     const userId = param.userId
     const user = users[userId]
 
-    // Navigate to other users using relative via
     const prevUser = (userId - 1 + users.length) % users.length
-
     const nextUser = (userId + 1) % users.length
 
     if (!user) {
@@ -89,14 +92,10 @@ function UserDetail({
                 <h4>Relative Navigation</h4>
                 <div className='button-group'>
                     <button type='button' data-href={to(String(prevUser))} onClick={handleHref}>
-                        to(prevUser)
+                        to(prevUser) → Prev
                     </button>
-                    <button
-                        type='button'
-                        data-href={via('profile:$1', [nextUser])}
-                        onClick={handleHref}
-                    >
-                        via('profile:$1', [{nextUser}]) → Next User
+                    <button type='button' data-href={to(String(nextUser))} onClick={handleHref}>
+                        to(nextUser) → Next
                     </button>
                 </div>
             </div>

@@ -209,6 +209,20 @@ export default function Layout({ to, ahead }: RouteComponentProps) {
                             Label Navigation
                         </a>
                         <a
+                            href={to('/at-demo')}
+                            onClick={handleHref}
+                            className={active === 'at-demo' ? 'active' : ''}
+                        >
+                            at.* Accessor
+                        </a>
+                        <a
+                            href={to('/type-safety')}
+                            onClick={handleHref}
+                            className={active === 'type-safety' ? 'active' : ''}
+                        >
+                            Type Safety ✨
+                        </a>
+                        <a
                             href={to('/nested-layout-demo')}
                             onClick={handleHref}
                             className={active === 'nested-layout-demo' ? 'active' : ''}

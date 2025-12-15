@@ -1,4 +1,3 @@
-import type { RouteComponentProps } from 'stateurl'
 import { path, useSignals, label, toLabel, go } from 'stateurl'
 import CodeExample from './CodeExample'
 
@@ -20,7 +19,7 @@ label.userProfile.param.userId     // Current userId (number)
 label.userProfile.fullPath         // '/users/123'
 label.userProfile.go()             // Navigate to route`
 
-export default function LabelExample(props: RouteComponentProps) {
+export default function LabelExample() {
     useSignals()
     const currentPath = path.full
 
@@ -36,11 +35,10 @@ export default function LabelExample(props: RouteComponentProps) {
                 <strong>Current:</strong> <code>{currentPath}</code>
             </div>
 
-            <div className='via-examples'>
+            <div className='demo-examples'>
                 <ToLabelExample />
                 <LabelAccessorExample />
                 <LabelNavigationExample />
-                <DeprecationNotice {...props} />
             </div>
 
             <CodeExample code={mainCode} language='tsx' />
@@ -158,57 +156,6 @@ go(toLabel('userProfile', { userId: 123 }))`}
     )
 }
 
-function DeprecationNotice({ via }: RouteComponentProps) {
-    useSignals()
-    return (
-        <div className='demo-section' style={{ background: 'var(--warning-bg, #fef3c7)', padding: '1rem', borderRadius: '8px' }}>
-            <h3>Migrating from via()</h3>
-            <p>
-                The global <code>via()</code> function is deprecated. Use <code>label.*</code> or{' '}
-                <code>toLabel()</code> instead.
-            </p>
-
-            <div className='migration-example' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div>
-                    <h4 style={{ color: 'var(--danger-color, #dc2626)' }}>Before (deprecated)</h4>
-                    <CodeExample
-                        code={`import { via } from 'stateurl'
-
-// Global via - deprecated
-via('/products')
-via('/users/profile:42')`}
-                        language='typescript'
-                    />
-                </div>
-                <div>
-                    <h4 style={{ color: 'var(--success-color, #16a34a)' }}>After (recommended)</h4>
-                    <CodeExample
-                        code={`import { toLabel, label } from 'stateurl'
-
-// Label-based - rename-safe (integers auto-serialize)
-toLabel('products')
-toLabel('userProfile', { userId: 42 })
-
-// Or use label accessor
-label.products.fullPath`}
-                        language='typescript'
-                    />
-                </div>
-            </div>
-
-            <p style={{ marginTop: '1rem' }}>
-                <strong>Note:</strong> The contextual <code>via</code> and <code>to</code> props
-                in <code>RouteComponentProps</code> are still valid for relative navigation.
-            </p>
-
-            <div className='result-grid'>
-                <Result expr="via('products')" value={via('products')} />
-                <Result expr="via('settings')" value={via('settings')} />
-            </div>
-        </div>
-    )
-}
-
 // Helper to safely call toLabel (catches errors for demo)
 function safeToLabel(labelName: string, params?: Record<string, string | number>): string {
     try {
@@ -231,7 +178,7 @@ function safeAccess(fn: () => any): string {
 function Result({ expr, value }: { expr: string; value: string }) {
     useSignals()
     return (
-        <div className='via-result'>
+        <div className='result-item'>
             <code>{expr}</code>
             <span className='arrow'>→</span>
             <code className='value'>{value}</code>

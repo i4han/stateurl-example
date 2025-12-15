@@ -1,13 +1,22 @@
-import { useSignals, path } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { useSignals, path, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-const code = `import type { RouteComponentProps } from 'stateurl'
+// Schema exported for routes.ts
+export const paramDemoSchema = {
+    trail: '/param-demo/:userId',
+    schema: { param: { userId: 0 } }
+} as const
 
-// Route definition with schema (in routes.ts):
-// { path: 'param-demo/:userId', schema: { param: { userId: 0 } } }
+const code = `import { type SurlRouteProps } from 'stateurl'
 
-function UserProfile({ param }: RouteComponentProps) {
+// Schema with trail for type-safe breadcrumbs
+export const paramDemoSchema = {
+    trail: '/param-demo/:userId',
+    schema: { param: { userId: 0 } }
+} as const
+
+function UserProfile({ param, breadcrumbs }: SurlRouteProps<typeof paramDemoSchema>) {
+  // breadcrumbs: [\`param-demo/\${number}\`]
     return (
         <div>
             <h1>User: {param.userId}</h1>
@@ -19,7 +28,7 @@ function UserProfile({ param }: RouteComponentProps) {
 }
 `
 
-export default function ParamDemo({ param }: RouteComponentProps) {
+export default function ParamDemo({ param }: SurlRouteProps<typeof paramDemoSchema>) {
     useSignals()
     return (
         <section>

@@ -1,21 +1,29 @@
-import type { RouteComponentProps } from 'stateurl'
+import type { RouteComponentProps, SurlRouteProps } from 'stateurl'
 import { path, useSignals, go, Outlet, toLabel } from 'stateurl'
 import CodeExample from './CodeExample'
 
+// Schema exported for routes.ts
+export const loaderUserSchema = {
+    trail: '/loader-demo/user/:userId',
+    schema: { param: { userId: 0 } }
+} as const
+
 const mainCode = `
-// Define a route with loader in routes.ts
-{
-    path: 'user/:userId',
-    loader: async ({ param }) => {
-        const response = await fetch(\`/api/users/\${param.userId}\`)
-        return { user: await response.json() }
-    },
-    render: UserPage
-}
+import { type SurlRouteProps } from 'stateurl'
+
+// Schema with trail for type-safe breadcrumbs
+export const loaderUserSchema = {
+    trail: '/loader-demo/user/:userId',
+    schema: { param: { userId: 0 } }
+} as const
+
+// Route with loader in routes.ts:
+// { path: 'user/:userId', ...loaderUserSchema, loader: async ({ param }) => {...} }
 
 // Access loader data in component
-function UserPage({ data }: RouteComponentProps) {
-    // data contains the loader result
+function UserPage({ data, param, breadcrumbs }: SurlRouteProps<typeof loaderUserSchema>) {
+  // breadcrumbs: ['loader-demo', \`user/\${number}\`]
+    // data contains the loader result, param.userId is typed as number
     if (!data) return <Loading />
     return <div>{data.user.name}</div>
 }`
@@ -131,7 +139,7 @@ go(toLabel('loaderUser', { userId: 2 }))`}
 /**
  * LoaderUserPage - demonstrates receiving loader data with cross-fade transition
  */
-export function LoaderUserPage({ data, param }: RouteComponentProps) {
+export function LoaderUserPage({ data, param }: SurlRouteProps<typeof loaderUserSchema>) {
     useSignals()
 
     const isLoading = !data
