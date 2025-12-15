@@ -1,11 +1,20 @@
-import { useSignals, handleHref, Outlet, type SurlRouteProps } from 'stateurl'
+import {
+    defineRoute,
+    useSignals,
+    handleHref,
+    Outlet,
+    type SurlRouteProps,
+} from 'stateurl'
 import CodeExample from './CodeExample'
+import { ProductDetailRoute } from './Products/ProductDetail'
 
-// Schema with trail for type-safe to() autocomplete
-export const productsSchema = {
-    trail: '/products',
-    schema: {}
+const productsConfig = {
+    path: 'products',
+    trail: '/',
+    outlet: [ProductDetailRoute],
 } as const
+
+export const ProductsRoute = defineRoute(Products, productsConfig)
 
 const products = [
     { id: 0, name: 'Laptop', price: 999 },
@@ -24,7 +33,7 @@ export const productsSchema = {
 } as const
 
 // to() autocompletes 'item/:productId' from SurlTo registry
-export default function Products({ to, param }: SurlRouteProps<typeof productsSchema>) {
+export default function Products({ to, param }: SurlRouteProps<typeof productsConfig>) {
   return (
     <div>
       {products.map((product) => (
@@ -44,7 +53,7 @@ export default function Products({ to, param }: SurlRouteProps<typeof productsSc
   )
 }`
 
-export default function Products(props: SurlRouteProps<typeof productsSchema>) {
+export default function Products(props: SurlRouteProps<typeof productsConfig>) {
     useSignals()
     return (
         <section>
@@ -73,7 +82,7 @@ export default function Products(props: SurlRouteProps<typeof productsSchema>) {
     )
 }
 
-function ProductList({ to, param }: SurlRouteProps<typeof productsSchema>) {
+function ProductList({ to, param }: SurlRouteProps<typeof productsConfig>) {
     return (
         <ul className='product-items'>
             {products.map((product) => (

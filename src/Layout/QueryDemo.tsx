@@ -1,16 +1,19 @@
-import { useSignals, type SurlRouteProps } from 'stateurl'
+import { defineRoute, useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-// Schema defines available query params and their types
-export const queryDemoSchema = {
+const queryDemoConfig = {
+    path: 'query-demo',
     schema: {
         query: {
             sort: 'name',      // string with default 'name'
             filter: 'all',     // string with default 'all'
             search: '',        // string with default ''
         }
-    }
+    },
+    trail: '/',
 } as const
+
+export const QueryDemoRoute = defineRoute(QueryDemo, queryDemoConfig)
 
 const code = `import { useSignals, type SurlRouteProps } from 'stateurl'
 
@@ -25,7 +28,7 @@ export const queryDemoSchema = {
     }
 } as const
 
-function QueryDemo({ query }: SurlRouteProps<typeof queryDemoSchema>) {
+function QueryDemo({ query }: SurlRouteProps<typeof queryDemoConfig>) {
     useSignals()
 
     return (
@@ -46,7 +49,7 @@ function QueryDemo({ query }: SurlRouteProps<typeof queryDemoSchema>) {
     )
 }`
 
-export default function QueryDemo({ query }: SurlRouteProps<typeof queryDemoSchema>) {
+export default function QueryDemo({ query }: SurlRouteProps<typeof queryDemoConfig>) {
     useSignals()
 
     return (

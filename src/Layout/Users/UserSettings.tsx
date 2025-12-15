@@ -1,11 +1,19 @@
-import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
-import CodeExample from './CodeExample'
+/**
+ * UserSettings - User settings page
+ *
+ * path: 'settings' → UserSettings component, UserSettingsRoute
+ */
 
-// Schema with trail for type-safe navigation
-export const userSettingsSchema = {
-    trail: '/users/settings',
-    schema: {}
+import { defineRoute, handleHref, useSignals, type SurlRouteProps } from 'stateurl'
+import CodeExample from '../CodeExample'
+
+const userSettingsConfig = {
+    path: 'settings',
+    trail: '/users',
+    label: 'userSettings',
 } as const
+
+export const UserSettingsRoute = defineRoute(UserSettings, userSettingsConfig)
 
 const code = `
 import { handleHref, type SurlRouteProps } from 'stateurl'
@@ -16,7 +24,7 @@ export const userSettingsSchema = {
     schema: {}
 } as const
 
-function UserSettings({ to }: SurlRouteProps<typeof userSettingsSchema>) {
+function UserSettings({ to }: SurlRouteProps<typeof userSettingsConfig>) {
     return (
         <div>
             {/* Navigate to sibling: ../profile/:userId */}
@@ -32,10 +40,10 @@ function UserSettings({ to }: SurlRouteProps<typeof userSettingsSchema>) {
     )
 }`
 
-function UserSettings({
+export default function UserSettings({
     to,
     breadcrumbs,
-}: SurlRouteProps<typeof userSettingsSchema>) {
+}: SurlRouteProps<typeof userSettingsConfig>) {
     useSignals()
 
     return (
@@ -76,5 +84,3 @@ function UserSettings({
         </div>
     )
 }
-
-export default UserSettings

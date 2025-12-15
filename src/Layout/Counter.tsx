@@ -1,11 +1,14 @@
-import { useSignals, type SurlRouteProps } from 'stateurl'
+import { defineRoute, useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-// Schema exported for routes.ts - single source of truth
-export const counterSchema = {
-    trail: '/counter',
-    schema: { query: { count: 0 } }
+// Config for type-safe props
+const counterConfig = {
+    path: 'counter',
+    schema: { query: { count: 0 } },
+    trail: '/',
 } as const
+
+export const CounterRoute = defineRoute(Counter, counterConfig)
 
 const code = `
 import { useSignals, type SurlRouteProps } from 'stateurl'
@@ -32,7 +35,7 @@ function Counter({ query, breadcrumbs }: SurlRouteProps<typeof counterSchema>) {
 }
 export default Counter`
 
-function Counter({ query }: SurlRouteProps<typeof counterSchema>) {
+function Counter({ query }: SurlRouteProps<typeof counterConfig>) {
     useSignals()
     // query.count is typed as number (schema-defined)
     const count = query.count ?? 0

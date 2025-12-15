@@ -1,70 +1,45 @@
 /**
  * Transitions Demo - Transition state tracking for loading UI
+ *
+ * path: 'transitions-demo' → TransitionsDemo component, TransitionsDemoRoute
  */
+import {
+    defineRoute,
+    useSignals,
+    routerState,
+    feature,
+    handleHref,
+    Outlet,
+    type SurlRouteProps,
+} from 'stateurl'
+import { TransitionsFastRoute } from './TransitionsDemo/TransitionsFast'
+import { TransitionsMediumRoute } from './TransitionsDemo/TransitionsMedium'
+import { TransitionsSlowRoute } from './TransitionsDemo/TransitionsSlow'
 
-import { type MouseEvent } from 'react'
-import { useSignals, routerState, feature, go, handleHref } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+const transitionsDemoConfig = {
+    path: 'transitions-demo',
+    trail: '/',
+    outlet: [
+        TransitionsFastRoute,
+        TransitionsMediumRoute,
+        TransitionsSlowRoute,
+    ],
+} as const
 
-function TransitionPage({ title, color }: { title: string; color: string }) {
-    useSignals()
-    return (
-        <section>
-            <h2>{title}</h2>
-            <p>
-                Transition complete! The loading bar showed while navigating
-                here.
-            </p>
+export const TransitionsDemoRoute = defineRoute(
+    TransitionsDemo,
+    transitionsDemoConfig,
+)
 
-            <div className='setting-item'>
-                <h3>Page Loaded Successfully</h3>
-                <p>
-                    The router automatically tracked navigation and displayed
-                    the loading indicator for ~400ms minimum.
-                </p>
-                <div
-                    style={{
-                        height: '4px',
-                        background: color,
-                        borderRadius: '2px',
-                        marginTop: '1rem',
-                    }}
-                />
-            </div>
-
-            <div className='info-box'>
-                <h4>About This Page:</h4>
-                <ul>
-                    <li>Loading bar appeared at the top during navigation</li>
-                    <li>Transition state was tracked throughout</li>
-                    <li>Page rendered after transition completed</li>
-                </ul>
-            </div>
-
-            <div className='button-group'>
-                <a
-                    href='/transitions-demo'
-                    onClick={handleHref}
-                    className='btn'
-                >
-                    ← Back to Transitions Demo
-                </a>
-            </div>
-        </section>
-    )
-}
-
-export default function TransitionsDemo(_props: RouteComponentProps) {
+export default function TransitionsDemo(
+    props: SurlRouteProps<typeof transitionsDemoConfig>,
+) {
     useSignals()
     const transition = routerState.value.transition
 
-    // Read current version (demonstrates URL state reactivity)
-    const version = feature.version
-
-    const handleHref = (e: MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault()
-        const href = e.currentTarget.getAttribute('href') || ''
-        go(href)
+    // Render child routes if navigating to them
+    if (props.ahead.length > 0) {
+        return <Outlet />
     }
 
     return (
@@ -79,7 +54,7 @@ export default function TransitionsDemo(_props: RouteComponentProps) {
                         fontSize: '0.9em',
                     }}
                 >
-                    (Current version: {version})
+                    (Current version: {feature.version})
                 </span>
             </p>
 
@@ -113,25 +88,25 @@ export default function TransitionsDemo(_props: RouteComponentProps) {
                     <p>Click to navigate and watch the loading bar</p>
                     <div className='button-group'>
                         <a
-                            href='/transitions-fast'
+                            href='/transitions-demo/fast'
                             onClick={handleHref}
                             className='btn'
                         >
-                            Page 1
+                            Fast
                         </a>
                         <a
-                            href='/transitions-medium'
+                            href='/transitions-demo/medium'
                             onClick={handleHref}
                             className='btn'
                         >
-                            Page 2
+                            Medium
                         </a>
                         <a
-                            href='/transitions-slow'
+                            href='/transitions-demo/slow'
                             onClick={handleHref}
                             className='btn'
                         >
-                            Page 3
+                            Slow
                         </a>
                     </div>
                 </div>
@@ -179,17 +154,4 @@ export default function TransitionsDemo(_props: RouteComponentProps) {
             </div>
         </section>
     )
-}
-
-// Export slow loading pages
-export function TransitionsFastPage() {
-    return <TransitionPage title='Fast Page' color='#10b981' />
-}
-
-export function TransitionsMediumPage() {
-    return <TransitionPage title='Medium Page' color='#3b82f6' />
-}
-
-export function TransitionsSlowPage() {
-    return <TransitionPage title='Slow Page' color='#8b5cf6' />
 }

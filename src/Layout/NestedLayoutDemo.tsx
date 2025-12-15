@@ -2,8 +2,15 @@
  * Nested Layout Demo - Multiple layouts with route prefixes
  */
 
-import { useSignals } from 'stateurl'
+import { defineRoute, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
+
+const nestedLayoutDemoConfig = {
+    path: 'nested-layout-demo',
+    trail: '/',
+} as const
+
+export const NestedLayoutDemoRoute = defineRoute(NestedLayoutDemo, nestedLayoutDemoConfig)
 
 export default function NestedLayoutDemo() {
     useSignals()

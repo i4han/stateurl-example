@@ -1,8 +1,14 @@
-import { useSignals } from 'stateurl'
-import type { RouteComponentProps } from 'stateurl'
+import { defineRoute, useSignals, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
 
-export default function About(_props: RouteComponentProps) {
+const aboutConfig = {
+    path: 'about',
+    trail: '/',
+} as const
+
+export const AboutRoute = defineRoute(About, aboutConfig)
+
+export default function About(_props: SurlRouteProps<typeof aboutConfig>) {
     useSignals()
     return (
         <section>

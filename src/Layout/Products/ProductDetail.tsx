@@ -1,11 +1,20 @@
-import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
-import CodeExample from './CodeExample'
+/**
+ * ProductDetail - Product detail page
+ *
+ * path: 'item/:productId' → ProductDetail component, ProductDetailRoute
+ */
 
-// Schema exported for routes.ts
-export const productDetailSchema = {
-    trail: '/products/item/:productId',
-    schema: { param: { productId: 0 } }
+import { defineRoute, handleHref, useSignals, type SurlRouteProps } from 'stateurl'
+import CodeExample from '../CodeExample'
+
+const productDetailConfig = {
+    path: 'item/:productId',
+    schema: { param: { productId: 0 } },
+    trail: '/products',
+    label: 'productDetail',
 } as const
+
+export const ProductDetailRoute = defineRoute(ProductDetail, productDetailConfig)
 
 const products = [
     { id: 0, name: 'Laptop', price: 999, desc: 'High-performance laptop for professionals' },
@@ -23,7 +32,7 @@ export const productDetailSchema = {
     schema: { param: { productId: 0 } }
 } as const
 
-function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailSchema>) {
+function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailConfig>) {
   const nextId = (param.productId + 1) % products.length
   const prevId = (param.productId + products.length - 1) % products.length
 
@@ -47,11 +56,11 @@ function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailSchema>
   )
 }`
 
-function ProductDetail({
+export default function ProductDetail({
     param,
     to,
     breadcrumbs,
-}: SurlRouteProps<typeof productDetailSchema>) {
+}: SurlRouteProps<typeof productDetailConfig>) {
     useSignals()
     const product = products[param.productId]
     const nextId = (param.productId + 1) % products.length
@@ -101,5 +110,3 @@ function ProductDetail({
         </div>
     )
 }
-
-export default ProductDetail

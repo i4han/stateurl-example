@@ -1,5 +1,12 @@
-import { useSignals, path, at, type RouteComponentProps } from 'stateurl'
+import { defineRoute, useSignals, path, at, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
+
+const atDemoConfig = {
+    path: 'at-demo',
+    trail: '/',
+} as const
+
+export const AtDemoRoute = defineRoute(AtDemo, atDemoConfig)
 
 const introCode = `import { at, go } from 'stateurl'
 
@@ -33,7 +40,7 @@ at.users.profile.param.userId = 42   // → /users/profile/42
 // Query access
 at.counter.query.count = 5           // → /counter?count=5`
 
-export default function AtDemo(_props: RouteComponentProps) {
+export default function AtDemo(_props: SurlRouteProps<typeof atDemoConfig>) {
     useSignals()
     const currentPath = path.full
 

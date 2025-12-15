@@ -3,11 +3,28 @@
  */
 
 import { useState } from 'react'
-import { go, useSignals, ErrorBoundary } from 'stateurl'
+import { defineRoute, go, useSignals, ErrorBoundary, Outlet, type SurlRouteProps } from 'stateurl'
 import CodeExample from './CodeExample'
+import { ErrorStableRoute } from './ErrorBoundaryDemo/ErrorStable'
+import { ErrorImmediateRoute } from './ErrorBoundaryDemo/ErrorImmediate'
+import { ErrorDelayedRoute } from './ErrorBoundaryDemo/ErrorDelayed'
 
-export default function ErrorBoundaryDemo() {
+const errorBoundaryDemoConfig = {
+    path: 'error-boundary-demo',
+    trail: '/',
+    outlet: [ErrorStableRoute, ErrorImmediateRoute, ErrorDelayedRoute],
+} as const
+
+export const ErrorBoundaryDemoRoute = defineRoute(ErrorBoundaryDemo, errorBoundaryDemoConfig)
+
+export default function ErrorBoundaryDemo(props: SurlRouteProps<typeof errorBoundaryDemoConfig>) {
     useSignals()
+
+    // Render child routes if navigating to them
+    if (props.ahead.length > 0) {
+        return <Outlet />
+    }
+
     return (
         <section>
             <h2>Error Boundary Demo</h2>
@@ -18,13 +35,13 @@ export default function ErrorBoundaryDemo() {
                     <h3>Test Scenarios</h3>
                     <p>Try these pages to see error recovery</p>
                     <div className='button-group'>
-                        <button onClick={() => go('/error-stable')} className='btn'>
+                        <button onClick={() => go('/error-boundary-demo/stable')} className='btn'>
                             Stable Page
                         </button>
-                        <button onClick={() => go('/error-immediate')} className='btn'>
+                        <button onClick={() => go('/error-boundary-demo/immediate')} className='btn'>
                             Immediate Error
                         </button>
-                        <button onClick={() => go('/error-delayed')} className='btn'>
+                        <button onClick={() => go('/error-boundary-demo/delayed')} className='btn'>
                             Delayed Error
                         </button>
                     </div>
@@ -155,74 +172,5 @@ function ErrorBoundaryPropsDemo() {
 
 function ThrowingComponent(): never {
     throw new Error('Component error! Only this section fails - the rest of the page still works.')
-}
-
-// Stable page - successful render
-export function ErrorStablePage() {
-    return (
-        <section>
-            <h2>Stable Page</h2>
-            <p>This page renders successfully and is marked as stable.</p>
-
-            <div className='setting-item'>
-                <h3>Stable State Established</h3>
-                <p>
-                    The router has marked this location as the "lastStable" state.
-                    If you navigate to an error page, the router will rollback to here!
-                </p>
-            </div>
-
-            <div className='button-group'>
-                <button onClick={() => go('/error-boundary-demo')} className='btn'>
-                    ← Back to Error Demo
-                </button>
-            </div>
-        </section>
-    )
-}
-
-// Immediate error page - throws on render
-export function ErrorImmediatePage(): React.ReactNode {
-    throw new Error('💥 Immediate render error! Router will rollback to last stable location.')
-}
-
-// Delayed error page - can trigger error via user action
-export function ErrorDelayedPage() {
-    const [shouldThrow, setShouldThrow] = useState(false)
-
-    if (shouldThrow) {
-        throw new Error('User-triggered error! Router will rollback.')
-    }
-
-    return (
-        <section>
-            <h2>Delayed Error Page</h2>
-            <p>This page renders successfully at first, but can trigger an error.</p>
-
-            <div className='info-box'>
-                <h4>What happens when you click the button:</h4>
-                <ol>
-                    <li>Component throws an error during re-render</li>
-                    <li>ErrorBoundary catches the error</li>
-                    <li>Router calls <code>rollback()</code></li>
-                    <li>URL reverts to last stable location</li>
-                    <li>Previous page is restored</li>
-                </ol>
-            </div>
-
-            <div className='button-group'>
-                <button
-                    onClick={() => setShouldThrow(true)}
-                    className='btn'
-                    style={{ background: '#ef4444', color: 'white' }}
-                >
-                    Trigger Error
-                </button>
-                <button onClick={() => go('/error-boundary-demo')} className='btn'>
-                    Back to Demo
-                </button>
-            </div>
-        </section>
-    )
 }
 

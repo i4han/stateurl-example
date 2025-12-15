@@ -1,11 +1,20 @@
-import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
-import CodeExample from './CodeExample'
+/**
+ * UserDetail - User profile page
+ *
+ * path: 'profile/:userId' → UserDetail component, UserDetailRoute
+ */
 
-// Schema exported for routes.ts
-export const userDetailSchema = {
-    trail: '/users/profile/:userId',
-    schema: { param: { userId: 0 } }
+import { defineRoute, handleHref, useSignals, type SurlRouteProps } from 'stateurl'
+import CodeExample from '../CodeExample'
+
+const userDetailConfig = {
+    path: 'profile/:userId',
+    schema: { param: { userId: 0 } },
+    trail: '/users',
+    label: 'userProfile',
 } as const
+
+export const UserDetailRoute = defineRoute(UserDetail, userDetailConfig)
 
 const users = [
     {
@@ -32,7 +41,7 @@ export const userDetailSchema = {
     schema: { param: { userId: 0 } }
 } as const
 
-function UserDetail({ param, to }: SurlRouteProps<typeof userDetailSchema>) {
+function UserDetail({ param, to }: SurlRouteProps<typeof userDetailConfig>) {
   const userId = param.userId
   const prevUser = (userId - 1 + 3) % 3
   const nextUser = (userId + 1) % 3
@@ -57,11 +66,11 @@ function UserDetail({ param, to }: SurlRouteProps<typeof userDetailSchema>) {
   )
 }`
 
-function UserDetail({
+export default function UserDetail({
     param,
     to,
     breadcrumbs,
-}: SurlRouteProps<typeof userDetailSchema>) {
+}: SurlRouteProps<typeof userDetailConfig>) {
     useSignals()
     const userId = param.userId
     const user = users[userId]
@@ -153,5 +162,3 @@ function UserDetail({
         </div>
     )
 }
-
-export default UserDetail

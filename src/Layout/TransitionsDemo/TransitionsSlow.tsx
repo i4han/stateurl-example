@@ -1,0 +1,63 @@
+/**
+ * TransitionsSlow - Slow transition page
+ *
+ * path: 'transitions-slow' → TransitionsSlow component, TransitionsSlowRoute
+ */
+
+import { defineRoute, useSignals, handleHref } from 'stateurl'
+
+const transitionsSlowConfig = {
+    path: 'slow',
+    trail: '/transitions-demo',
+    label: 'transitionsSlow',
+} as const
+
+export const TransitionsSlowRoute = defineRoute(TransitionsSlow, transitionsSlowConfig)
+
+export default function TransitionsSlow() {
+    useSignals()
+    return (
+        <section>
+            <h2>Slow Page</h2>
+            <p>
+                Transition complete! The loading bar showed while navigating
+                here.
+            </p>
+
+            <div className='setting-item'>
+                <h3>Page Loaded Successfully</h3>
+                <p>
+                    The router automatically tracked navigation and displayed
+                    the loading indicator for ~400ms minimum.
+                </p>
+                <div
+                    style={{
+                        height: '4px',
+                        background: '#8b5cf6',
+                        borderRadius: '2px',
+                        marginTop: '1rem',
+                    }}
+                />
+            </div>
+
+            <div className='info-box'>
+                <h4>About This Page:</h4>
+                <ul>
+                    <li>Loading bar appeared at the top during navigation</li>
+                    <li>Transition state was tracked throughout</li>
+                    <li>Page rendered after transition completed</li>
+                </ul>
+            </div>
+
+            <div className='button-group'>
+                <a
+                    href='/transitions-demo'
+                    onClick={handleHref}
+                    className='btn'
+                >
+                    ← Back to Transitions Demo
+                </a>
+            </div>
+        </section>
+    )
+}

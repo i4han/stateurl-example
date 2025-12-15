@@ -1,5 +1,12 @@
-import { feature, useSignals } from 'stateurl'
+import { defineRoute, feature, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
+
+const settingsConfig = {
+    path: 'settings',
+    trail: '/',
+} as const
+
+export const SettingsRoute = defineRoute(Settings, settingsConfig)
 
 const code = `
 import { feature } from 'stateurl'

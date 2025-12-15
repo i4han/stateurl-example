@@ -1,11 +1,13 @@
-import { path, type SurlRouteProps, useSignals } from 'stateurl'
+import { defineRoute, path, type SurlRouteProps, useSignals } from 'stateurl'
 import CodeExample from './CodeExample'
 
-// Schema exported for routes.ts
-export const paramDemoSchema = {
-    trail: '/param-demo/:userId',
+const paramDemoConfig = {
+    path: 'param-demo/:userId',
     schema: { param: { userId: 0 } },
+    trail: '/',
 } as const
+
+export const ParamDemoRoute = defineRoute(ParamDemo, paramDemoConfig)
 
 // Alternative: defineRenderer validates trail params match schema params
 // Useful when you want compile-time validation of trail ↔ schema consistency
@@ -23,7 +25,7 @@ export const paramDemoSchema = {
     schema: { param: { userId: 0 } },
 } as const
 
-function ParamDemo({ param }: SurlRouteProps<typeof paramDemoSchema>) {
+function ParamDemo({ param }: SurlRouteProps<typeof paramDemoConfig>) {
     return <h1>User: {param.userId}</h1>
 }
 
@@ -46,7 +48,7 @@ export const ParamDemoRenderer = defineRenderer({
 // - Schema has 'extra' but path doesn't → "Schema param not in path: extra"
 `
 
-export default function ParamDemo({ param }: SurlRouteProps<typeof paramDemoSchema>) {
+export default function ParamDemo({ param }: SurlRouteProps<typeof paramDemoConfig>) {
     useSignals()
     return (
         <section>

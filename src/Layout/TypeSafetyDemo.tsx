@@ -1,6 +1,22 @@
 import { useState } from 'react'
-import { useSignals, path, at, go, to, label, handleHref, type RouteComponentProps } from 'stateurl'
+import {
+    defineRoute,
+    useSignals,
+    path,
+    at,
+    go,
+    to,
+    label,
+    handleHref,
+} from 'stateurl'
 import CodeExample from './CodeExample'
+
+const typeSafetyDemoConfig = {
+    path: 'type-safety',
+    trail: '/',
+} as const
+
+export const TypeSafetyDemoRoute = defineRoute(TypeSafetyDemo, typeSafetyDemoConfig)
 
 // Simulated autocomplete dropdown component
 function AutocompleteVisual({
@@ -120,20 +136,22 @@ function MyComponent({ to }: RouteComponentProps) {
     to('./edit')          // ✓ relative - append to current
 }`
 
-const labelCode = `import { label, toLabel, go } from 'stateurl'
+const labelCode = `import { label, toLabel, go, at } from 'stateurl'
 
-// label.* - navigate by route label (restructure-safe)
-label.counter.go()              // No params needed
-label.userProfile.go({ userId: 3 })  // With params - clean!
-label.products.go()
+// First-level routes: use at.* (simpler)
+at.home.go()
+at.counter.go()
+at.settings.go()
 
-// With options (input data, transition control)
-label.userProfile.go({ userId: 3 }, { input: userData })
+// Nested routes: use label.* (cleaner than chained at.*)
+label.userProfile.go({ userId: 3 })   // vs at.users.profile.go()
+label.productDetail.go({ productId: 5 }) // vs at.products.item.go()
+label.loaderUser.go({ userId: 2 })    // vs at['loader-demo'].user.go()
 
 // toLabel() - get path string (for links, etc.)
 const path = toLabel('userProfile', { userId: 1 }) // '/users/profile/1'`
 
-export default function TypeSafetyDemo(_props: RouteComponentProps) {
+export default function TypeSafetyDemo() {
     useSignals()
     const [activeTab, setActiveTab] = useState<'setup' | 'props' | 'at' | 'to' | 'label'>('setup')
 
@@ -449,14 +467,14 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <div className='autocomplete-row'>
                             <AutocompleteVisual
                                 prefix="label."
-                                suggestions={['home', 'counter', 'products', 'users', 'userProfile', 'settings']}
+                                suggestions={['userProfile', 'productDetail', 'loaderUser', 'userSettings']}
                                 selected="userProfile"
                             />
                         </div>
                         <div className='autocomplete-row'>
                             <AutocompleteVisual
                                 prefix="toLabel('"
-                                suggestions={['home', 'counter', 'userProfile', 'productDetail', 'loaderUser']}
+                                suggestions={['userProfile', 'productDetail', 'loaderUser', 'userSettings']}
                                 selected="userProfile"
                             />
                         </div>
@@ -485,23 +503,23 @@ at.products.pattern: "${at.products?.pattern ?? '...'}"`}
                         <button
                             type='button'
                             className='btn btn-primary'
-                            onClick={() => label.home.go()}
-                        >
-                            label.home.go()
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => label.counter.go()}
-                        >
-                            label.counter.go()
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
                             onClick={() => label.userProfile.go({ userId: 1 })}
                         >
                             label.userProfile.go({'{ userId: 1 }'})
+                        </button>
+                        <button
+                            type='button'
+                            className='btn'
+                            onClick={() => label.productDetail.go({ productId: 0 })}
+                        >
+                            label.productDetail.go({'{ productId: 0 }'})
+                        </button>
+                        <button
+                            type='button'
+                            className='btn'
+                            onClick={() => label.loaderUser.go({ userId: 2 })}
+                        >
+                            label.loaderUser.go({'{ userId: 2 }'})
                         </button>
                     </div>
 

@@ -1,11 +1,21 @@
-import { handleHref, Outlet, useSignals, type SurlRouteProps } from 'stateurl'
+import {
+    defineRoute,
+    handleHref,
+    Outlet,
+    useSignals,
+    type SurlRouteProps,
+} from 'stateurl'
 import CodeExample from './CodeExample'
+import { UserDetailRoute } from './Users/UserDetail'
+import { UserSettingsRoute } from './Users/UserSettings'
 
-// Schema with trail for type-safe to() autocomplete
-export const usersSchema = {
-    trail: '/users',
-    schema: {}
+const usersConfig = {
+    path: 'users',
+    trail: '/',
+    outlet: [UserDetailRoute, UserSettingsRoute],
 } as const
+
+export const UsersRoute = defineRoute(Users, usersConfig)
 
 const users = [
     { id: 0, name: 'Alice Johnson' },
@@ -13,7 +23,7 @@ const users = [
     { id: 2, name: 'Carol Williams' },
 ]
 
-export default function Users({ to, param }: SurlRouteProps<typeof usersSchema>) {
+export default function Users({ to, param }: SurlRouteProps<typeof usersConfig>) {
     useSignals()
     return (
         <section>
@@ -67,7 +77,7 @@ export const usersSchema = {
 } as const
 
 // to() autocompletes 'profile/:userId' from SurlTo registry
-export default function Users({ to, param }: SurlRouteProps<typeof usersSchema>) {
+export default function Users({ to, param }: SurlRouteProps<typeof usersConfig>) {
   return (
     <div>
       {users.map((user) => (
