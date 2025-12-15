@@ -41,6 +41,14 @@ export default function Users({ to, param }: SurlRouteProps<typeof usersSchema>)
                                 </a>
                             </li>
                         ))}
+                        <li>
+                            <a
+                                href={to('settings')}
+                                onClick={handleHref}
+                            >
+                                Settings
+                            </a>
+                        </li>
                     </ul>
                 </div>
 

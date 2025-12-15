@@ -110,6 +110,14 @@ function UserDetail({
                         Next ({nextUser}) →
                     </button>
                 </div>
+                <p style={{ fontSize: '0.9em', color: '#666', marginTop: '1rem', marginBottom: '0.5rem' }}>
+                    Navigate to sibling route (../settings)
+                </p>
+                <div className='button-group'>
+                    <button type='button' data-href={to('../settings')} onClick={handleHref}>
+                        User Settings (../settings)
+                    </button>
+                </div>
             </div>
 
             <CodeExample code={code} language='tsx' highlightLines={[20, 24, 28]} />

@@ -7,6 +7,7 @@ import Products, { productsSchema } from './components/Products'
 import ProductDetail, { productDetailSchema } from './components/ProductDetail'
 import Users, { usersSchema } from './components/Users'
 import UserDetail, { userDetailSchema } from './components/UserDetail'
+import UserSettings, { userSettingsSchema } from './components/UserSettings'
 import Settings from './components/Settings'
 import LabelExample from './components/LabelExample'
 import LoaderExample, { LoaderUserPage, loaderUserSchema } from './components/LoaderExample'
@@ -69,6 +70,12 @@ export const routes = defineRoutes([
                         render: UserDetail,
                         label: 'userProfile',
                         ...userDetailSchema,
+                    },
+                    {
+                        path: 'settings',
+                        render: UserSettings,
+                        label: 'userSettings',
+                        ...userSettingsSchema,
                     },
                 ],
             },
