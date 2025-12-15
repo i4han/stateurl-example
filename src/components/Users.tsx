@@ -30,8 +30,8 @@ export default function Users({ to, param }: SurlRouteProps<typeof usersSchema>)
                         {users.map((user) => (
                             <li key={user.id}>
                                 <a
-                                    // to() autocompletes 'profile/:userId' based on trail
-                                    href={to('profile/$1', [user.id])}
+                                    // to() uses :param style - autocompletes 'profile/:userId'
+                                    href={to('profile/:userId', { userId: user.id })}
                                     onClick={handleHref}
                                     className={
                                         param.userId === user.id ? 'active' : ''
@@ -64,8 +64,8 @@ export default function Users({ to, param }: SurlRouteProps<typeof usersSchema>)
     <div>
       {users.map((user) => (
         <a
-          // Type-safe: to() suggests 'profile/:userId'
-          href={to('profile/$1', [user.id])}
+          // Type-safe: to() uses :param style interpolation
+          href={to('profile/:userId', { userId: user.id })}
           onClick={handleHref}
           className={param.userId === user.id ? 'active' : ''}
         >

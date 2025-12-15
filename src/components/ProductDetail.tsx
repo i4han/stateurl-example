@@ -35,11 +35,11 @@ function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailSchema>
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Products
         </button>
-        {/* to('sibling') navigates to sibling routes */}
-        <button data-href={to('../$1', [prevId])} onClick={handleHref}>
+        {/* Navigate to sibling with :param style */}
+        <button data-href={to('../:id', { id: prevId })} onClick={handleHref}>
           Prev Product
         </button>
-        <button data-href={to('../$1', [nextId])} onClick={handleHref}>
+        <button data-href={to('../:id', { id: nextId })} onClick={handleHref}>
           Next Product
         </button>
       </div>
@@ -82,17 +82,17 @@ function ProductDetail({
             <div className='navigation-demo'>
                 <h4>Type-Safe Navigation with to()</h4>
                 <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
-                    Navigate through the tree using relative paths
+                    Navigate through the tree using relative paths with :param style
                 </p>
                 <div className='button-group'>
                     <button type='button' data-href={to('../')} onClick={handleHref}>
                         ← Back (../)
                     </button>
-                    <button type='button' data-href={to(`../${prevId}`)} onClick={handleHref}>
-                        ← Prev (../{prevId})
+                    <button type='button' data-href={to('../:id', { id: prevId })} onClick={handleHref}>
+                        ← Prev ({prevId})
                     </button>
-                    <button type='button' data-href={to(`../${nextId}`)} onClick={handleHref}>
-                        Next (../{nextId}) →
+                    <button type='button' data-href={to('../:id', { id: nextId })} onClick={handleHref}>
+                        Next ({nextId}) →
                     </button>
                 </div>
             </div>

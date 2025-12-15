@@ -45,11 +45,11 @@ function UserDetail({ param, to }: SurlRouteProps<typeof userDetailSchema>) {
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Users
         </button>
-        {/* to('../sibling') navigates to sibling routes */}
-        <button data-href={to('../$1', [prevUser])} onClick={handleHref}>
+        {/* Navigate to sibling with :param style */}
+        <button data-href={to('../:id', { id: prevUser })} onClick={handleHref}>
           Prev User
         </button>
-        <button data-href={to('../$1', [nextUser])} onClick={handleHref}>
+        <button data-href={to('../:id', { id: nextUser })} onClick={handleHref}>
           Next User
         </button>
       </div>
@@ -97,17 +97,17 @@ function UserDetail({
             <div className='navigation-demo'>
                 <h4>Type-Safe Navigation with to()</h4>
                 <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '0.5rem' }}>
-                    Navigate through the tree using relative paths
+                    Navigate through the tree using relative paths with :param style
                 </p>
                 <div className='button-group'>
                     <button type='button' data-href={to('../')} onClick={handleHref}>
                         ← Back (../)
                     </button>
-                    <button type='button' data-href={to(`../${prevUser}`)} onClick={handleHref}>
-                        ← Prev (../{prevUser})
+                    <button type='button' data-href={to('../:id', { id: prevUser })} onClick={handleHref}>
+                        ← Prev ({prevUser})
                     </button>
-                    <button type='button' data-href={to(`../${nextUser}`)} onClick={handleHref}>
-                        Next (../{nextUser}) →
+                    <button type='button' data-href={to('../:id', { id: nextUser })} onClick={handleHref}>
+                        Next ({nextUser}) →
                     </button>
                 </div>
             </div>

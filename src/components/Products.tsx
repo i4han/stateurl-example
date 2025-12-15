@@ -29,8 +29,8 @@ export default function Products({ to, param }: SurlRouteProps<typeof productsSc
     <div>
       {products.map((product) => (
         <a
-          // Type-safe: to() suggests 'item/:productId'
-          href={to('item/$1', [product.id])}
+          // Type-safe: to() uses :param style interpolation
+          href={to('item/:productId', { productId: product.id })}
           onClick={handleHref}
           className={param.productId === product.id ? 'active' : ''}
         >
@@ -79,8 +79,8 @@ function ProductList({ to, param }: SurlRouteProps<typeof productsSchema>) {
             {products.map((product) => (
                 <li key={product.id}>
                     <a
-                        // to() autocompletes 'item/:productId' based on trail
-                        href={to('item/$1', [product.id])}
+                        // to() uses :param style - autocompletes 'item/:productId'
+                        href={to('item/:productId', { productId: product.id })}
                         onClick={handleHref}
                         className={
                             param.productId === product.id ? 'active' : ''
