@@ -18,6 +18,8 @@ import { AtDemoRoute } from './Layout/AtDemo'
 import { TypeSafetyDemoRoute } from './Layout/TypeSafetyDemo'
 import { ForkDemoRoute } from './Layout/ForkDemo'
 import { ForkLayoutRoute } from './Layout/ForkLayout'
+import { TabsDemoRoute } from './Layout/TabsDemo'
+import { ScrollSpyDemoRoute } from './Layout/ScrollSpyDemo'
 
 export const routes = defineRoutes([
     {
@@ -42,6 +44,8 @@ export const routes = defineRoutes([
             ErrorBoundaryDemoRoute,
             ForkDemoRoute,
             ForkLayoutRoute,
+            TabsDemoRoute,
+            ScrollSpyDemoRoute,
         ],
     },
 ] as const)

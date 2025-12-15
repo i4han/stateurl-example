@@ -79,8 +79,8 @@ export default function About(_props: SurlRouteProps<typeof aboutConfig>) {
 
             <CodeExample
                 code={`import { handleHref } from 'stateurl'
+import { cx } from 'stateurl/utils'
 import type { RouteComponentProps } from 'stateurl'
-import clsx from 'clsx'
 
 // Route components receive props automatically
 export default function Navigation({ to, ahead }: RouteComponentProps) {
@@ -92,14 +92,14 @@ export default function Navigation({ to, ahead }: RouteComponentProps) {
       <a
         href={to('/home')}
         onClick={handleHref}
-        className={clsx({ active: active === 'home' })}
+        className={cx(active === 'home' && 'active')}
       >
         Home
       </a>
       <a
         href={to('/products')}
         onClick={handleHref}
-        className={clsx({ active: active === 'products' })}
+        className={cx(active === 'products' && 'active')}
       >
         Products
       </a>

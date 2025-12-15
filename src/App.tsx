@@ -1,5 +1,14 @@
-import { Router } from 'stateurl'
+import { useEffect } from 'react'
+import { Router, feature, useSignals } from 'stateurl'
 import { routes } from './routes'
+
+function ThemeSync() {
+    useSignals()
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', feature.theme)
+    }, [feature.theme])
+    return null
+}
 
 function NotFound() {
     return (
@@ -11,16 +20,23 @@ function NotFound() {
     )
 }
 
-export const appFeature = { version: ['v1', 'v2'], theme: ['light', 'dark'] } as const
+export const appFeature = {
+    version: ['v1', 'v2'],
+    theme: ['light', 'dark'],
+    sidebar: ['open', 'collapsed'],
+} as const
 
 export default function App() {
     return (
-        <Router
-            base='app'
-            feature={appFeature}
-            routes={routes}
-            NotFound={NotFound}
-            redirectToBase={true}
-        />
+        <>
+            <ThemeSync />
+            <Router
+                base='app'
+                feature={appFeature}
+                routes={routes}
+                NotFound={NotFound}
+                redirectToBase={true}
+            />
+        </>
     )
 }

@@ -10,6 +10,7 @@ import { TypeBadge, setupCode } from './components'
 const typeSafetySetupConfig = {
     path: 'setup',
     trail: '/type-safety',
+    index: true,
 } as const
 
 export const TypeSafetySetupRoute = defineRoute(

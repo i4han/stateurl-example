@@ -3,16 +3,15 @@
  *
  * path: 'type-safety' → TypeSafetyDemo component, TypeSafetyDemoRoute
  */
-import { useEffect } from 'react'
 import {
     defineRoute,
     useSignals,
     path,
     handleHref,
-    go,
     Outlet,
     type SurlRouteProps,
 } from 'stateurl'
+import { cx } from 'stateurl/utils'
 
 // Import child route components
 import { TypeSafetySetupRoute } from './TypeSafetyDemo/TypeSafetySetup'
@@ -43,15 +42,9 @@ export default function TypeSafetyDemo(
 ) {
     useSignals()
 
-    // Redirect to setup tab if no child route selected
-    useEffect(() => {
-        if (props.ahead.length === 0) {
-            go(props.to('setup'))
-        }
-    }, [props.ahead.length])
-
     // Determine active tab from ahead path (first segment after /type-safety/)
-    const activeTab = props.ahead[0] || 'setup'
+    // index: true on TypeSafetySetup handles the default
+    const [ active ] = props.ahead
 
     return (
         <section className='type-safety-demo'>
@@ -69,39 +62,19 @@ export default function TypeSafetyDemo(
 
             {/* Feature tabs - Chrome style */}
             <div className='chrome-tabs'>
-                <a
-                    href={props.to('setup')}
-                    onClick={handleHref}
-                    className={activeTab === 'setup' ? 'active' : ''}
-                >
+                <a href={props.to('setup')} onClick={handleHref} className={cx(active === 'setup' && 'active')}>
                     Setup
                 </a>
-                <a
-                    href={props.to('props')}
-                    onClick={handleHref}
-                    className={activeTab === 'props' ? 'active' : ''}
-                >
+                <a href={props.to('props')} onClick={handleHref} className={cx(active === 'props' && 'active')}>
                     RouteProps
                 </a>
-                <a
-                    href={props.to('at')}
-                    onClick={handleHref}
-                    className={activeTab === 'at' ? 'active' : ''}
-                >
+                <a href={props.to('at')} onClick={handleHref} className={cx(active === 'at' && 'active')}>
                     at.*
                 </a>
-                <a
-                    href={props.to('to')}
-                    onClick={handleHref}
-                    className={activeTab === 'to' ? 'active' : ''}
-                >
+                <a href={props.to('to')} onClick={handleHref} className={cx(active === 'to' && 'active')}>
                     to()
                 </a>
-                <a
-                    href={props.to('label')}
-                    onClick={handleHref}
-                    className={activeTab === 'label' ? 'active' : ''}
-                >
+                <a href={props.to('label')} onClick={handleHref} className={cx(active === 'label' && 'active')}>
                     label.*
                 </a>
             </div>
@@ -138,20 +111,37 @@ export default function TypeSafetyDemo(
                     text-decoration: none;
                     text-align: center;
                     position: relative;
-                    border-radius: 8px 8px 0 0;
+                    border-radius: 10px 10px 0 0;
+                    margin-left: 6px;
+                    margin-right: 6px;
                 }
 
-                .chrome-tabs a:not(:last-child)::after {
-                    content: '';
-                    position: absolute;
-                    right: 0;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    height: 16px;
-                    width: 1px;
-                    background: var(--text-secondary);
-                    opacity: 0.3;
+                .chrome-tabs a:first-child {
+                    margin-left: 8px;
                 }
+
+                .chrome-tabs a:last-child {
+                    margin-right: 8px;
+                }
+
+                /* First tab: convex bottom-left on tab bar */
+                .chrome-tabs a:first-child.active::before {
+                    left: -8px;
+                    bottom: 0;
+                    width: 8px;
+                    height: 8px;
+                    background: radial-gradient(circle at 100% 0, transparent 8px, var(--border-default) 8px);
+                }
+
+                /* Last tab: convex bottom-right on tab bar */
+                .chrome-tabs a:last-child.active::after {
+                    right: -8px;
+                    bottom: 0;
+                    width: 8px;
+                    height: 8px;
+                    background: radial-gradient(circle at 0 0, transparent 8px, var(--border-default) 8px);
+                }
+
 
                 .chrome-tabs a:hover {
                     background: rgba(255,255,255,0.5);
@@ -165,9 +155,26 @@ export default function TypeSafetyDemo(
                     font-weight: 500;
                 }
 
-                .chrome-tabs a.active::after,
-                .chrome-tabs a:has(+ a.active)::after {
-                    display: none;
+                /* Left curved foot */
+                .chrome-tabs a.active::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: -8px;
+                    width: 8px;
+                    height: 8px;
+                    background: radial-gradient(circle at 0 0, transparent 8px, var(--bg-surface) 8px);
+                }
+
+                /* Right curved foot */
+                .chrome-tabs a.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    right: -8px;
+                    width: 8px;
+                    height: 8px;
+                    background: radial-gradient(circle at 100% 0, transparent 8px, var(--bg-surface) 8px);
                 }
 
                 .type-safety-demo .demo-section {

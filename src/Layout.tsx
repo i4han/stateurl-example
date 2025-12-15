@@ -1,278 +1,92 @@
-import { useEffect, useState } from 'react'
-import { useSignals, Outlet, feature, path, routerState, handleHref } from 'stateurl'
+import { useSignals, Outlet, feature, path, handleHref } from 'stateurl'
+import { cx } from 'stateurl/utils'
 import type { RouteComponentProps } from 'stateurl'
+import Header from './Header'
 
 export default function Layout({ to, ahead }: RouteComponentProps) {
-    useSignals() // Enable signal tracking
-    const transition = routerState.value.transition
-    const [toast, setToast] = useState<string | null>(null)
+    useSignals()
+    const collapsed = feature.sidebar === 'collapsed'
     const [active] = ahead
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', feature.theme)
-    }, [feature.theme])
-
-    const toggleTheme = () => {
-        feature.theme = feature.theme === 'light' ? 'dark' : 'light'
-    }
-
-    const toggleVersion = () => {
-        feature.version = feature.version === 'v1' ? 'v2' : 'v1'
-        setToast(`Check URL updated to ${feature.version}`)
-        setTimeout(() => setToast(null), 2500)
-    }
 
     return (
         <div className='app-container'>
-            {/* Global transition loading bar */}
-            {transition && (
-                <>
-                    <div
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            height: '3px',
-                            background: 'rgba(59, 130, 246, 0.1)',
-                            zIndex: 9999,
-                        }}
-                    >
-                        <div
-                            style={{
-                                height: '100%',
-                                background:
-                                    'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b)',
-                                animation: 'loadingBar 0.4s ease-out forwards',
-                                transformOrigin: 'left',
-                                boxShadow: '0 0 10px rgba(139, 92, 207, 0.5)',
-                            }}
-                        />
-                    </div>
-                    <style>{`
-                        @keyframes loadingBar {
-                            0% { transform: scaleX(0); }
-                            100% { transform: scaleX(1); }
-                        }
-                    `}</style>
-                </>
-            )}
+            <Header to={to} />
 
-            <header className='top-menu'>
-                <a href={to('/home')} onClick={handleHref} className='logo'>
-                    <span className='logo-icon'>S</span>
-                    <span className='logo-text'>StateURL</span>
-                </a>
-                <nav className='top-nav'>
-                    <a
-                        href='https://github.com/i4han/stateurl-example'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='feature-toggle github-link'
-                        style={{ textDecoration: 'none' }}
-                    >
-                        GitHub
-                    </a>
-                    <a
-                        href='https://www.npmjs.com/package/stateurl'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='feature-toggle npm-link'
-                        style={{ textDecoration: 'none' }}
-                    >
-                        📦 npm
-                    </a>
-                    <a
-                        href='/docs/'
-                        className='feature-toggle docs-link'
-                        style={{ textDecoration: 'none' }}
-                    >
-                        📚 API Docs
-                    </a>
-                    <button
-                        type='button'
-                        onClick={toggleVersion}
-                        className='feature-toggle'
-                    >
-                        Toggle Version
-                    </button>
-                    <button
-                        type='button'
-                        onClick={toggleTheme}
-                        className='feature-toggle theme-toggle'
-                    >
-                        {feature.theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-                    </button>
-                </nav>
-            </header>
-
-            {/* Toast notification - below header */}
-            {toast && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: '60px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background:
-                            feature.theme === 'dark'
-                                ? 'rgba(59, 130, 246, 0.2)'
-                                : 'rgba(59, 130, 246, 0.1)',
-                        color: feature.theme === 'dark' ? '#93c5fd' : '#1e40af',
-                        padding: '8px 20px',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(59, 130, 246, 0.25)',
-                        zIndex: 10000,
-                        animation:
-                            'toastFade 0.3s ease-out, toastFadeOut 0.8s ease-in 2.2s',
-                        fontWeight: 500,
-                        fontSize: '14px',
-                        whiteSpace: 'nowrap',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                    }}
+            <div className={cx('app-body', collapsed && 'sidebar-collapsed')}>
+                <button
+                    type='button'
+                    className='sidebar-toggle'
+                    onClick={() => feature.sidebar = collapsed ? 'open' : 'collapsed'}
+                    title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                 >
-                    {toast}
-                    <style>{`
-                        @keyframes toastFade {
-                            0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-                            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-                        }
-                        @keyframes toastFadeOut {
-                            0% { opacity: 1; }
-                            100% { opacity: 0; }
-                        }
-                    `}</style>
-                </div>
-            )}
-
-            <div className='app-body'>
-                <aside className='side-nav'>
+                    {collapsed ? '›' : '‹'}
+                </button>
+                <aside className={cx('side-nav', collapsed && 'collapsed')}>
                     <nav>
                         {/* Overview */}
-                        <a
-                            href={to('/home')}
-                            onClick={handleHref}
-                            className={active === 'home' ? 'active' : ''}
-                        >
+                        <a href={to('/home')} onClick={handleHref} className={cx(active === 'home' && 'active')}>
                             Home
                         </a>
-                        <a
-                            href={to('/about')}
-                            onClick={handleHref}
-                            className={active === 'about' ? 'active' : ''}
-                        >
+                        <a href={to('/about')} onClick={handleHref} className={cx(active === 'about' && 'active')}>
                             About
                         </a>
 
                         {/* Basic Examples */}
-                        <a
-                            href={to('/counter')}
-                            onClick={handleHref}
-                            className={active === 'counter' ? 'active' : ''}
-                        >
+                        <a href={to('/counter')} onClick={handleHref} className={cx(active === 'counter' && 'active')}>
                             Counter
                         </a>
-                        <a
-                            href={to('/products')}
-                            onClick={handleHref}
-                            className={active === 'products' ? 'active' : ''}
-                        >
+                        <a href={to('/products')} onClick={handleHref} className={cx(active === 'products' && 'active')}>
                             Products
                         </a>
-                        <a
-                            href={to('/users')}
-                            onClick={handleHref}
-                            className={active === 'users' ? 'active' : ''}
-                        >
+                        <a href={to('/users')} onClick={handleHref} className={cx(active === 'users' && 'active')}>
                             Users
                         </a>
 
                         {/* Core Features */}
-                        <a
-                            href={to('/query-demo')}
-                            onClick={handleHref}
-                            className={active === 'query-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/query-demo')} onClick={handleHref} className={cx(active === 'query-demo' && 'active')}>
                             Query Params
                         </a>
-                        <a
-                            href={to('/param-demo/1')}
-                            onClick={handleHref}
-                            className={active === 'param-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/param-demo/1')} onClick={handleHref} className={cx(active === 'param-demo' && 'active')}>
                             Param Assignment
                         </a>
-                        <a
-                            href={to('/label-demo')}
-                            onClick={handleHref}
-                            className={active === 'label-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/label-demo')} onClick={handleHref} className={cx(active === 'label-demo' && 'active')}>
                             Label Navigation
                         </a>
-                        <a
-                            href={to('/at-demo')}
-                            onClick={handleHref}
-                            className={active === 'at-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/at-demo')} onClick={handleHref} className={cx(active === 'at-demo' && 'active')}>
                             at.* Accessor
                         </a>
-                        <a
-                            href={to('/type-safety')}
-                            onClick={handleHref}
-                            className={active === 'type-safety' ? 'active' : ''}
-                        >
+                        <a href={to('/type-safety')} onClick={handleHref} className={cx(active === 'type-safety' && 'active')}>
                             Type Safety ✨
                         </a>
-                        <a
-                            href={to('/nested-layout-demo')}
-                            onClick={handleHref}
-                            className={active === 'nested-layout-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/nested-layout-demo')} onClick={handleHref} className={cx(active === 'nested-layout-demo' && 'active')}>
                             Nested Layouts
+                        </a>
+                        <a href={to('/tabs')} onClick={handleHref} className={cx(active === 'tabs' && 'active')}>
+                            Tabs
+                        </a>
+                        <a href={to('/scroll-spy')} onClick={handleHref} className={cx(active === 'scroll-spy' && 'active')}>
+                            Scroll Spy
                         </a>
 
                         {/* Advanced Features */}
-                        <a
-                            href={to('/loader-demo')}
-                            onClick={handleHref}
-                            className={active === 'loader-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/loader-demo')} onClick={handleHref} className={cx(active === 'loader-demo' && 'active')}>
                             Loader API
                         </a>
-                        <a
-                            href={to('/guards-demo')}
-                            onClick={handleHref}
-                            className={active === 'guards-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/guards-demo')} onClick={handleHref} className={cx(active === 'guards-demo' && 'active')}>
                             Guards
                         </a>
-                        <a
-                            href={to('/transitions-demo')}
-                            onClick={handleHref}
-                            className={active === 'transitions-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/transitions-demo')} onClick={handleHref} className={cx(active === 'transitions-demo' && 'active')}>
                             Transitions
                         </a>
-                        <a
-                            href={to('/fork-demo')}
-                            onClick={handleHref}
-                            className={active === 'fork-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/fork-demo')} onClick={handleHref} className={cx(active === 'fork-demo' && 'active')}>
                             Fork Routes
                         </a>
-                        <a
-                            href={to('/error-boundary-demo')}
-                            onClick={handleHref}
-                            className={active === 'error-boundary-demo' ? 'active' : ''}
-                        >
+                        <a href={to('/error-boundary-demo')} onClick={handleHref} className={cx(active === 'error-boundary-demo' && 'active')}>
                             Error Boundary
                         </a>
 
                         {/* Configuration */}
-                        <a
-                            href={to('/settings')}
-                            onClick={handleHref}
-                            className={active === 'settings' ? 'active' : ''}
-                        >
+                        <a href={to('/settings')} onClick={handleHref} className={cx(active === 'settings' && 'active')}>
                             Settings
                         </a>
                     </nav>
