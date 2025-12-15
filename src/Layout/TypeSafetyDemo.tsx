@@ -1,568 +1,182 @@
-import { useState } from 'react'
+/**
+ * TypeSafetyDemo - Type-safe routing demonstration with tabbed navigation
+ *
+ * path: 'type-safety' → TypeSafetyDemo component, TypeSafetyDemoRoute
+ */
+import { useEffect } from 'react'
 import {
     defineRoute,
     useSignals,
     path,
-    at,
-    go,
-    to,
-    label,
     handleHref,
+    go,
+    Outlet,
+    type SurlRouteProps,
 } from 'stateurl'
-import CodeExample from './CodeExample'
+
+// Import child route components
+import { TypeSafetySetupRoute } from './TypeSafetyDemo/TypeSafetySetup'
+import { TypeSafetyPropsRoute } from './TypeSafetyDemo/TypeSafetyProps'
+import { TypeSafetyAtRoute } from './TypeSafetyDemo/TypeSafetyAt'
+import { TypeSafetyToRoute } from './TypeSafetyDemo/TypeSafetyTo'
+import { TypeSafetyLabelRoute } from './TypeSafetyDemo/TypeSafetyLabel'
 
 const typeSafetyDemoConfig = {
     path: 'type-safety',
     trail: '/',
+    outlet: [
+        TypeSafetySetupRoute,
+        TypeSafetyPropsRoute,
+        TypeSafetyAtRoute,
+        TypeSafetyToRoute,
+        TypeSafetyLabelRoute,
+    ],
 } as const
 
-export const TypeSafetyDemoRoute = defineRoute(TypeSafetyDemo, typeSafetyDemoConfig)
+export const TypeSafetyDemoRoute = defineRoute(
+    TypeSafetyDemo,
+    typeSafetyDemoConfig,
+)
 
-// Simulated autocomplete dropdown component
-function AutocompleteVisual({
-    prefix,
-    suggestions,
-    selected,
-    onSelect
-}: {
-    prefix: string
-    suggestions: string[]
-    selected?: string
-    onSelect?: (s: string) => void
-}) {
-    return (
-        <div className='autocomplete-visual'>
-            <div className='autocomplete-input'>
-                <span className='prefix'>{prefix}</span>
-                <span className='cursor'>|</span>
-            </div>
-            <div className='autocomplete-dropdown'>
-                {suggestions.map((s, i) => (
-                    <div
-                        key={s}
-                        className={`autocomplete-item ${selected === s ? 'selected' : ''} ${i === 0 ? 'first' : ''}`}
-                        onClick={() => onSelect?.(s)}
-                    >
-                        <span className='item-icon'>◇</span>
-                        <span className='item-text'>{s}</span>
-                        <span className='item-type'>route</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
-
-// Type badge component
-function TypeBadge({ type, color }: { type: string; color: string }) {
-    return (
-        <span className='type-badge' style={{
-            background: `${color}20`,
-            color: color,
-            border: `1px solid ${color}40`
-        }}>
-            {type}
-        </span>
-    )
-}
-
-const setupCode = `// stateurl-types.ts - All types derived from source
-import type {
-    SurlAtFrom, SurlToFrom, SurlParamFrom,
-    SurlFeatureFrom, SurlLabelFrom
-} from 'stateurl'
-import type { routes } from './routes'
-import type { appFeature } from './App'
-
-declare module 'stateurl' {
-    interface SurlAt extends SurlAtFrom<typeof routes> {}
-    interface SurlTo extends SurlToFrom<typeof routes> {}
-    interface SurlParam extends SurlParamFrom<typeof routes> {}
-    interface SurlFeature extends SurlFeatureFrom<typeof appFeature> {}
-    interface SurlLabel extends SurlLabelFrom<typeof routes> {}
-}`
-
-const typedPropsCode = `import { useSignals, type SurlRouteProps } from 'stateurl'
-
-// Define schema with trail for typed breadcrumbs
-export const counterSchema = {
-    trail: '/counter',
-    schema: { query: { count: 0 } }  // 0 → number type
-} as const
-
-// SurlRouteProps infers types from schema
-function Counter({ query, breadcrumbs }: SurlRouteProps<typeof counterSchema>) {
+export default function TypeSafetyDemo(
+    props: SurlRouteProps<typeof typeSafetyDemoConfig>,
+) {
     useSignals()
-    // query.count is typed as number (from schema)
-    // breadcrumbs is ['counter'] (from trail)
-    const count = query.count ?? 0
 
-    return (
-        <button onClick={() => {
-            query.count = count + 1  // ✓ accepts number
-            query.count = undefined  // ✓ cleanup allowed
-            query.count = "10"       // ✗ type error!
-        }}>
-            {count}
-        </button>
-    )
-}`
+    // Redirect to setup tab if no child route selected
+    useEffect(() => {
+        if (props.ahead.length === 0) {
+            go(props.to('setup'))
+        }
+    }, [props.ahead.length])
 
-const atAccessorCode = `import { at } from 'stateurl'
-
-// at.* mirrors route structure with full autocomplete
-at.counter.go()              // Navigate to /counter
-at.users.profile.go()        // Navigate to /users/profile
-at.products.item.go()        // Navigate to /products/item
-
-// Access route properties
-at.counter.pattern           // "/counter"
-at.counter.query.count = '5' // Update query param
-at.users.profile.param.userId = 1  // Update route param`
-
-const toPathCode = `// Global to() - MUST start with '/'
-import { to, go } from 'stateurl'
-
-go(to('/home'))                                      // ✓ valid
-go(to('/users/profile/:userId', { userId: 42 }))     // ✓ with :param
-go(to('home'))                                       // ✗ type error!
-go(to('../settings'))                                // ✗ type error!
-
-// Props to() - allows relative paths
-function MyComponent({ to }: RouteComponentProps) {
-    to('/home')           // ✓ absolute
-    to('../settings')     // ✓ relative - go up one level
-    to('../../')          // ✓ relative - go up two levels
-    to('./edit')          // ✓ relative - append to current
-}`
-
-const labelCode = `import { label, toLabel, go, at } from 'stateurl'
-
-// First-level routes: use at.* (simpler)
-at.home.go()
-at.counter.go()
-at.settings.go()
-
-// Nested routes: use label.* (cleaner than chained at.*)
-label.userProfile.go({ userId: 3 })   // vs at.users.profile.go()
-label.productDetail.go({ productId: 5 }) // vs at.products.item.go()
-label.loaderUser.go({ userId: 2 })    // vs at['loader-demo'].user.go()
-
-// toLabel() - get path string (for links, etc.)
-const path = toLabel('userProfile', { userId: 1 }) // '/users/profile/1'`
-
-export default function TypeSafetyDemo() {
-    useSignals()
-    const [activeTab, setActiveTab] = useState<'setup' | 'props' | 'at' | 'to' | 'label'>('setup')
+    // Determine active tab from ahead path (first segment after /type-safety/)
+    const activeTab = props.ahead[0] || 'setup'
 
     return (
         <section className='type-safety-demo'>
             <h2>Type-Safe Routing</h2>
             <p>
-                StateURL provides <strong>full TypeScript autocomplete</strong> for routes, params, and queries.
-                Define your types once, get IDE support everywhere.
+                StateURL provides{' '}
+                <strong>full TypeScript autocomplete</strong> for routes,
+                params, and queries. Define your types once, get IDE support
+                everywhere.
             </p>
 
             <div className='current-location'>
                 <strong>Current:</strong> <code>{path.full}</code>
             </div>
 
-            {/* Feature tabs */}
-            <div className='feature-tabs'>
-                <button
+            {/* Feature tabs - Chrome style */}
+            <div className='chrome-tabs'>
+                <a
+                    href={props.to('setup')}
+                    onClick={handleHref}
                     className={activeTab === 'setup' ? 'active' : ''}
-                    onClick={() => setActiveTab('setup')}
                 >
                     Setup
-                </button>
-                <button
+                </a>
+                <a
+                    href={props.to('props')}
+                    onClick={handleHref}
                     className={activeTab === 'props' ? 'active' : ''}
-                    onClick={() => setActiveTab('props')}
                 >
-                    SurlRouteProps
-                </button>
-                <button
+                    RouteProps
+                </a>
+                <a
+                    href={props.to('at')}
+                    onClick={handleHref}
                     className={activeTab === 'at' ? 'active' : ''}
-                    onClick={() => setActiveTab('at')}
                 >
                     at.*
-                </button>
-                <button
+                </a>
+                <a
+                    href={props.to('to')}
+                    onClick={handleHref}
                     className={activeTab === 'to' ? 'active' : ''}
-                    onClick={() => setActiveTab('to')}
                 >
                     to()
-                </button>
-                <button
+                </a>
+                <a
+                    href={props.to('label')}
+                    onClick={handleHref}
                     className={activeTab === 'label' ? 'active' : ''}
-                    onClick={() => setActiveTab('label')}
                 >
                     label.*
-                </button>
+                </a>
             </div>
 
-            {/* Setup tab */}
-            {activeTab === 'setup' && (
-                <div className='demo-section'>
-                    <h3>
-                        Module Augmentation Setup
-                        <TypeBadge type="one-time" color="#10b981" />
-                    </h3>
-                    <p>
-                        Define your route types in a single file using TypeScript module augmentation.
-                        This becomes the single source of truth for all type inference.
-                    </p>
-
-                    <div className='feature-grid'>
-                        <div className='feature-card'>
-                            <h4>SurlAt</h4>
-                            <p>Route tree for at.* accessor</p>
-                            <code>SurlAtFrom&lt;routes&gt;</code>
-                        </div>
-                        <div className='feature-card'>
-                            <h4>SurlTo</h4>
-                            <p>Valid paths for to()</p>
-                            <code>SurlToFrom&lt;routes&gt;</code>
-                        </div>
-                        <div className='feature-card'>
-                            <h4>SurlFeature</h4>
-                            <p>Feature flags from appFeature</p>
-                            <code>SurlFeatureFrom&lt;appFeature&gt;</code>
-                        </div>
-                        <div className='feature-card'>
-                            <h4>SurlLabel</h4>
-                            <p>Typed label.*.go() params</p>
-                            <code>SurlLabelFrom&lt;routes&gt;</code>
-                        </div>
-                    </div>
-
-                    <CodeExample code={setupCode} language='typescript' />
-                </div>
-            )}
-
-            {/* SurlRouteProps tab */}
-            {activeTab === 'props' && (
-                <div className='demo-section'>
-                    <h3>
-                        SurlRouteProps&lt;Schema&gt;
-                        <TypeBadge type="param" color="#3b82f6" />
-                        <TypeBadge type="query" color="#8b5cf6" />
-                        <TypeBadge type="trail" color="#10b981" />
-                    </h3>
-                    <p>
-                        Get typed <code>param</code>, <code>query</code>, and <code>breadcrumbs</code> from schema.
-                        Sugar syntax: <code>{'{count: 0}'}</code> → <code>number</code> type.
-                    </p>
-
-                    <div className='autocomplete-demo'>
-                        <h4>Schema-Based Types</h4>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="SurlRouteProps<typeof "
-                                suggestions={['counterSchema', 'userDetailSchema', 'productDetailSchema']}
-                                selected="counterSchema"
-                            />
-                        </div>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="query."
-                                suggestions={['count']}
-                                selected="count"
-                            />
-                            <span className='type-hint'>: number | undefined</span>
-                        </div>
-                    </div>
-
-                    <h4>Try It</h4>
-                    <div className='button-row'>
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                            onClick={() => go(to('/counter'))}
-                        >
-                            Go to Counter (typed query)
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => at.users.profile.param.userId = 1}
-                        >
-                            Go to User 1 (typed param)
-                        </button>
-                    </div>
-
-                    <CodeExample code={typedPropsCode} language='tsx' />
-                </div>
-            )}
-
-            {/* at.* tab */}
-            {activeTab === 'at' && (
-                <div className='demo-section'>
-                    <h3>
-                        at.* Accessor
-                        <TypeBadge type="chained" color="#f59e0b" />
-                        <TypeBadge type="navigation" color="#10b981" />
-                    </h3>
-                    <p>
-                        Chain route segments for intuitive navigation.
-                        Mirrors your route structure with full autocomplete at each level.
-                    </p>
-
-                    <div className='autocomplete-demo'>
-                        <h4>Autocomplete Preview</h4>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="at."
-                                suggestions={['counter', 'users', 'products', 'settings', 'home', 'about']}
-                                selected="users"
-                            />
-                        </div>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="at.users."
-                                suggestions={['profile', 'go()', 'param', 'query', 'pattern']}
-                                selected="profile"
-                            />
-                        </div>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="at.users.profile."
-                                suggestions={['go()', 'param', 'query', 'pattern', 'scopePath']}
-                                selected="go()"
-                            />
-                        </div>
-                    </div>
-
-                    <h4>Try It</h4>
-                    <div className='button-row'>
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                            onClick={() => at.counter.go()}
-                        >
-                            at.counter.go()
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => at.users.go()}
-                        >
-                            at.users.go()
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => at.products.go()}
-                        >
-                            at.products.go()
-                        </button>
-                    </div>
-
-                    <div className='info-box' style={{ marginTop: '1rem' }}>
-                        <strong>Route Info:</strong>
-                        <pre style={{ margin: '0.5rem 0 0', fontSize: '0.85rem' }}>
-{`at.counter.pattern:  "${at.counter?.pattern ?? '...'}"
-at.users.pattern:    "${at.users?.pattern ?? '...'}"
-at.products.pattern: "${at.products?.pattern ?? '...'}"`}
-                        </pre>
-                    </div>
-
-                    <CodeExample code={atAccessorCode} language='typescript' />
-                </div>
-            )}
-
-            {/* to() tab */}
-            {activeTab === 'to' && (
-                <div className='demo-section'>
-                    <h3>
-                        to() Path Resolution
-                        <TypeBadge type="absolute" color="#ef4444" />
-                        <TypeBadge type="relative" color="#06b6d4" />
-                    </h3>
-                    <p>
-                        Global <code>to()</code> requires absolute paths (starts with <code>/</code>).
-                        Props <code>to()</code> allows relative paths for context-aware navigation.
-                    </p>
-
-                    <div className='autocomplete-demo'>
-                        <h4>Global to() - Absolute Only</h4>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="to('/"
-                                suggestions={['/home', '/counter', '/users', '/users/profile/:userId', '/products', '/products/item/:productId']}
-                                selected="/users/profile/:userId"
-                            />
-                        </div>
-
-                        <h4 style={{ marginTop: '1.5rem' }}>Props to() - Relative Allowed</h4>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="to('"
-                                suggestions={['../', '../../', './', '/home', '/counter', '/users']}
-                                selected="../"
-                            />
-                        </div>
-                    </div>
-
-                    <div className='comparison-box'>
-                        <div className='comparison-col valid'>
-                            <h4>✓ Valid</h4>
-                            <code>to('/home')</code>
-                            <code>to('/users/profile/:userId', {'{ userId: 42 }'})</code>
-                            <code>props.to('../settings')</code>
-                            <code>props.to('edit')</code>
-                        </div>
-                        <div className='comparison-col invalid'>
-                            <h4>✗ Type Error</h4>
-                            <code>to('home')</code>
-                            <code>to('../settings')</code>
-                            <span className='error-hint'>Global to() must start with /</span>
-                        </div>
-                    </div>
-
-                    <h4>Try It</h4>
-                    <div className='button-row'>
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                            onClick={() => go(to('/home'))}
-                        >
-                            go(to('/home'))
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => go(to('/counter'))}
-                        >
-                            go(to('/counter'))
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            data-href={to('/users/profile/:userId', { userId: 1 })}
-                            onClick={handleHref}
-                        >
-                            to('/users/profile/:userId', {'{ userId: 1 }'})
-                        </button>
-                    </div>
-
-                    <CodeExample code={toPathCode} language='typescript' />
-                </div>
-            )}
-
-            {/* label.* tab */}
-            {activeTab === 'label' && (
-                <div className='demo-section'>
-                    <h3>
-                        label.* Navigation
-                        <TypeBadge type="restructure-safe" color="#10b981" />
-                    </h3>
-                    <p>
-                        Navigate by route label instead of path.
-                        Survives route restructuring as long as labels are preserved.
-                    </p>
-
-                    <div className='autocomplete-demo'>
-                        <h4>Autocomplete Preview</h4>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="label."
-                                suggestions={['userProfile', 'productDetail', 'loaderUser', 'userSettings']}
-                                selected="userProfile"
-                            />
-                        </div>
-                        <div className='autocomplete-row'>
-                            <AutocompleteVisual
-                                prefix="toLabel('"
-                                suggestions={['userProfile', 'productDetail', 'loaderUser', 'userSettings']}
-                                selected="userProfile"
-                            />
-                        </div>
-                    </div>
-
-                    <div className='info-box' style={{ marginTop: '1rem' }}>
-                        <h4>at.* vs label.*</h4>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '0.5rem' }}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border-default)' }}><strong>at.*</strong></td>
-                                    <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border-default)' }}>Based on path structure</td>
-                                    <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border-default)' }}><code>at.users.profile</code></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ padding: '0.5rem' }}><strong>label.*</strong></td>
-                                    <td style={{ padding: '0.5rem' }}>Based on route labels</td>
-                                    <td style={{ padding: '0.5rem' }}><code>label.userProfile</code></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h4>Try It</h4>
-                    <div className='button-row'>
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                            onClick={() => label.userProfile.go({ userId: 1 })}
-                        >
-                            label.userProfile.go({'{ userId: 1 }'})
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => label.productDetail.go({ productId: 0 })}
-                        >
-                            label.productDetail.go({'{ productId: 0 }'})
-                        </button>
-                        <button
-                            type='button'
-                            className='btn'
-                            onClick={() => label.loaderUser.go({ userId: 2 })}
-                        >
-                            label.loaderUser.go({'{ userId: 2 }'})
-                        </button>
-                    </div>
-
-                    <CodeExample code={labelCode} language='typescript' />
-                </div>
-            )}
+            {/* Render active tab content via Outlet */}
+            <Outlet />
 
             <style>{`
                 .type-safety-demo {
                     max-width: 900px;
                 }
 
-                .feature-tabs {
+                .chrome-tabs {
                     display: flex;
-                    gap: 0.25rem;
-                    margin: 1.5rem 0;
-                    padding: 0.25rem;
-                    background: var(--bg-muted);
-                    border-radius: 8px;
+                    gap: 0;
+                    margin: 1.5rem 0 0;
+                    padding: 4px 4px 0;
+                    background: var(--border-default);
+                    border-radius: 10px 10px 0 0;
                     overflow-x: auto;
                 }
 
-                .feature-tabs button {
+                .chrome-tabs a {
                     flex: 1;
-                    padding: 0.75rem 1rem;
-                    border: none;
+                    min-width: 100px;
+                    padding: 10px 16px 11px;
+                    margin-bottom: -1px;
                     background: transparent;
-                    border-radius: 6px;
                     cursor: pointer;
-                    font-weight: 500;
+                    font-size: 15px;
                     color: var(--text-secondary);
-                    transition: all 0.2s;
+                    transition: background 0.15s, color 0.15s;
                     white-space: nowrap;
+                    text-decoration: none;
+                    text-align: center;
+                    position: relative;
+                    border-radius: 8px 8px 0 0;
                 }
 
-                .feature-tabs button:hover {
-                    background: var(--bg-surface);
+                .chrome-tabs a:not(:last-child)::after {
+                    content: '';
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    height: 16px;
+                    width: 1px;
+                    background: var(--text-secondary);
+                    opacity: 0.3;
+                }
+
+                .chrome-tabs a:hover {
+                    background: rgba(255,255,255,0.5);
                     color: var(--text-primary);
                 }
 
-                .feature-tabs button.active {
-                    background: var(--primary-color, #3b82f6);
-                    color: white;
+                .chrome-tabs a.active,
+                .chrome-tabs a.active:hover {
+                    background: var(--bg-surface);
+                    color: var(--text-primary);
+                    font-weight: 500;
+                }
+
+                .chrome-tabs a.active::after,
+                .chrome-tabs a:has(+ a.active)::after {
+                    display: none;
+                }
+
+                .type-safety-demo .demo-section {
+                    background: var(--bg-surface);
+                    padding: 1.5rem;
+                    border-radius: 0 0 10px 10px;
+                    margin-top: 0;
+                    border: 3px solid var(--border-default);
+                    border-top: 1px solid transparent;
                 }
 
                 .type-badge {
