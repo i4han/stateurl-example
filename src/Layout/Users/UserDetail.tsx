@@ -54,11 +54,11 @@ function UserDetail({ param, to }: SurlRouteProps<typeof userDetailConfig>) {
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Users
         </button>
-        {/* Navigate to sibling with :param style */}
-        <button data-href={to('../:id', { id: prevUser })} onClick={handleHref}>
+        {/* Navigate to sibling - params are not depth, just replace param */}
+        <button data-href={to(':userId', { userId: prevUser })} onClick={handleHref}>
           Prev User
         </button>
-        <button data-href={to('../:id', { id: nextUser })} onClick={handleHref}>
+        <button data-href={to(':userId', { userId: nextUser })} onClick={handleHref}>
           Next User
         </button>
       </div>
@@ -110,13 +110,13 @@ export default function UserDetail({
                 </p>
 
                 <div className='nav-level'>
-                    <strong>Sibling (../)</strong>
-                    <span style={{ fontSize: '0.85em', color: '#888' }}> → /users/*</span>
+                    <strong>Same route</strong>
+                    <span style={{ fontSize: '0.85em', color: '#888' }}> → params are not depth</span>
                     <div className='button-group'>
-                        <button type='button' data-href={to('../profile/:id', { id: prevUser })} onClick={handleHref}>
+                        <button type='button' data-href={to(':userId', { userId: prevUser })} onClick={handleHref}>
                             ← Prev User ({prevUser})
                         </button>
-                        <button type='button' data-href={to('../profile/:id', { id: nextUser })} onClick={handleHref}>
+                        <button type='button' data-href={to(':userId', { userId: nextUser })} onClick={handleHref}>
                             Next User ({nextUser}) →
                         </button>
                         <button type='button' data-href={to('../settings')} onClick={handleHref}>

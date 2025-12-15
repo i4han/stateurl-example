@@ -44,11 +44,11 @@ function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailConfig>
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Products
         </button>
-        {/* Navigate to sibling with :param style */}
-        <button data-href={to('../:id', { id: prevId })} onClick={handleHref}>
+        {/* Navigate to sibling - params are not depth, just replace param */}
+        <button data-href={to(':productId', { productId: prevId })} onClick={handleHref}>
           Prev Product
         </button>
-        <button data-href={to('../:id', { id: nextId })} onClick={handleHref}>
+        <button data-href={to(':productId', { productId: nextId })} onClick={handleHref}>
           Next Product
         </button>
       </div>
@@ -97,10 +97,10 @@ export default function ProductDetail({
                     <button type='button' data-href={to('../')} onClick={handleHref}>
                         ← Back (../)
                     </button>
-                    <button type='button' data-href={to('../:id', { id: prevId })} onClick={handleHref}>
+                    <button type='button' data-href={to(':productId', { productId: prevId })} onClick={handleHref}>
                         ← Prev ({prevId})
                     </button>
-                    <button type='button' data-href={to('../:id', { id: nextId })} onClick={handleHref}>
+                    <button type='button' data-href={to(':productId', { productId: nextId })} onClick={handleHref}>
                         Next ({nextId}) →
                     </button>
                 </div>
