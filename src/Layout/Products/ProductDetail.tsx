@@ -24,31 +24,31 @@ const products = [
 ]
 
 const code = `
-import { handleHref, type SurlRouteProps } from 'stateurl'
+import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
 
-// Schema with trail for type-safe to() navigation
+// Schema with trail for type-safe navigation
 export const productDetailSchema = {
     trail: '/products/item/:productId',
     schema: { param: { productId: 0 } }
 } as const
 
 function ProductDetail({ param, to }: SurlRouteProps<typeof productDetailConfig>) {
+  useSignals()
   const nextId = (param.productId + 1) % products.length
   const prevId = (param.productId + products.length - 1) % products.length
 
   return (
     <div>
-      {/* Type-safe relative navigation */}
       <div className='button-group'>
         {/* to('../') goes up to /products */}
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Products
         </button>
-        {/* Navigate to sibling - params are not depth, just replace param */}
-        <button data-href={to(':productId', { productId: prevId })} onClick={handleHref}>
+        {/* Change param at current route - just assign */}
+        <button onClick={() => { param.productId = prevId }}>
           Prev Product
         </button>
-        <button data-href={to(':productId', { productId: nextId })} onClick={handleHref}>
+        <button onClick={() => { param.productId = nextId }}>
           Next Product
         </button>
       </div>
@@ -97,10 +97,10 @@ export default function ProductDetail({
                     <button type='button' data-href={to('../')} onClick={handleHref}>
                         ← Back (../)
                     </button>
-                    <button type='button' data-href={to(':productId', { productId: prevId })} onClick={handleHref}>
+                    <button type='button' onClick={() => { param.productId = prevId }}>
                         ← Prev ({prevId})
                     </button>
-                    <button type='button' data-href={to(':productId', { productId: nextId })} onClick={handleHref}>
+                    <button type='button' onClick={() => { param.productId = nextId }}>
                         Next ({nextId}) →
                     </button>
                 </div>

@@ -33,32 +33,32 @@ const users = [
 ]
 
 const code = `
-import { handleHref, type SurlRouteProps } from 'stateurl'
+import { handleHref, useSignals, type SurlRouteProps } from 'stateurl'
 
-// Schema with trail for type-safe to() navigation
+// Schema with trail for type-safe navigation
 export const userDetailSchema = {
     trail: '/users/profile/:userId',
     schema: { param: { userId: 0 } }
 } as const
 
 function UserDetail({ param, to }: SurlRouteProps<typeof userDetailConfig>) {
+  useSignals()
   const userId = param.userId
   const prevUser = (userId - 1 + 3) % 3
   const nextUser = (userId + 1) % 3
 
   return (
     <div>
-      {/* Type-safe relative navigation */}
       <div className='button-group'>
         {/* to('../') goes up to /users */}
         <button data-href={to('../')} onClick={handleHref}>
           ← Back to Users
         </button>
-        {/* Navigate to sibling - params are not depth, just replace param */}
-        <button data-href={to(':userId', { userId: prevUser })} onClick={handleHref}>
+        {/* Change param at current route - just assign */}
+        <button onClick={() => { param.userId = prevUser }}>
           Prev User
         </button>
-        <button data-href={to(':userId', { userId: nextUser })} onClick={handleHref}>
+        <button onClick={() => { param.userId = nextUser }}>
           Next User
         </button>
       </div>
@@ -111,12 +111,12 @@ export default function UserDetail({
 
                 <div className='nav-level'>
                     <strong>Same route</strong>
-                    <span style={{ fontSize: '0.85em', color: '#888' }}> → params are not depth</span>
+                    <span style={{ fontSize: '0.85em', color: '#888' }}> → assign param directly</span>
                     <div className='button-group'>
-                        <button type='button' data-href={to(':userId', { userId: prevUser })} onClick={handleHref}>
+                        <button type='button' onClick={() => { param.userId = prevUser }}>
                             ← Prev User ({prevUser})
                         </button>
-                        <button type='button' data-href={to(':userId', { userId: nextUser })} onClick={handleHref}>
+                        <button type='button' onClick={() => { param.userId = nextUser }}>
                             Next User ({nextUser}) →
                         </button>
                         <button type='button' data-href={to('../settings')} onClick={handleHref}>
