@@ -18,3 +18,7 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Test outputs
+test-results/
+playwright-report/
