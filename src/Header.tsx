@@ -3,9 +3,11 @@ import { feature, handleHref, useSignals } from 'stateurl'
 
 interface HeaderProps {
     to: (path: string) => string
+    onMenuToggle: () => void
+    mobileMenuOpen: boolean
 }
 
-export default function Header({ to }: HeaderProps) {
+export default function Header({ to, onMenuToggle, mobileMenuOpen }: HeaderProps) {
     useSignals()
     const [toast, setToast] = useState<string | null>(null)
 
@@ -22,6 +24,21 @@ export default function Header({ to }: HeaderProps) {
     return (
         <>
             <header className='top-menu'>
+                {/* Hamburger menu button - mobile only */}
+                <button
+                    type='button'
+                    className='hamburger-btn'
+                    onClick={onMenuToggle}
+                    aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={mobileMenuOpen}
+                >
+                    <span className={`hamburger-icon ${mobileMenuOpen ? 'open' : ''}`}>
+                        <span />
+                        <span />
+                        <span />
+                    </span>
+                </button>
+
                 <a href={to('/home')} onClick={handleHref} className='logo'>
                     <span className='logo-icon'>S</span>
                     <span className='logo-text'>StateURL</span>
